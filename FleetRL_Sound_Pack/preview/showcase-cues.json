@@ -1,0 +1,197 @@
+[
+  {
+    "timeS": 1.0,
+    "id": "countdown_tick",
+    "pan": -0.1
+  },
+  {
+    "timeS": 1.6,
+    "id": "countdown_tick",
+    "pan": 0.1
+  },
+  {
+    "timeS": 2.2,
+    "id": "countdown_tick",
+    "pan": 0
+  },
+  {
+    "timeS": 2.85,
+    "id": "match_start",
+    "pan": 0
+  },
+  {
+    "timeS": 4.0,
+    "id": "movement_start",
+    "pan": -0.3
+  },
+  {
+    "timeS": 4.7,
+    "id": "cannon_fire_01",
+    "pan": -0.5
+  },
+  {
+    "timeS": 5.08,
+    "id": "water_hit_01",
+    "pan": 0.4
+  },
+  {
+    "timeS": 5.9,
+    "id": "cannon_fire_02",
+    "pan": 0.5
+  },
+  {
+    "timeS": 6.25,
+    "id": "wood_hit_01",
+    "pan": -0.3
+  },
+  {
+    "timeS": 6.9,
+    "id": "cannon_fire_03",
+    "pan": -0.4
+  },
+  {
+    "timeS": 7.24,
+    "id": "wood_hit_02",
+    "pan": 0.4
+  },
+  {
+    "timeS": 7.8,
+    "id": "ship_collision_01",
+    "pan": 0.1
+  },
+  {
+    "timeS": 8.5,
+    "id": "ship_sink_01",
+    "pan": 0.3
+  },
+  {
+    "timeS": 10.5,
+    "id": "ship_respawn",
+    "pan": -0.2
+  },
+  {
+    "timeS": 11.8,
+    "id": "flag_pickup_01",
+    "pan": 0
+  },
+  {
+    "timeS": 12.65,
+    "id": "flag_give",
+    "pan": -0.15
+  },
+  {
+    "timeS": 13.4,
+    "id": "flag_place",
+    "pan": 0.15
+  },
+  {
+    "timeS": 14.2,
+    "id": "flag_drop_water",
+    "pan": 0
+  },
+  {
+    "timeS": 15.2,
+    "id": "flag_recover",
+    "pan": 0
+  },
+  {
+    "timeS": 16.3,
+    "id": "flag_capture",
+    "pan": 0
+  },
+  {
+    "timeS": 18.0,
+    "id": "ui_click_01",
+    "pan": 0
+  },
+  {
+    "timeS": 18.3,
+    "id": "ui_click_02",
+    "pan": 0
+  },
+  {
+    "timeS": 18.8,
+    "id": "ui_confirm",
+    "pan": 0
+  },
+  {
+    "timeS": 19.45,
+    "id": "ui_error",
+    "pan": 0
+  },
+  {
+    "timeS": 20.0,
+    "id": "ui_pause",
+    "pan": 0
+  },
+  {
+    "timeS": 20.5,
+    "id": "ui_resume",
+    "pan": 0
+  },
+  {
+    "timeS": 21.3,
+    "id": "training_start",
+    "pan": 0
+  },
+  {
+    "timeS": 22.0,
+    "id": "checkpoint_saved",
+    "pan": 0
+  },
+  {
+    "timeS": 22.6,
+    "id": "validation_pass",
+    "pan": 0
+  },
+  {
+    "timeS": 23.4,
+    "id": "validation_fail",
+    "pan": 0
+  },
+  {
+    "timeS": 24.2,
+    "id": "training_complete",
+    "pan": 0
+  },
+  {
+    "timeS": 26.0,
+    "id": "match_defeat",
+    "pan": 0
+  },
+  {
+    "timeS": 27.6,
+    "id": "match_draw",
+    "pan": 0
+  },
+  {
+    "timeS": 29.0,
+    "id": "match_victory",
+    "pan": 0
+  },
+  {
+    "timeS": 31.0,
+    "id": "tournament_complete",
+    "pan": 0
+  },
+  {
+    "timeS": 34.0,
+    "id": "cannon_fire_01",
+    "pan": -0.45
+  },
+  {
+    "timeS": 34.42,
+    "id": "water_hit_02",
+    "pan": 0.3
+  },
+  {
+    "timeS": 35.2,
+    "id": "flag_pickup_02",
+    "pan": 0
+  },
+  {
+    "timeS": 36.2,
+    "id": "flag_capture",
+    "pan": 0
+  }
+]

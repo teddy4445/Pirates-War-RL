@@ -1,0 +1,25 @@
+{
+  "packageVersion": "fleetrl-package-v1",
+  "name": "Neural Agent Package Template",
+  "apiVersion": "fleetrl-agent-v1",
+  "controlScope": "team",
+  "entry": "agent.js",
+  "models": [
+    {
+      "id": "policy",
+      "format": "tfjs-layers",
+      "modelPath": "model/model.json",
+      "inputWidth": 64,
+      "outputWidth": 22,
+      "maxBatch": 8,
+      "featureEncoder": "ship-64-v1",
+      "actionDecoder": "discrete-22-v1"
+    }
+  ],
+  "supportedModes": [
+    "duel",
+    "fleet",
+    "fog-duel",
+    "fog-fleet"
+  ]
+}

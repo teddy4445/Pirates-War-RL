@@ -1,0 +1,8 @@
+﻿{
+    "bundle":  "C:\\Users\\TeddyLazebni_mwmf8h4\\Desktop\\FleetRL_Codex_Bundle\\public\\downloads\\FleetRL_Python_Training_Bundle.zip",
+    "bundleSha256":  "6324733dfe4afe88af4760eedebe03bb1ee3aaa33ebf9fbc6012bf50cbd32ffd",
+    "manifestFiles":  42,
+    "python":  "Python 3.13.0",
+    "outputAgent":  "C:\\Users\\TeddyLazebni_mwmf8h4\\Desktop\\FleetRL_Codex_Bundle\\artifacts\\python-bundle-smoke\\downloaded-bundle.agent.json",
+    "outputAgentSha256":  "f9cd73603f55c46e93f65d1be4f3a06ae77081f9014ed193d3c65a2b54447a84"
+}

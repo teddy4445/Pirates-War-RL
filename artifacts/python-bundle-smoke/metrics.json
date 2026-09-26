@@ -1,0 +1,19 @@
+{
+  "algorithm": "dqn",
+  "mode": "duel",
+  "seed": 7,
+  "steps": 40,
+  "gradientSteps": 33,
+  "episodes": 2,
+  "rewardPreset": "capture-difference-v1",
+  "featureEncoder": "ship-64-v1",
+  "actionDecoder": "discrete-22-v1",
+  "trained": true,
+  "episodeReturns": [
+    0.0,
+    0.0
+  ],
+  "lastLoss": 0.00010258251859340817,
+  "meanLoss": 0.0025953637634136776,
+  "bufferSize": 40
+}

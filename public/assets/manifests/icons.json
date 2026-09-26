@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "fleetrl-icon-assets-v1",
+  "assets": [
+    {
+      "path": "assets/icons/ui-icons.png",
+      "width": 640,
+      "height": 128,
+      "sha256": "0514b08dca507770f19fc2e13db15d51bd486d41ab8f4aa88548b5cea907e35e",
+      "id": "ui-icons-v1",
+      "frames": [
+        "play",
+        "pause",
+        "visibility",
+        "red-flag",
+        "blue-flag"
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "source": "ChatGPT Image Sep 25, 2026, 08_38_26 PM.png",
+      "sourceSha256": "47bedd6e8f16c81051611ed10634cfef405d9f23e4569b2bfa92f86a62e3892f",
+      "review": "measured five-cell extraction; decorative DOM icons only"
+    },
+    {
+      "path": "assets/ui/button-states.png",
+      "width": 640,
+      "height": 180,
+      "sha256": "d402bca7b9b4f6057eb3ed3cbeaccf944a5d3cb09d1e0cd5031336991c66b453",
+      "id": "gold-button-states-v1",
+      "frames": [
+        "released",
+        "hover",
+        "pressed"
+      ],
+      "frameSize": [
+        640,
+        60
+      ],
+      "source": "tools/build_assets.py",
+      "provenance": "project-authored procedural Pillow raster",
+      "review": "three-state stretchable game button background"
+    }
+  ]
+}

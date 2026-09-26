@@ -1,0 +1,59 @@
+{
+  "name": "fleetrl",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "bundle:check": ".\\python\\.venv\\Scripts\\python.exe tools/check_bundle.py && node tools/test_examples.cjs",
+    "pages:check": "node tools/check_pages_build.mjs",
+    "verify": "npm run lint && npm run test && npm run typecheck && npm run build",
+    "assets:build": ".\\python\\.venv\\Scripts\\python.exe tools/build_assets.py",
+    "examples:build": "node tools/build_tfjs_example.mjs",
+    "python:test": ".\\python\\.venv\\Scripts\\python.exe -m pytest python/tests",
+    "python:smoke": ".\\python\\.venv\\Scripts\\python.exe -m fleetrl.rollout --mode duel --seed 7 --decisions 12",
+    "python:package": ".\\python\\.venv\\Scripts\\python.exe tools/package_python.py",
+    "python:package:check": ".\\python\\.venv\\Scripts\\python.exe tools/package_python.py --check",
+    "python:bundle-smoke": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify_python_bundle.ps1",
+    "test:e2e:bundle": "playwright test tests/e2e/downloaded-bundle.spec.ts",
+    "parity": ".\\python\\.venv\\Scripts\\python.exe tools/generate_parity_fixtures.py && .\\python\\.venv\\Scripts\\python.exe tools/generate_gameplay_parity_fixtures.py && .\\python\\.venv\\Scripts\\python.exe tools/generate_adapter_fixtures.py && .\\python\\.venv\\Scripts\\python.exe tools/generate_procedural_fixtures.py && .\\python\\.venv\\Scripts\\python.exe -m pytest python/tests/test_parity.py python/tests/test_gameplay_parity.py python/tests/test_observation_adapters.py python/tests/test_procedural_map.py && vitest run tests/parity.test.ts tests/gameplay-parity.test.ts tests/adapter-parity.test.ts tests/procedural-map.test.ts",
+    "release:verify": "npm run bundle:check && npm run assets:build && npm run examples:build && npm run python:package && npm run verify && npm run pages:check && npm run python:test && npm run parity && npm run python:package:check && npm run test:e2e -- tests/e2e/shell.spec.ts && npm run python:bundle-smoke && npm run test:e2e:bundle"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "4.22.0",
+    "ajv": "8.20.0",
+    "idb": "8.0.3",
+    "jszip": "3.10.2",
+    "quickjs-emscripten": "0.32.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.9.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "@vitest/coverage-v8": "5.0.2",
+    "eslint": "10.11.0",
+    "fake-indexeddb": "6.2.5",
+    "globals": "17.12.0",
+    "jsdom": "29.0.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.70.1",
+    "vite": "8.3.1",
+    "vitest": "5.0.2"
+  }
+}

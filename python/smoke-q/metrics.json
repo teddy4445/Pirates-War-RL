@@ -1,0 +1,15 @@
+{
+  "algorithm": "qlearning",
+  "mode": "duel",
+  "seed": 7,
+  "steps": 12,
+  "episodes": 2,
+  "rewardPreset": "capture-difference-v1",
+  "trained": true,
+  "episodeReturns": [
+    0.0,
+    0.0
+  ],
+  "visitedStates": 1,
+  "meanAbsoluteTdError": 0.0
+}

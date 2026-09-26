@@ -1,0 +1,6 @@
+interface:
+  display_name: "FleetRL Visuals and Audio"
+  short_description: "Create coherent pirate art and procedural game sounds."
+  default_prompt: "Use $fleetrl-assets to create and verify no-cost pirate-game visuals and short sound effects."
+policy:
+  allow_implicit_invocation: true

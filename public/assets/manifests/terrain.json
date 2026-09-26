@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "fleetrl-terrain-assets-v1",
+  "assets": [
+    {
+      "path": "assets/terrain/water-mirror-tile.jpg",
+      "width": 512,
+      "height": 512,
+      "sha256": "1181576adb5e8817f0e5ff6513bc5f59382116cd0285f71d85eb6f4944929d24",
+      "id": "water-tile-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (1).png",
+      "sourceSha256": "f850c278feb088c84a9c54d565749bcd12af54b6c373574dec21db4919ada3a4",
+      "crop": [
+        377,
+        126,
+        716,
+        508
+      ],
+      "seamMethod": "2x2 horizontal/vertical mirror",
+      "collisionRole": "none"
+    },
+    {
+      "path": "assets/terrain/grass-mirror-tile.jpg",
+      "width": 512,
+      "height": 512,
+      "sha256": "4934b529b9fec11474f8adf1107f974c84073c6336039f45b411b249dca958a6",
+      "id": "grass-tile-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (2).png",
+      "sourceSha256": "b16e4506693e5e961da149b7a6dfbd00020494ab109012cb1f1b28f6c31b1319",
+      "crop": [
+        589,
+        4,
+        862,
+        261
+      ],
+      "seamMethod": "2x2 horizontal/vertical mirror",
+      "collisionRole": "masked to authoritative polygons"
+    },
+    {
+      "path": "assets/terrain/sand-mirror-tile.jpg",
+      "width": 512,
+      "height": 512,
+      "sha256": "32fad2c3727a4ac8552755bfb5d7c40f9400ba252c9fe11d57f46b34edbbce2e",
+      "id": "sand-tile-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (2).png",
+      "sourceSha256": "b16e4506693e5e961da149b7a6dfbd00020494ab109012cb1f1b28f6c31b1319",
+      "crop": [
+        11,
+        4,
+        283,
+        261
+      ],
+      "seamMethod": "2x2 horizontal/vertical mirror",
+      "collisionRole": "presentation shoreline only"
+    }
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "schemaVersion": "fleetrl-map-v1",
+  "id": "twin-harbors-v1",
+  "world": {
+    "width": 1600,
+    "height": 900
+  },
+  "islands": [
+    {
+      "id": "blue-home-island",
+      "polygon": [
+        [
+          40,
+          340
+        ],
+        [
+          120,
+          340
+        ],
+        [
+          150,
+          400
+        ],
+        [
+          150,
+          500
+        ],
+        [
+          120,
+          560
+        ],
+        [
+          40,
+          560
+        ]
+      ]
+    },
+    {
+      "id": "rose-home-island",
+      "polygon": [
+        [
+          1560,
+          560
+        ],
+        [
+          1480,
+          560
+        ],
+        [
+          1450,
+          500
+        ],
+        [
+          1450,
+          400
+        ],
+        [
+          1480,
+          340
+        ],
+        [
+          1560,
+          340
+        ]
+      ]
+    },
+    {
+      "id": "north-island",
+      "polygon": [
+        [
+          670,
+          220
+        ],
+        [
+          730,
+          160
+        ],
+        [
+          870,
+          160
+        ],
+        [
+          930,
+          220
+        ],
+        [
+          870,
+          320
+        ],
+        [
+          730,
+          320
+        ]
+      ]
+    },
+    {
+      "id": "south-island",
+      "polygon": [
+        [
+          670,
+          680
+        ],
+        [
+          730,
+          580
+        ],
+        [
+          870,
+          580
+        ],
+        [
+          930,
+          680
+        ],
+        [
+          870,
+          750
+        ],
+        [
+          730,
+          750
+        ]
+      ]
+    }
+  ],
+  "bases": [
+    {
+      "teamId": "blue",
+      "homeFlagSiteId": "blue-home-site",
+      "homePost": {
+        "x": 146,
+        "y": 450
+      },
+      "approach": {
+        "x": 170,
+        "y": 450
+      },
+      "deliveryZone": {
+        "center": {
+          "x": 200,
+          "y": 450
+        },
+        "radius": 36
+      },
+      "spawnSlots": [
+        {
+          "x": 230,
+          "y": 360,
+          "heading": 0
+        },
+        {
+          "x": 230,
+          "y": 420,
+          "heading": 0
+        },
+        {
+          "x": 230,
+          "y": 480,
+          "heading": 0
+        },
+        {
+          "x": 230,
+          "y": 540,
+          "heading": 0
+        },
+        {
+          "x": 280,
+          "y": 360,
+          "heading": 0
+        },
+        {
+          "x": 280,
+          "y": 420,
+          "heading": 0
+        },
+        {
+          "x": 280,
+          "y": 480,
+          "heading": 0
+        },
+        {
+          "x": 280,
+          "y": 540,
+          "heading": 0
+        }
+      ]
+    },
+    {
+      "teamId": "rose",
+      "homeFlagSiteId": "rose-home-site",
+      "homePost": {
+        "x": 1454,
+        "y": 450
+      },
+      "approach": {
+        "x": 1430,
+        "y": 450
+      },
+      "deliveryZone": {
+        "center": {
+          "x": 1400,
+          "y": 450
+        },
+        "radius": 36
+      },
+      "spawnSlots": [
+        {
+          "x": 1370,
+          "y": 360,
+          "heading": -3.141592653589793
+        },
+        {
+          "x": 1370,
+          "y": 420,
+          "heading": -3.141592653589793
+        },
+        {
+          "x": 1370,
+          "y": 480,
+          "heading": -3.141592653589793
+        },
+        {
+          "x": 1370,
+          "y": 540,
+          "heading": -3.141592653589793
+        },
+        {
+          "x": 1320,
+          "y": 360,
+          "heading": -3.141592653589793
+        },
+        {
+          "x": 1320,
+          "y": 420,
+          "heading": -3.141592653589793
+        },
+        {
+          "x": 1320,
+          "y": 480,
+          "heading": -3.141592653589793
+        },
+        {
+          "x": 1320,
+          "y": 540,
+          "heading": -3.141592653589793
+        }
+      ]
+    }
+  ],
+  "flagSites": [
+    {
+      "id": "blue-home-site",
+      "position": {
+        "x": 146,
+        "y": 450
+      },
+      "approach": {
+        "x": 170,
+        "y": 450
+      },
+      "radius": 30,
+      "reservedHome": true
+    },
+    {
+      "id": "rose-home-site",
+      "position": {
+        "x": 1454,
+        "y": 450
+      },
+      "approach": {
+        "x": 1430,
+        "y": 450
+      },
+      "radius": 30,
+      "reservedHome": true
+    },
+    {
+      "id": "north-neutral-site",
+      "position": {
+        "x": 800,
+        "y": 316
+      },
+      "approach": {
+        "x": 800,
+        "y": 344
+      },
+      "radius": 30,
+      "reservedHome": false
+    },
+    {
+      "id": "south-neutral-site",
+      "position": {
+        "x": 800,
+        "y": 584
+      },
+      "approach": {
+        "x": 800,
+        "y": 560
+      },
+      "radius": 30,
+      "reservedHome": false
+    }
+  ],
+  "metadata": {
+    "status": "Proposed fixture; validate collision clearance and connectivity during P02."
+  }
+}

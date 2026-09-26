@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "fleetrl-overlay-assets-v1",
+  "assets": [
+    {
+      "path": "assets/overlays/ocean-ripples.png",
+      "width": 640,
+      "height": 140,
+      "sha256": "bdc1aa170c48301a6c8da502b8d7b2bcfe7f7a72df309a1b53284e3906e9f70b",
+      "id": "ocean-ripples-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 08_38_30 PM.png",
+      "sourceSha256": "ce2f22e50fb7c56e8b095a84f968a77ae6c4a1f069dfe5656bd41653d22baefd",
+      "crop": [
+        0,
+        410,
+        660,
+        555
+      ],
+      "collisionRole": "none",
+      "review": "measured transparent ripple and splash strip; decorative only"
+    },
+    {
+      "path": "assets/overlays/shore-foam.png",
+      "width": 768,
+      "height": 176,
+      "sha256": "51eb32de5f83936dae5e4cf46b65f09e63a06e068872ad00bcc92b13286ab965",
+      "id": "shore-foam-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (3).png",
+      "sourceSha256": "8120a9a560a61a51f480824c1d6d61995cf6fc930735dff896679b0288ca1ae4",
+      "crop": [
+        0,
+        0,
+        975,
+        225
+      ],
+      "collisionRole": "none",
+      "review": "measured transparent foam strip; clipped to authoritative island paths"
+    },
+    {
+      "path": "assets/overlays/fog-mist.png",
+      "width": 640,
+      "height": 284,
+      "sha256": "667d34503de99b0c2cc2c7583f092e16cd00a5a06abe3c5977efb96f25a49243",
+      "id": "fog-mist-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_48 PM (4).png",
+      "sourceSha256": "f00f9ecaf92c3f862f5b6e83cfd5526b58b7f6c9bd7afc86e0e8ed0a95ddccf3",
+      "crop": [
+        760,
+        285,
+        1448,
+        590
+      ],
+      "collisionRole": "none",
+      "review": "measured cloud and mist forms; presentation layer after visibility filtering"
+    }
+  ]
+}

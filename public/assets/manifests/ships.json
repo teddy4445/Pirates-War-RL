@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "fleetrl-ship-assets-v1",
+  "assets": [
+    {
+      "path": "assets/ships/ship-atlas.png",
+      "width": 1024,
+      "height": 512,
+      "sha256": "c60f3449bf4bff6fdfdbb6a8f58a9e2821004b57a3a282cbca974946032e183b",
+      "id": "directional-ships-v1",
+      "frameSize": [
+        128,
+        128
+      ],
+      "headingOrder": [
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "N",
+        "NE"
+      ],
+      "rowOrder": [
+        "blue",
+        "blue-carrying-red",
+        "green",
+        "green-carrying-blue"
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "muzzle": [
+        0.83,
+        0.5
+      ],
+      "wake": [
+        0.18,
+        0.5
+      ],
+      "source": "ChatGPT Image Sep 25, 2026, 08_35_53 PM (1).png",
+      "sourceSha256": "e5ebd12b8a20cc2564d6ae8136f8dcb24ac283d8096db01db0e2fa2bd4686022",
+      "tool": "Pillow 12.3.0",
+      "review": "calibrated from depicted bow direction; common cell-centered pivot"
+    }
+  ]
+}

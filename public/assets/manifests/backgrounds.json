@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "fleetrl-background-assets-v1",
+  "assets": [
+    {
+      "id": "pirates-war-hero-v1",
+      "category": "background",
+      "path": "assets/backgrounds/pirates-war-hero.png",
+      "width": 1674,
+      "height": 942,
+      "sha256": "02113100c053c73ef31a5471cce10702ad430e1c6c6667f653366ce71cff6d2c",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated raster; prompt recorded in release notes",
+      "review": "inspected at generated resolution; text-free responsive background"
+    }
+  ]
+}

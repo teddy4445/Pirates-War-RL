@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling==1.29.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fleetrl"
+version = "0.1.0"
+description = "Native deterministic headless FleetRL training environment"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Project source; see repository provenance and license." }
+authors = [{ name = "FleetRL project" }]
+dependencies = ["numpy==2.5.3"]
+
+[project.optional-dependencies]
+env = ["gymnasium==1.3.0", "pettingzoo==1.27.0"]
+train = ["torch==2.14.0"]
+test = ["pytest==9.1.1"]
+all = ["gymnasium==1.3.0", "pettingzoo==1.27.0", "torch==2.14.0", "pytest==9.1.1"]
+
+[project.scripts]
+fleetrl-rollout = "fleetrl.rollout:main"
+fleetrl-train = "fleetrl.train:main"
+fleetrl-evaluate = "fleetrl.evaluate:main"
+fleetrl-export = "fleetrl.export:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fleetrl"]
+
+[tool.hatch.build]
+include = ["src/fleetrl/**/*.py", "src/fleetrl/data/**/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

@@ -1,0 +1,265 @@
+{
+  "previewTestMode": "Self-contained HTML injected into about:blank; direct file navigation is blocked by the test browser administrator.",
+  "offlineCards": 49,
+  "allOggDecoded": [
+    {
+      "id": "cannon_fire_01",
+      "duration": 0.628390022675737,
+      "channels": 1
+    },
+    {
+      "id": "cannon_fire_02",
+      "duration": 0.6225850340136054,
+      "channels": 1
+    },
+    {
+      "id": "cannon_fire_03",
+      "duration": 0.6225850340136054,
+      "channels": 1
+    },
+    {
+      "id": "cannon_reload",
+      "duration": 0.3178231292517007,
+      "channels": 1
+    },
+    {
+      "id": "cannon_flyby_01",
+      "duration": 0.3613605442176871,
+      "channels": 1
+    },
+    {
+      "id": "cannon_flyby_02",
+      "duration": 0.34104308390022675,
+      "channels": 1
+    },
+    {
+      "id": "wood_hit_01",
+      "duration": 0.41070294784580497,
+      "channels": 1
+    },
+    {
+      "id": "wood_hit_02",
+      "duration": 0.41360544217687073,
+      "channels": 1
+    },
+    {
+      "id": "wood_hit_03",
+      "duration": 0.41070294784580497,
+      "channels": 1
+    },
+    {
+      "id": "water_hit_01",
+      "duration": 0.7212698412698413,
+      "channels": 1
+    },
+    {
+      "id": "water_hit_02",
+      "duration": 0.7386848072562359,
+      "channels": 1
+    },
+    {
+      "id": "water_hit_03",
+      "duration": 0.7386848072562359,
+      "channels": 1
+    },
+    {
+      "id": "ship_collision_01",
+      "duration": 0.5297052154195011,
+      "channels": 1
+    },
+    {
+      "id": "ship_collision_02",
+      "duration": 0.5297052154195011,
+      "channels": 1
+    },
+    {
+      "id": "ship_sink_01",
+      "duration": 1.7197278911564626,
+      "channels": 1
+    },
+    {
+      "id": "ship_sink_02",
+      "duration": 1.713922902494331,
+      "channels": 1
+    },
+    {
+      "id": "ship_respawn",
+      "duration": 0.8867120181405895,
+      "channels": 1
+    },
+    {
+      "id": "low_health",
+      "duration": 0.5297052154195011,
+      "channels": 1
+    },
+    {
+      "id": "movement_start",
+      "duration": 0.6167800453514739,
+      "channels": 1
+    },
+    {
+      "id": "flag_pickup_01",
+      "duration": 0.4774603174603175,
+      "channels": 1
+    },
+    {
+      "id": "flag_pickup_02",
+      "duration": 0.4774603174603175,
+      "channels": 1
+    },
+    {
+      "id": "flag_give",
+      "duration": 0.39328798185941044,
+      "channels": 1
+    },
+    {
+      "id": "flag_place",
+      "duration": 0.4513378684807256,
+      "channels": 1
+    },
+    {
+      "id": "flag_drop_water",
+      "duration": 0.6225850340136054,
+      "channels": 1
+    },
+    {
+      "id": "flag_recover",
+      "duration": 0.6196825396825397,
+      "channels": 1
+    },
+    {
+      "id": "flag_capture",
+      "duration": 1.0637641723356008,
+      "channels": 1
+    },
+    {
+      "id": "flag_lost",
+      "duration": 0.6080725623582767,
+      "channels": 1
+    },
+    {
+      "id": "ui_hover",
+      "duration": 0.08562358276643992,
+      "channels": 1
+    },
+    {
+      "id": "ui_click_01",
+      "duration": 0.10884353741496598,
+      "channels": 1
+    },
+    {
+      "id": "ui_click_02",
+      "duration": 0.10884353741496598,
+      "channels": 1
+    },
+    {
+      "id": "ui_back",
+      "duration": 0.22494331065759637,
+      "channels": 1
+    },
+    {
+      "id": "ui_confirm",
+      "duration": 0.3613605442176871,
+      "channels": 1
+    },
+    {
+      "id": "ui_error",
+      "duration": 0.2742857142857143,
+      "channels": 1
+    },
+    {
+      "id": "ui_pause",
+      "duration": 0.2829931972789116,
+      "channels": 1
+    },
+    {
+      "id": "ui_resume",
+      "duration": 0.2829931972789116,
+      "channels": 1
+    },
+    {
+      "id": "ui_notification",
+      "duration": 0.5297052154195011,
+      "channels": 1
+    },
+    {
+      "id": "countdown_tick",
+      "duration": 0.1785034013605442,
+      "channels": 1
+    },
+    {
+      "id": "match_start",
+      "duration": 0.7560997732426303,
+      "channels": 1
+    },
+    {
+      "id": "match_victory",
+      "duration": 1.5746031746031746,
+      "channels": 1
+    },
+    {
+      "id": "match_defeat",
+      "duration": 1.1769614512471656,
+      "channels": 1
+    },
+    {
+      "id": "match_draw",
+      "duration": 0.9737868480725623,
+      "channels": 1
+    },
+    {
+      "id": "tournament_complete",
+      "duration": 2.1463945578231294,
+      "channels": 1
+    },
+    {
+      "id": "training_start",
+      "duration": 0.45714285714285713,
+      "channels": 1
+    },
+    {
+      "id": "training_complete",
+      "duration": 0.9447619047619048,
+      "channels": 1
+    },
+    {
+      "id": "checkpoint_saved",
+      "duration": 0.31492063492063493,
+      "channels": 1
+    },
+    {
+      "id": "validation_pass",
+      "duration": 0.5006802721088436,
+      "channels": 1
+    },
+    {
+      "id": "validation_fail",
+      "duration": 0.45424036281179136,
+      "channels": 1
+    },
+    {
+      "id": "ocean_calm_loop",
+      "duration": 24.000725623582767,
+      "channels": 2
+    },
+    {
+      "id": "ocean_harbor_loop",
+      "duration": 24.000725623582767,
+      "channels": 2
+    }
+  ],
+  "offlinePlaybackLoopStopMute": "passed",
+  "desktopAndMobileLayout": "passed",
+  "helperTestTransport": "Fetch mocked with local file bytes because browser policy blocks navigation; real Web Audio decoding and playback exercised.",
+  "webAudioHelper": {
+    "loadedBuffers": 49,
+    "hiddenBlocked": true,
+    "duplicateAccepted": 1,
+    "maxObservedVoices": 12,
+    "loopStarted": true,
+    "gainClamping": true,
+    "disposed": true
+  },
+  "uncaughtBrowserErrors": [],
+  "passed": true
+}

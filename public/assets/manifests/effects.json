@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "fleetrl-effect-assets-v1",
+  "assets": [
+    {
+      "path": "assets/effects/combat-effects.png",
+      "width": 512,
+      "height": 128,
+      "sha256": "8c5f27b72567649de78112e7301237c4ebd4cd99273005440d27c3147e49c5cc",
+      "id": "combat-effects-v1",
+      "frames": [
+        "cannonball",
+        "impact",
+        "splash",
+        "sink"
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "source": "ChatGPT Image Sep 25, 2026, 08_38_21 PM.png",
+      "sourceSha256": "acab40af8fdb2cfcffe2b88b97aad3a329ecfaab7feeaad664f5364dbf2b3d22",
+      "collisionRole": "none",
+      "review": "decorative crops; procedural event markers remain accessibility fallback"
+    }
+  ]
+}

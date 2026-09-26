@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "fleetrl-config-v1",
+  "rulesVersion": "fleetrl-rules-v5",
+  "mode": "fleet",
+  "mapId": "twin-harbors-v1",
+  "shipsPerTeam": 3,
+  "world": {
+    "width": 1600,
+    "height": 900
+  },
+  "timing": {
+    "physicsHz": 60,
+    "renderFpsTarget": 30,
+    "decisionIntervalTicks": 6,
+    "decisionBudgetMs": 100,
+    "actionLatencyWindows": 1
+  },
+  "ship": {
+    "radius": 12,
+    "maxHealth": 100,
+    "acceleration": 55,
+    "maxSpeed": 80,
+    "dragPerSecond": 0.7,
+    "maxTurnRate": 2.4,
+    "respawnDelayTicks": 900,
+    "spawnProtectionTicks": 60
+  },
+  "combat": {
+    "projectileSpeed": 320,
+    "projectileRadius": 3,
+    "projectileRange": 250,
+    "damage": 18.75,
+    "minDamageMultiplier": 0.65,
+    "maxDamageMultiplier": 1.6,
+    "closeRangeFraction": 0.25,
+    "impactDamagePerSpeed": 0.2,
+    "cooldownTicks": 48,
+    "friendlyFire": false,
+    "rammingDamage": true,
+    "friendlyShipsBlockShots": false
+  },
+  "flags": {
+    "pickupRadius": 30,
+    "placeRadius": 30,
+    "giveRadius": 36,
+    "looseReturnTicks": 1800,
+    "requireOwnFlagHome": true
+  },
+  "match": {
+    "durationTicks": 10800,
+    "captureTarget": 1
+  },
+  "vision": {
+    "sensorRadius": 220,
+    "islandsOcclude": true,
+    "fleetSharing": "team-union",
+    "staticMapKnown": true
+  },
+  "features": {
+    "encoder": "ship-64-v1",
+    "width": 64,
+    "obstacleRayRange": 180
+  },
+  "actions": {
+    "decoder": "discrete-22-v1",
+    "discreteCount": 22
+  },
+  "runtime": {
+    "guestHeapBytes": 33554432,
+    "guestStackBytes": 524288,
+    "maxSourceBytes": 102400,
+    "maxOutputBytes": 65536,
+    "maxInferenceCallsPerDecision": 1,
+    "maxBatch": 8,
+    "maxFeatureWidth": 256,
+    "maxParameters": 1000000,
+    "initializationTimeoutMs": 10000,
+    "forfeitConsecutiveFailedDecisions": 10,
+    "forfeitFailureRate": 0.2,
+    "failureRateMinimumDecisions": 50
+  },
+  "import": {
+    "maxCompressedBytes": 10485760,
+    "maxExtractedBytes": 33554432,
+    "maxFiles": 64,
+    "maxPathDepth": 4,
+    "maxJsonBytes": 2097152,
+    "maxDenseLayers": 8,
+    "maxDenseJsonBytes": 33554432
+  },
+  "tournament": {
+    "seedCount": 1,
+    "mirrorSides": true,
+    "concurrency": 1,
+    "informalEntriesPerStudent": 3,
+    "points": {
+      "win": 3,
+      "draw": 1,
+      "loss": 0,
+      "doubleForfeit": 0
+    }
+  },
+  "replay": {
+    "keyframeEveryTicks": 120,
+    "checksumEveryTicks": 60,
+    "optionalSnapshotHz": 10,
+    "retainClassroomReplays": true
+  },
+  "audio": {
+    "masterGain": 0.35,
+    "effectsGain": 0.7,
+    "maxVoices": 12,
+    "musicEnabled": false
+  }
+}

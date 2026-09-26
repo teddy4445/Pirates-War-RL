@@ -1,0 +1,27 @@
+{
+  "measuredAt": "2026-09-26T06:36:25.754Z",
+  "provider": "Playwright Chromium on local Windows host",
+  "concurrency": "one browser training worker; one tournament match at a time",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Safari/537.36",
+    "hardwareConcurrency": 20,
+    "deviceMemoryGiB": 32,
+    "heap": {}
+  },
+  "presentation": {
+    "frames": 121,
+    "elapsedMs": 2004.8999999970197,
+    "fps": 60.35213726379364
+  },
+  "fixedStep": {
+    "decisions": 50,
+    "physicsTicks": 300,
+    "elapsedMs": 1768,
+    "meanDecisionStepMs": 35.36,
+    "physicsTicksPerSecond": 169.68325791855204
+  },
+  "qLearning": {
+    "transitions": 200,
+    "stepsPerSecond": 1751.3
+  }
+}

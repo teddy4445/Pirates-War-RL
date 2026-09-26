@@ -1,0 +1,10 @@
+* { box-sizing: border-box; }
+html { background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: radial-gradient(circle at 5% 0, #e9f7f8, transparent 35%), var(--color-bg); }
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.skip-link { position: fixed; z-index: 9999; top: 8px; left: 8px; padding: 10px 14px; color: white; background: var(--color-focus); border-radius: 8px; transform: translateY(-150%); }
+.skip-link:focus { transform: translateY(0); }
+.numeric { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } }

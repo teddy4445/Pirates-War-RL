@@ -1,0 +1,182 @@
+{
+  "bundle": "FleetRL Codex Specification",
+  "version": "1.0",
+  "preparedDate": "2026-09-25",
+  "files": [
+    {
+      "path": ".agents/skills/fleetrl-assets/SKILL.md",
+      "bytes": 4485,
+      "sha256": "a996338a3bba834a1d4c317a6be6a2405e70eb9afc3f78f013d20b9221ee0663"
+    },
+    {
+      "path": ".agents/skills/fleetrl-assets/agents/openai.yaml",
+      "bytes": 289,
+      "sha256": "6bb03d92e9c9f24d3a271841d456ed24470096cbb66d996015b49630711bc466"
+    },
+    {
+      "path": ".agents/skills/fleetrl-assets/references/audio.md",
+      "bytes": 3380,
+      "sha256": "2ba7c9f13b828af627925d422535c28ce05960d3c0ac8f7f61d6a6431b7589d1"
+    },
+    {
+      "path": ".agents/skills/fleetrl-assets/references/visuals.md",
+      "bytes": 4809,
+      "sha256": "9c635de1097e766cc725d79ab3bb078f4957f52feb3d4d3de3616b1f3b917b0d"
+    },
+    {
+      "path": ".agents/skills/fleetrl-assets/scripts/generate_sfx.mjs",
+      "bytes": 5103,
+      "sha256": "6fb5b983568ec11c4d8caae7b266bd7a4548b5d407ad7e1db616f8fcbc52d698"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 4134,
+      "sha256": "88b019f5baa9983b7850d85b78d86b9f788861dffff7b318fae73d7407f610a0"
+    },
+    {
+      "path": "BUNDLE_VERIFICATION.md",
+      "bytes": 2413,
+      "sha256": "9eeac52af11c9076f042ce73a0a4bb8fa92be5ae717cd33bceefef5d210287eb"
+    },
+    {
+      "path": "CODEX_START_HERE.md",
+      "bytes": 2450,
+      "sha256": "3c00fd2451c93f15e10f159391f4b655db910bd021fea019e65fe21c30260cd4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6479,
+      "sha256": "f191f686596f7c22c40e85c030c0121b808252dca2fadc32fa5b43880e6556dd"
+    },
+    {
+      "path": "docs/01_GAME_LOGIC.md",
+      "bytes": 12856,
+      "sha256": "3147e408981596dd0cbef124ed080f37ab8215eb2861843a02a53ddf1b11415f"
+    },
+    {
+      "path": "docs/02_DESIGN_SYSTEM.md",
+      "bytes": 8723,
+      "sha256": "878bd0512282f8ea435a1a84bb43533df734ee6c9ca1dcdd8bd6e39591e755b8"
+    },
+    {
+      "path": "docs/03_ARCHITECTURE_AND_AGENT_RUNTIME.md",
+      "bytes": 12918,
+      "sha256": "7cf3a14730dc34818b84e3a10c52948dc0c64df83966eb4c79ce053883add99d"
+    },
+    {
+      "path": "docs/04_VISUALS_AND_AUDIO_WORKFLOW.md",
+      "bytes": 3928,
+      "sha256": "e604034c9d29c35e5adfc8f89f4f6f537cff8c3d40a3947709c7f63f05a553fd"
+    },
+    {
+      "path": "docs/05_OBSERVATION_ACTION_AND_MODEL_API.md",
+      "bytes": 15646,
+      "sha256": "ff74ed8d3384a37a3fc79e7a6e7367d0491f46045bcf3f8b469677a984320f62"
+    },
+    {
+      "path": "docs/06_TIMING_DETERMINISM_AND_REPLAYS.md",
+      "bytes": 10130,
+      "sha256": "2f778b111be84c862286c3192efc8aedc9d4922d60b4f0f10d9e59c518522ae3"
+    },
+    {
+      "path": "docs/07_RL_TRAINING_AND_LESSONS.md",
+      "bytes": 9601,
+      "sha256": "f64d56a1d021ff2af0aafe53981bc8531d0b6e720553d7dfe9778230ecd52687"
+    },
+    {
+      "path": "docs/08_TOURNAMENTS_AND_CLASSROOM_LIVE.md",
+      "bytes": 9135,
+      "sha256": "58fde139dcb1a0e191cb72151f4964b8d119c68cc2cdfde252a5730723ec0f16"
+    },
+    {
+      "path": "docs/09_SCREENS_AND_USER_FLOWS.md",
+      "bytes": 6689,
+      "sha256": "d0ce6fed21ce16ac9599bdab0e4d8750aabc080db5cd3ff05b89d3238cc11db2"
+    },
+    {
+      "path": "docs/10_TESTING_SECURITY_AND_ACCEPTANCE.md",
+      "bytes": 8418,
+      "sha256": "d2e72b3b9dae041d22f781f3ec3991c24f2f90378c130d39cd8e3cef452d6518"
+    },
+    {
+      "path": "docs/11_STORAGE_EXPORT_AND_DEPLOYMENT.md",
+      "bytes": 6099,
+      "sha256": "50736238bf43dc62736dc2a818b22da5fd893f372cb50e0bbb205d365a8e43f5"
+    },
+    {
+      "path": "docs/12_CODEX_BUILD_PLAN.md",
+      "bytes": 10053,
+      "sha256": "81e0aab575536b7bd7e46d015ead7108bd15cf5bd141801e07339c5520c8669c"
+    },
+    {
+      "path": "docs/13_DEFAULTS_AND_DECISION_LOG.md",
+      "bytes": 5249,
+      "sha256": "4ca76d260fde284d8a8da6cbb99e82851ccbf947f8987c5e2830d49cae8a9d60"
+    },
+    {
+      "path": "docs/14_SOURCES.md",
+      "bytes": 3502,
+      "sha256": "4186251bab120e986a4e9338169c22d920df9ad0aed4ff2bf67d0558f7a5536a"
+    },
+    {
+      "path": "docs/15_STUDENT_AND_INSTRUCTOR_GUIDE.md",
+      "bytes": 3720,
+      "sha256": "965412419c0782bd42ddeefb5717cd726142826d26152b282d133e7f86940fbe"
+    },
+    {
+      "path": "docs/16_REQUIREMENTS_TRACEABILITY.md",
+      "bytes": 2681,
+      "sha256": "efa6e7c0c5802ea8f547b776a7a960f04c4e2c0935b49ca85435dd76d0bae76e"
+    },
+    {
+      "path": "examples/README.md",
+      "bytes": 1613,
+      "sha256": "fec738c5d8834bd5588b47a5f3e811b39c12c74e2869022f01ea0905d24bf35b"
+    },
+    {
+      "path": "examples/agent-script.js",
+      "bytes": 1995,
+      "sha256": "271f86a1253bddce1b45bf2abb5602b432dde1f64bf6995350db3892e9366549"
+    },
+    {
+      "path": "examples/constant-forward.agent.json",
+      "bytes": 22219,
+      "sha256": "c0008abb4868573e74e24c132ddece6d8ac4528e5298391e67ea760754ed4420"
+    },
+    {
+      "path": "examples/default-config.json",
+      "bytes": 2447,
+      "sha256": "05c9c9d388cf9dd7e5a96fb6cf324f42979736132e110464038c53fe9f7ca15c"
+    },
+    {
+      "path": "examples/manifest-script.json",
+      "bytes": 258,
+      "sha256": "88c813d237bdf42cbf40e61cc53c763b79d74c580519390f80a7ee4b9beb499a"
+    },
+    {
+      "path": "examples/manifest-tfjs.json",
+      "bytes": 528,
+      "sha256": "fe97ddd8c21b59e87949e040ae9f2692c8b23f9af0c0aaace5e3d373752c4402"
+    },
+    {
+      "path": "examples/neural-agent.js",
+      "bytes": 983,
+      "sha256": "73ab4914d5d984e7f35b9e391b1f5e5516e0f5cf360619732678521377c83d4a"
+    },
+    {
+      "path": "examples/twin-harbors.map.json",
+      "bytes": 4867,
+      "sha256": "fa0f070896f2a59521afc223be7e2645f58d04c329791bfa4cda9d29226e6591"
+    },
+    {
+      "path": "tools/check_bundle.py",
+      "bytes": 4716,
+      "sha256": "a6ee41615df0ed947c37f5393d3eec356eb03fd8196e0b0ec10bd31cd741afce"
+    },
+    {
+      "path": "tools/test_examples.cjs",
+      "bytes": 3597,
+      "sha256": "61cdd161da66a93a2af3494938f893f5230b7a0e1c4680e06354dc2114e57e4d"
+    }
+  ]
+}

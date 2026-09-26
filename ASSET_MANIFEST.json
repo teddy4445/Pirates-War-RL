@@ -1,0 +1,327 @@
+{
+  "schemaVersion": "fleetrl-assets-v1",
+  "status": "production-derivatives-built",
+  "generatedAt": "2026-09-25",
+  "sources": [
+    {
+      "id": "source-ships",
+      "path": "ChatGPT Image Sep 25, 2026, 08_35_53 PM (1).png",
+      "category": "ships",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "e5ebd12b8a20cc2564d6ae8136f8dcb24ac283d8096db01db0e2fa2bd4686022",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; irregular sheet, not yet sliced"
+    },
+    {
+      "id": "source-combat-effects",
+      "path": "ChatGPT Image Sep 25, 2026, 08_38_21 PM.png",
+      "category": "effects",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "acab40af8fdb2cfcffe2b88b97aad3a329ecfaab7feeaad664f5364dbf2b3d22",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; irregular transparent atlas"
+    },
+    {
+      "id": "source-icons",
+      "path": "ChatGPT Image Sep 25, 2026, 08_38_26 PM.png",
+      "category": "icons",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "47bedd6e8f16c81051611ed10634cfef405d9f23e4569b2bfa92f86a62e3892f",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; irregular transparent sheet"
+    },
+    {
+      "id": "source-ocean-effects",
+      "path": "ChatGPT Image Sep 25, 2026, 08_38_30 PM.png",
+      "category": "ocean-effects",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "ce2f22e50fb7c56e8b095a84f968a77ae6c4a1f069dfe5656bd41653d22baefd",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; irregular transparent atlas"
+    },
+    {
+      "id": "source-screen-reference",
+      "path": "ChatGPT Image Sep 25, 2026, 08_47_39 PM.png",
+      "category": "reference",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "f298ae22432a753182ce2a8f1c47e3091e232b4c44e53644710bb7b177fce8e7",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; reference only"
+    },
+    {
+      "id": "source-water-materials",
+      "path": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (1).png",
+      "category": "terrain",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "f850c278feb088c84a9c54d565749bcd12af54b6c373574dec21db4919ada3a4",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; RGB contact sheet with white gutters"
+    },
+    {
+      "id": "source-land-materials",
+      "path": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (2).png",
+      "category": "terrain",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "b16e4506693e5e961da149b7a6dfbd00020494ab109012cb1f1b28f6c31b1319",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; RGB contact sheet with white gutters"
+    },
+    {
+      "id": "source-shore-overlays",
+      "path": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (3).png",
+      "category": "overlays",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "8120a9a560a61a51f480824c1d6d61995cf6fc930735dff896679b0288ca1ae4",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; irregular transparent atlas"
+    },
+    {
+      "id": "source-fog-overlays",
+      "path": "ChatGPT Image Sep 25, 2026, 09_08_48 PM (4).png",
+      "category": "overlays",
+      "width": 1448,
+      "height": 1086,
+      "sha256": "f00f9ecaf92c3f862f5b6e83cfd5526b58b7f6c9bd7afc86e0e8ed0a95ddccf3",
+      "provenance": "user-supplied generated raster",
+      "review": "visually inspected; irregular transparent atlas"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/ships/ship-atlas.png",
+      "width": 1024,
+      "height": 512,
+      "sha256": "c60f3449bf4bff6fdfdbb6a8f58a9e2821004b57a3a282cbca974946032e183b",
+      "id": "directional-ships-v1",
+      "frameSize": [
+        128,
+        128
+      ],
+      "headingOrder": [
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "N",
+        "NE"
+      ],
+      "rowOrder": [
+        "blue",
+        "blue-carrying-red",
+        "green",
+        "green-carrying-blue"
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "muzzle": [
+        0.83,
+        0.5
+      ],
+      "wake": [
+        0.18,
+        0.5
+      ],
+      "source": "ChatGPT Image Sep 25, 2026, 08_35_53 PM (1).png",
+      "sourceSha256": "e5ebd12b8a20cc2564d6ae8136f8dcb24ac283d8096db01db0e2fa2bd4686022",
+      "tool": "Pillow 12.3.0",
+      "review": "calibrated from depicted bow direction; common cell-centered pivot"
+    },
+    {
+      "path": "assets/effects/combat-effects.png",
+      "width": 512,
+      "height": 128,
+      "sha256": "8c5f27b72567649de78112e7301237c4ebd4cd99273005440d27c3147e49c5cc",
+      "id": "combat-effects-v1",
+      "frames": [
+        "cannonball",
+        "impact",
+        "splash",
+        "sink"
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "source": "ChatGPT Image Sep 25, 2026, 08_38_21 PM.png",
+      "sourceSha256": "acab40af8fdb2cfcffe2b88b97aad3a329ecfaab7feeaad664f5364dbf2b3d22",
+      "collisionRole": "none",
+      "review": "decorative crops; procedural event markers remain accessibility fallback"
+    },
+    {
+      "path": "assets/icons/ui-icons.png",
+      "width": 640,
+      "height": 128,
+      "sha256": "0514b08dca507770f19fc2e13db15d51bd486d41ab8f4aa88548b5cea907e35e",
+      "id": "ui-icons-v1",
+      "frames": [
+        "play",
+        "pause",
+        "visibility",
+        "red-flag",
+        "blue-flag"
+      ],
+      "frameSize": [
+        128,
+        128
+      ],
+      "source": "ChatGPT Image Sep 25, 2026, 08_38_26 PM.png",
+      "sourceSha256": "47bedd6e8f16c81051611ed10634cfef405d9f23e4569b2bfa92f86a62e3892f",
+      "review": "measured five-cell extraction; decorative DOM icons only"
+    },
+    {
+      "path": "assets/ui/button-states.png",
+      "width": 640,
+      "height": 180,
+      "sha256": "d402bca7b9b4f6057eb3ed3cbeaccf944a5d3cb09d1e0cd5031336991c66b453",
+      "id": "gold-button-states-v1",
+      "frames": [
+        "released",
+        "hover",
+        "pressed"
+      ],
+      "frameSize": [
+        640,
+        60
+      ],
+      "source": "tools/build_assets.py",
+      "provenance": "project-authored procedural Pillow raster",
+      "review": "three-state stretchable game button background"
+    },
+    {
+      "path": "assets/terrain/water-mirror-tile.jpg",
+      "width": 512,
+      "height": 512,
+      "sha256": "1181576adb5e8817f0e5ff6513bc5f59382116cd0285f71d85eb6f4944929d24",
+      "id": "water-tile-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (1).png",
+      "sourceSha256": "f850c278feb088c84a9c54d565749bcd12af54b6c373574dec21db4919ada3a4",
+      "crop": [
+        377,
+        126,
+        716,
+        508
+      ],
+      "seamMethod": "2x2 horizontal/vertical mirror",
+      "collisionRole": "none"
+    },
+    {
+      "path": "assets/terrain/grass-mirror-tile.jpg",
+      "width": 512,
+      "height": 512,
+      "sha256": "4934b529b9fec11474f8adf1107f974c84073c6336039f45b411b249dca958a6",
+      "id": "grass-tile-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (2).png",
+      "sourceSha256": "b16e4506693e5e961da149b7a6dfbd00020494ab109012cb1f1b28f6c31b1319",
+      "crop": [
+        589,
+        4,
+        862,
+        261
+      ],
+      "seamMethod": "2x2 horizontal/vertical mirror",
+      "collisionRole": "masked to authoritative polygons"
+    },
+    {
+      "path": "assets/terrain/sand-mirror-tile.jpg",
+      "width": 512,
+      "height": 512,
+      "sha256": "32fad2c3727a4ac8552755bfb5d7c40f9400ba252c9fe11d57f46b34edbbce2e",
+      "id": "sand-tile-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (2).png",
+      "sourceSha256": "b16e4506693e5e961da149b7a6dfbd00020494ab109012cb1f1b28f6c31b1319",
+      "crop": [
+        11,
+        4,
+        283,
+        261
+      ],
+      "seamMethod": "2x2 horizontal/vertical mirror",
+      "collisionRole": "presentation shoreline only"
+    },
+    {
+      "path": "assets/overlays/ocean-ripples.png",
+      "width": 640,
+      "height": 140,
+      "sha256": "bdc1aa170c48301a6c8da502b8d7b2bcfe7f7a72df309a1b53284e3906e9f70b",
+      "id": "ocean-ripples-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 08_38_30 PM.png",
+      "sourceSha256": "ce2f22e50fb7c56e8b095a84f968a77ae6c4a1f069dfe5656bd41653d22baefd",
+      "crop": [
+        0,
+        410,
+        660,
+        555
+      ],
+      "collisionRole": "none",
+      "review": "measured transparent ripple and splash strip; decorative only"
+    },
+    {
+      "path": "assets/overlays/shore-foam.png",
+      "width": 768,
+      "height": 176,
+      "sha256": "51eb32de5f83936dae5e4cf46b65f09e63a06e068872ad00bcc92b13286ab965",
+      "id": "shore-foam-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_47 PM (3).png",
+      "sourceSha256": "8120a9a560a61a51f480824c1d6d61995cf6fc930735dff896679b0288ca1ae4",
+      "crop": [
+        0,
+        0,
+        975,
+        225
+      ],
+      "collisionRole": "none",
+      "review": "measured transparent foam strip; clipped to authoritative island paths"
+    },
+    {
+      "path": "assets/overlays/fog-mist.png",
+      "width": 640,
+      "height": 284,
+      "sha256": "667d34503de99b0c2cc2c7583f092e16cd00a5a06abe3c5977efb96f25a49243",
+      "id": "fog-mist-v1",
+      "source": "ChatGPT Image Sep 25, 2026, 09_08_48 PM (4).png",
+      "sourceSha256": "f00f9ecaf92c3f862f5b6e83cfd5526b58b7f6c9bd7afc86e0e8ed0a95ddccf3",
+      "crop": [
+        760,
+        285,
+        1448,
+        590
+      ],
+      "collisionRole": "none",
+      "review": "measured cloud and mist forms; presentation layer after visibility filtering"
+    },
+    {
+      "id": "pirates-war-hero-v1",
+      "category": "background",
+      "path": "assets/backgrounds/pirates-war-hero.png",
+      "width": 1674,
+      "height": 942,
+      "sha256": "02113100c053c73ef31a5471cce10702ad430e1c6c6667f653366ce71cff6d2c",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated raster; prompt recorded in release notes",
+      "review": "inspected at generated resolution; text-free responsive background"
+    },
+    {
+      "id": "fleetrl-audio-2.0.0",
+      "category": "audio",
+      "path": "public/assets/audio/",
+      "manifest": "public/assets/manifests/audio.json",
+      "files": 49,
+      "source": "FleetRL_Sound_Pack",
+      "provenance": "project-authored procedural synthesis",
+      "review": "file and managed-browser QA supplied; human speaker/headphone audition still required"
+    }
+  ],
+  "derivedAt": "2026-09-26"
+}

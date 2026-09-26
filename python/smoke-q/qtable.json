@@ -1,0 +1,59 @@
+{
+  "format": "fleetrl-qtable-v1",
+  "featureEncoder": "ship-64-v1",
+  "actionDecoder": "discrete-22-v1",
+  "discretizer": {
+    "bearingBins": 8,
+    "distanceBoundaries": [
+      0.12,
+      0.3,
+      0.6
+    ],
+    "healthBoundaries": [
+      0.3333333333333333,
+      0.6666666666666666
+    ],
+    "carryingBins": 2,
+    "enemyVisibilityBins": 2
+  },
+  "alpha": 0.2,
+  "gamma": 0.99,
+  "metadata": {
+    "algorithm": "qlearning",
+    "mode": "duel",
+    "seed": 7,
+    "steps": 12,
+    "episodes": 2,
+    "rewardPreset": "capture-difference-v1",
+    "trained": true
+  },
+  "states": {
+    "0:3:2:0:1": {
+      "q": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "visits": 12
+    }
+  }
+}

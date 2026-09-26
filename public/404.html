@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Opening Pirates War RL…</title>
+  </head>
+  <body>
+    <p>Opening Pirates War RL…</p>
+    <script>
+      (() => {
+        const parts = location.pathname.split("/").filter(Boolean);
+        const projectSite = location.hostname.endsWith(".github.io") && parts.length > 0;
+        const base = projectSite ? `/${parts.shift()}/` : "/";
+        const route = parts.length ? parts.join("/") : "home";
+        location.replace(`${location.origin}${base}#/${route}${location.search}`);
+      })();
+    </script>
+  </body>
+</html>

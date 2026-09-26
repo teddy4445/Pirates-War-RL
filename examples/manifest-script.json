@@ -1,0 +1,14 @@
+{
+  "packageVersion": "fleetrl-package-v1",
+  "name": "Harbor Starter",
+  "apiVersion": "fleetrl-agent-v1",
+  "controlScope": "team",
+  "entry": "agent.js",
+  "models": [],
+  "supportedModes": [
+    "duel",
+    "fleet",
+    "fog-duel",
+    "fog-fleet"
+  ]
+}

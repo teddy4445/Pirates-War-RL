@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "fleetrl-procedural-presentation-v1",
+  "generatedAt": "2026-09-26",
+  "sourceModule": "src/rendering/ArenaCanvas.tsx",
+  "provenance": "Original project-authored Canvas 2D geometry; no external assets, paid services, or runtime network calls.",
+  "assets": [
+    {
+      "id": "animated-ocean-v3",
+      "category": "environment",
+      "dimensions": "viewport-scaled",
+      "pivot": null,
+      "variants": ["parallax-current-ribbons", "wave-bands", "caustic-texture", "fish-schools", "sun-sparkles", "foam-eddies", "jellyfish", "sea-turtles", "manta-shadows", "kelp-fragments"],
+      "animationClock": "replay simulation tick",
+      "collisionRole": "none; these entities are never added to simulation state, observations, collision geometry, or agent inputs",
+      "selection": "bounded deterministic cosmetic hash of match seed and visual ID; does not consume gameplay RNG",
+      "reducedMotion": "freezes currents, fish, sea life, drifting fragments, and shimmer"
+    },
+    {
+      "id": "island-dressing-v2",
+      "category": "environment",
+      "dimensions": "authoritative-polygon-scaled",
+      "pivot": null,
+      "variants": ["palms", "bushes", "rocks", "flowers", "driftwood", "hut", "ruins", "campfire", "supply-cache", "tide-pool", "gulls"],
+      "animationClock": "replay simulation tick",
+      "collisionRole": "none; all dressing is clipped conceptually to authoritative map polygons",
+      "selection": "deterministic cosmetic hash of match seed and island ID; huts appear only on one of six landmark variants"
+    },
+    {
+      "id": "ship-presentation-v2",
+      "category": "ships-and-effects",
+      "dimensions": "38-58 CSS px ship atlas display",
+      "pivot": [0.5, 0.5],
+      "variants": ["blue", "blue-carrying", "green", "green-carrying"],
+      "eventTriggers": ["CannonFired", "ProjectileHitShip", "CloseRangeProjectileHit", "TerrainContact", "ShipSunk", "ShipRespawned", "FlagPickedUp", "FlagCaptured"],
+      "closeRangeImpact": "layered white-gold flash, expanding ring, and ten-ray burst; driven by ProjectileHitShip.closeRange",
+      "collisionRole": "none; authoritative circle hitbox remains in simulation",
+      "healthBarAnchor": "below hull",
+      "weaponCooldownBar": "yellow bar below health; empty immediately after firing and fills to a bright ready state from authoritative cooldownTicks"
+    },
+    {
+      "id": "explored-map-fog-v1",
+      "category": "visibility-presentation",
+      "dimensions": "800x450 internal mask, viewport-scaled",
+      "pivot": null,
+      "variants": ["unexplored-black", "explored-dimmed", "currently-visible-clear"],
+      "animationClock": "replay simulation tick",
+      "collisionRole": "none",
+      "visibility": "128 terrain-clipped rays per friendly sensor; explored mask is remembered per team and reset on replay rewind",
+      "reducedMotion": "static fog boundaries; no visibility change is inferred from cosmetic motion"
+    },
+    {
+      "id": "wreck-hazards-v3",
+      "category": "environment",
+      "dimensions": "authoritative-polygon-scaled",
+      "pivot": [0.5, 0.5],
+      "variants": ["zero-to-six-seeded-wrecks", "mirrored-pairs", "central-wreck", "bubbles"],
+      "animationClock": "replay simulation tick",
+      "collisionRole": "authoritative wreck-shoal polygons are solid; decorative hull and bubbles add no geometry"
+    }
+  ]
+}

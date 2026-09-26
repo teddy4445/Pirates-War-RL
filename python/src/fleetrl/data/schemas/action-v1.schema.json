@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fleetrl-action-v1",
+  "type": "object",
+  "required": ["actions"],
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["shipId", "throttle", "turn", "fire", "interact"],
+        "additionalProperties": false,
+        "properties": {
+          "shipId": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "throttle": { "type": "number", "minimum": -1, "maximum": 1 },
+          "turn": { "type": "number", "minimum": -1, "maximum": 1 },
+          "fire": { "type": "boolean" },
+          "fireTargetShipId": { "type": ["string", "null"], "minLength": 1, "maxLength": 64 },
+          "interact": {
+            "oneOf": [
+              { "type": "object", "required": ["type"], "additionalProperties": false, "properties": { "type": { "const": "none" } } },
+              { "type": "object", "required": ["type", "flagId"], "additionalProperties": false, "properties": { "type": { "const": "pickup" }, "flagId": { "type": "string" } } },
+              { "type": "object", "required": ["type", "targetShipId"], "additionalProperties": false, "properties": { "type": { "const": "give" }, "targetShipId": { "type": "string" } } },
+              { "type": "object", "required": ["type", "flagSiteId"], "additionalProperties": false, "properties": { "type": { "const": "place" }, "flagSiteId": { "type": "string" } } },
+              { "type": "object", "required": ["type"], "additionalProperties": false, "properties": { "type": { "const": "drop" } } }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "rulesVersion": "fleetrl-rules-v5",
+  "agentApiVersion": "fleetrl-agent-v1",
+  "configVersion": "fleetrl-config-v1",
+  "mapVersion": "fleetrl-map-v1",
+  "featureEncoder": "ship-64-v1",
+  "actionDecoder": "discrete-22-v1",
+  "denseModelFormat": "dense-json-v1",
+  "browserEngine": "fleetrl-engine-ts-v5",
+  "pythonEngine": "fleetrl-engine-py-v5",
+  "numericContract": "float64 simulation with cross-language tolerance; finite float32 model features and weights"
+}
