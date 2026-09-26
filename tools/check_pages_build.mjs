@@ -13,7 +13,10 @@ check(existsSync(file("404.html")), "dist/404.html is missing");
 check(existsSync(file(".nojekyll")), "dist/.nojekyll is missing");
 check(existsSync(file("CNAME")) && readFileSync(file("CNAME"), "utf8").trim() === domain, `dist/CNAME must contain only ${domain}`);
 check(existsSync(file("sw.js")), "dist/sw.js is missing");
-check(existsSync(file("downloads/FleetRL_Python_Training_Bundle.zip")), "Python training bundle is missing from the Pages artifact");
+check(
+  existsSync(file("downloads/FleetRL_Python_Training_Bundle.zip")),
+  "Python training bundle is missing from the Pages artifact; generate it before the Vite build with: python tools/package_python.py",
+);
 
 if (existsSync(file("index.html"))) {
   const html = readFileSync(file("index.html"), "utf8");

@@ -30,8 +30,16 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
       - name: Install locked dependencies
         run: npm ci
+
+      - name: Build downloadable Python training kit
+        run: python tools/package_python.py
 
       - name: Test and build the static application
         run: npm run verify
