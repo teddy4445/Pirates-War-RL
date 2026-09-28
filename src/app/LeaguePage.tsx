@@ -29,18 +29,19 @@ function BracketTree({ entries, rounds, results, previewIds = [], onWatch }: Bra
 
 export function LeaguePage() {
   const saved = gameSession.league;
-  const initialCatalog = builtinEntries();
+  const initialMode = saved?.mode ?? "duel";
+  const initialCatalog = saved?.entries ?? builtinEntries(initialMode);
   const [format, setFormat] = useState<LeagueFormat>(saved?.format ?? "round-robin");
-  const [mode, setMode] = useState<GameMode>(saved?.mode ?? "duel");
+  const [mode, setMode] = useState<GameMode>(initialMode);
   const [firstSeed, setFirstSeed] = useState(saved?.firstSeed ?? 100);
   const [seedCount, setSeedCount] = useState(saved?.seedCount ?? 1);
   const [durationSeconds, setDurationSeconds] = useState(clampMatchDurationSeconds(saved?.durationSeconds ?? DEFAULT_MATCH_DURATION_SECONDS));
   const [fleetSizeChoice, setFleetSizeChoice] = useState<FleetSizeChoice>(saved?.shipsPerTeam && saved.shipsPerTeam >= 2 && saved.shipsPerTeam <= 6 ? saved.shipsPerTeam as FleetSizeChoice : 3);
   const [resolvedShipsPerTeam, setResolvedShipsPerTeam] = useState(saved?.shipsPerTeam ?? 3);
   const [bracketSize, setBracketSize] = useState<4 | 8 | 16>(saved?.bracketSize ?? 4);
-  const [catalog, setCatalog] = useState<TournamentEntry[]>(saved ? saved.entries : initialCatalog);
-  const [entries, setEntries] = useState<TournamentEntry[]>(saved?.entries ?? initialCatalog);
-  const [knockoutSlots, setKnockoutSlots] = useState<TournamentEntry[]>(makeSlots(saved?.bracketSize ?? 4, saved ? saved.entries : initialCatalog, saved?.format === "knockout" ? saved.entries : []));
+  const [catalog, setCatalog] = useState<TournamentEntry[]>(initialCatalog);
+  const [entries, setEntries] = useState<TournamentEntry[]>(initialCatalog);
+  const [knockoutSlots, setKnockoutSlots] = useState<TournamentEntry[]>(makeSlots(saved?.bracketSize ?? 4, initialCatalog, saved?.format === "knockout" ? saved.entries : []));
   const [results, setResults] = useState<MatchResult[]>(saved?.results ?? []);
   const [jobs, setJobs] = useState<MatchJob[]>(saved?.jobs ?? []);
   const [knockoutRounds, setKnockoutRounds] = useState<KnockoutRoundSnapshot[]>(saved?.knockoutRounds ?? []);
@@ -62,6 +63,16 @@ export function LeaguePage() {
       setEntries(previous => [...previous, ...imported.filter(next => !previous.some(item => item.hash === next.hash))]);
     } catch (caught) { setError(caught instanceof Error ? caught.message : String(caught)); }
     finally { setBusy(false); }
+  };
+
+  const changeMode = (nextMode: GameMode) => {
+    setMode(nextMode);
+    const uploads = catalog.filter(entry => entry.student !== "Built-in rival" && entry.student !== "Teddy final boss" && (!entry.supportedModes || entry.supportedModes.includes(nextMode)));
+    const nextCatalog = [...builtinEntries(nextMode), ...uploads];
+    setCatalog(nextCatalog);
+    setEntries(nextCatalog);
+    setKnockoutSlots(makeSlots(bracketSize, nextCatalog));
+    setResults([]); setJobs([]); setKnockoutRounds([]);
   };
 
   const runRoundRobin = async (scheduled: MatchJob[], existing: MatchResult[], participants: TournamentEntry[], shipsPerTeam: number) => {
@@ -120,7 +131,7 @@ export function LeaguePage() {
     finally { setBusy(false); }
   };
 
-  const reset = () => { pauseRef.current = true; gameSession.clearLeague(); setResults([]); setJobs([]); setKnockoutRounds([]); setEntries(builtinEntries()); setCatalog(builtinEntries()); setKnockoutSlots(makeSlots(bracketSize, builtinEntries())); setStage("setup"); };
+  const reset = () => { const defaults = builtinEntries(mode); pauseRef.current = true; gameSession.clearLeague(); setResults([]); setJobs([]); setKnockoutRounds([]); setEntries(defaults); setCatalog(defaults); setKnockoutSlots(makeSlots(bracketSize, defaults)); setStage("setup"); };
   const watch = (result: MatchResult) => {
     const blue = entries.find(entry => entry.id === result.blueId)!; const green = entries.find(entry => entry.id === result.roseId)!;
     persist(entries, results, jobs, knockoutRounds);
@@ -137,7 +148,7 @@ export function LeaguePage() {
     {stage === "setup" ? <div className={styles.leagueLayout}>
       <aside className={styles.parchmentPanel}><h2>League rules</h2>
         <label className={styles.gameField}>Competition<select aria-label="Competition format" value={format} onChange={event => setFormat(event.target.value as LeagueFormat)}><option value="round-robin">All vs all</option><option value="knockout">Knockout bracket</option></select></label>
-        <label className={styles.gameField}>Mode<select value={mode} onChange={event => setMode(event.target.value as GameMode)}>{modeOptions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+        <label className={styles.gameField}>Mode<select value={mode} onChange={event => changeMode(event.target.value as GameMode)}>{modeOptions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
         {mode.includes("fleet") && <label className={styles.gameField}>Ships per fleet<select value={fleetSizeChoice} onChange={event => setFleetSizeChoice(event.target.value === "random" ? "random" : Number(event.target.value) as FleetSizeChoice)}><option value="random">Random · 2 to 6</option>{[2, 3, 4, 5, 6].map(count => <option value={count} key={count}>{count} ships</option>)}</select></label>}
         <label className={styles.gameField}>Starting seed<input type="number" value={firstSeed} onChange={event => setFirstSeed(Number(event.target.value) || 0)} /></label>
         <label className={styles.gameField}>Battle time · seconds<input aria-label="League battle time in seconds" type="number" min="15" max="300" step="1" value={durationSeconds} onChange={event => setDurationSeconds(Number(event.target.value))} onBlur={() => setDurationSeconds(clampMatchDurationSeconds(durationSeconds))} /></label>

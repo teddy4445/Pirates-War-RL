@@ -21,10 +21,13 @@ The repository is prepared to publish the production `dist/` artifact at `https:
 
 GitHub treats the custom-domain value in repository Pages settings as authoritative for Actions deployments. `public/CNAME` is retained in the built artifact as a clear domain declaration and for compatibility with branch-based Pages publishing, but it does not replace the Settings step.
 
+The workflow provisions Python 3.13 and runs `python tools/package_python.py` before Vite builds the website. This deterministically creates the downloadable training ZIP in a clean GitHub checkout, so the Pages artifact does not depend on a binary generated on a developer's machine.
+
 ## Local release checks
 
 ```text
 npm ci
+python tools/package_python.py
 npm run verify
 npm run pages:check
 npm run test:e2e -- tests/e2e/shell.spec.ts

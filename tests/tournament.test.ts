@@ -3,11 +3,18 @@ import { clampMatchDurationSeconds } from "../src/game/session";
 import { builtinEntries, knockoutWinner, makeKnockoutRoundJobs, makeRoundRobinJobs, preflightTournamentEntry, runTournamentMatch, shuffledKnockoutEntries, standings, type MatchResult, type TournamentEntry } from "../src/tournament/runner";
 
 describe("tournament scheduling and ranking", () => {
-  it("ships five distinct, valid tactical captains", async () => {
+  it("ships four mode-specific captain ladders with three levels and one Teddy boss", async () => {
     const entries = builtinEntries();
-    expect(entries).toHaveLength(5);
-    expect(new Set(entries.map(entry => entry.kind)).size).toBe(5);
-    await Promise.all(entries.map(entry => preflightTournamentEntry(entry, "fleet")));
+    expect(entries).toHaveLength(16);
+    expect(new Set(entries.map(entry => entry.hash)).size).toBe(16);
+    for (const mode of ["duel", "fleet", "fog-duel", "fog-fleet"] as const) {
+      const ladder = builtinEntries(mode);
+      expect(ladder).toHaveLength(4);
+      expect(ladder.map(entry => entry.difficulty)).toEqual([1, 2, 3, "boss"]);
+      expect(ladder.every(entry => entry.supportedModes?.length === 1 && entry.supportedModes[0] === mode)).toBe(true);
+    }
+    const trusted = entries.filter(entry => entry.difficulty !== "boss");
+    await Promise.all(trusted.map(entry => preflightTournamentEntry(entry, entry.targetMode!)));
   });
   it("creates every mirrored seed job exactly once", () => {
     const entries = builtinEntries(); const jobs = makeRoundRobinJobs("t", entries, [7, 8]);
@@ -43,7 +50,7 @@ describe("tournament scheduling and ranking", () => {
     const rows = standings(entries, results); expect(rows[0]).toEqual(expect.objectContaining({ id: entries[0]!.id, points: 4, wins: 1, draws: 1 }));
   });
   it("uses direct head-to-head before capture differential", () => {
-    const entries: TournamentEntry[] = [...builtinEntries().slice(0, 3), { id: "fourth", alias: "Fourth", student: "Built-in", hash: "fourth-v1", kind: "raider" }]; const fakeReplay = {} as MatchResult["replay"];
+    const entries: TournamentEntry[] = [...builtinEntries("duel").slice(0, 3), { id: "fourth", alias: "Fourth", student: "Built-in", hash: "fourth-v1", kind: "duel-cadet" }]; const fakeReplay = {} as MatchResult["replay"];
     const result = (id: string, blueId: string, roseId: string, winnerId: string, blueScore: number, roseScore: number): MatchResult => ({ id, blueId, roseId, seed: 1, winnerId, draw: false, blueScore, roseScore, blueKills: 0, roseKills: 0, tick: 1, forfeits: [], replay: fakeReplay });
     const results = [
       result("ab", entries[0]!.id, entries[1]!.id, entries[0]!.id, 1, 0),

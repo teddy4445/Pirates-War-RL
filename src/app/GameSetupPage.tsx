@@ -16,11 +16,11 @@ const modes: { id: GameMode; name: string; detail: string }[] = [
 ];
 
 export function GameSetupPage() {
-  const builtins = builtinEntries();
   const remembered = gameSession.lastSetup;
   const stored = gameSession.storedPreferences;
-  const entryFor = (id: string | undefined, fallback: TournamentEntry) => builtins.find(entry => entry.id === id) ?? fallback;
   const initialMode = remembered?.mode ?? stored?.mode ?? "duel";
+  const builtins = builtinEntries(initialMode);
+  const entryFor = (id: string | undefined, fallback: TournamentEntry) => builtins.find(entry => entry.id === id) ?? fallback;
   const initialViewpoint = remembered?.viewpoint ?? stored?.viewpoint ?? "spectator";
   const [mode, setMode] = useState<GameMode>(initialMode);
   const [seed, setSeed] = useState(remembered?.seed ?? stored?.seed ?? 7);
@@ -36,6 +36,9 @@ export function GameSetupPage() {
 
   const chooseMode = (next: GameMode) => {
     setMode(next);
+    const compatible = builtinEntries(next);
+    if (blue.supportedModes && !blue.supportedModes.includes(next)) setBlue(compatible[0]!);
+    if (green.supportedModes && !green.supportedModes.includes(next)) setGreen(compatible[1] ?? compatible[0]!);
     if (next.startsWith("fog") && viewpoint === "spectator") setViewpoint("blue");
   };
 

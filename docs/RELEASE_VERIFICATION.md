@@ -1,13 +1,13 @@
 # Release verification
 
-Verified: 2026-09-26. Scope: local Windows Pirates War RL release candidate, production static build, and downloadable Python kit. This report records executed checks; it is not a claim of public deployment or tamper-resistant grading.
+Verified: 2026-09-28. Scope: local Windows Pirates War RL release candidate, production static build, and downloadable Python kit. This report records executed checks; it is not a claim of public deployment or tamper-resistant grading.
 
 ## Release artifacts
 
 | Artifact | Evidence |
 |---|---|
-| Static website | `dist/`, 97 files, 28,330,405 bytes after the verified rules-v5 and GitHub Pages build |
-| GitHub Pages configuration | Actions deployment workflow, `CNAME` for `rl.teddylazebnik.com`, `.nojekyll`, direct-route recovery, and relative-path-safe output |
+| Static website | `dist/`, 97 files, 28,429,207 bytes after the verified rules-v5 and GitHub Pages build |
+| GitHub Pages configuration | Actions deployment workflow with clean-runner Python-kit generation, `CNAME` for `rl.teddylazebnik.com`, `.nojekyll`, direct-route recovery, and relative-path-safe output |
 | Generated hero | `public/assets/backgrounds/pirates-war-hero.png`, SHA-256 `02113100C053C73EF31A5471CCE10702AD430E1C6C6667F653366CE71CFF6D2C` |
 | Python kit | `public/downloads/FleetRL_Python_Training_Bundle.zip` and matching `dist/downloads/` copy |
 | Python kit SHA-256 | `6324733dfe4afe88af4760eedebe03bb1ee3aaa33ebf9fbc6012bf50cbd32ffd` |
@@ -22,13 +22,13 @@ The package hash is valid for the release tested here. Recompute it after changi
 | Command | Result |
 |---|---|
 | `npm run examples:build` | Generated the real restricted TF.js ZIP and copied all examples into the public static bundle. |
-| `npm run verify` | ESLint passed; 15 Vitest files / 88 tests passed; TypeScript passed; Vite production build passed. Tests include the 15-second respawn default, 15–300 second match-duration clamp/materialization, the 25% cannon reduction, full-state cross-language cases, friendly/enemy impact damage, terrain impacts, simultaneous lethal ramming, selected-target predictive aim, range-scaled damage, flag relocation, sink tiebreaks, procedural archipelagos/wrecks, fog island discovery, knockout scheduling, five captain preflights, and a complete built-in pickup/capture match. |
+| `npm run verify` | ESLint passed; 16 Vitest files / 93 tests passed; TypeScript passed; Vite production build passed. Tests include the 15-second respawn default, 15–300 second match-duration clamp/materialization, the 25% cannon reduction, full-state cross-language cases, friendly/enemy impact damage, terrain impacts, simultaneous lethal ramming, selected-target predictive aim, range-scaled damage, flag relocation, sink tiebreaks, procedural archipelagos/wrecks, fog island discovery, knockout scheduling, all 16 mode-specific captains, all four Teddy packages in the real QuickJS runtime, adjacent ladder ordering, and a complete built-in pickup/capture match. |
 | `npm run pages:check` | Passed the custom-domain, relative-path, direct-route recovery, service-worker, offline-manifest, and required-download checks for `https://rl.teddylazebnik.com/`. |
-| `npm run bundle:check` | 43 maintained Markdown files, 49 maintained JSON files, local links, fences, schemas/defaults, fixture geometry, and trusted example-agent fixtures passed. |
+| `npm run bundle:check` | 44 maintained Markdown files, 49 maintained JSON files, local links, fences, schemas/defaults, fixture geometry, and trusted example-agent fixtures passed. |
 | `npm run python:test` | 35 tests passed. |
 | `npm run parity` | Regenerated 12 trajectories (4 modes × 3 seeds × 240 ticks), 10 complete gameplay-state cases, 6 adapter cases, and 3 `fleetrl-archipelago-v3` maps; Python 20 passed; TypeScript 4 files / 35 tests passed. |
 | `npm run python:package:check` | Confirmed the maintained package and downloadable ZIP were byte-current. |
-| `npm run test:e2e -- tests/e2e/shell.spec.ts` | 5 Chromium production tests passed in 18.3 s, including the remembered 45-second setup, visible respawn HUD, completed duplicate-captain knockout bracket, published CNAME, and repository-subpath service-worker scope. |
+| `npm run test:e2e -- tests/e2e/shell.spec.ts` | 6 Chromium production tests passed in 57.2 s, including the mode-specific New Game roster and Under the deck source viewer, an actual Teddy QuickJS match, mirrored League evaluation of all four bosses against their Level 3 rivals, the Teddy build page, published CNAME, and repository-subpath service-worker scope. |
 | `npm run python:bundle-smoke` | The current website-download ZIP hash/42-file manifest passed; clean Python 3.13 environment installed; 35 tests, rollout, short DQN, evaluation, and export passed. |
 | `npm run test:e2e:bundle` | 1 Chromium test passed in 7.7 s: the exact clean-run Python export imported into New Game, captained a match, opened real results, and replayed the recording. |
 
@@ -38,10 +38,11 @@ The full reproducible command is `npm run release:verify`. Individual commands r
 
 The browser tests use the built application through static HTTP, not the Vite development server. They exercised:
 
-- the game landing page, opening menu, two-captain setup, remembered mode/seed/viewpoint/sound, 2-6/random fleet size, full-screen arena, compact ship-sink HUD, pause/continue, close, post-game statistics, and policy-free X1/X2/X4/X8 replay;
+- the game landing page, opening menu, two-captain setup, four-captain mode-specific roster, Under the deck source/file viewer for both sides, remembered mode/seed/viewpoint/sound, 2-6/random fleet size, full-screen arena, compact ship-sink HUD, pause/continue, close, post-game statistics, and policy-free X1/X2/X4/X8 replay;
 - declarative Dense JSON and real restricted TensorFlow.js ZIP imports directly into opposite sides of a one-off game;
 - mirrored all-vs-all League scheduling plus a completed four-slot duplicate-captain knockout bracket, animated winner tree, real standings/results, recorded match selection, replay, and return-to-league flow;
-- the consolidated developer reference, Python-kit download, responsive mobile landing, published CNAME, and serving with the correct service-worker scope under `/course/fleetrl/`;
+- the four Teddy final bosses running as ordinary student-format QuickJS packages and leading their Level 3 rivals in two-color mirrored evaluations on the maintained benchmark seed for Duel, Fleet, Fog Duel, and Fog Fleet;
+- the consolidated developer reference, Teddy's Agent process/file inspector, Python-kit download, responsive mobile landing, published CNAME, and serving with the correct service-worker scope under `/course/fleetrl/`;
 - retired Learn, browser Training, Agents, Instructor, and Classroom routes returning to the new game landing page.
 
 Import/security unit tests also reject unsafe archive paths, archive bombs by declared size, encrypted ZIP entries, remote model shards, unsupported TF.js topology, non-finite/oversized Dense packages, malformed actions, and invalid configs. Student JavaScript is interpreted only in QuickJS/WASM workers.

@@ -65,8 +65,27 @@
 .gameField input, .gameField select, .gameField textarea { width: 100%; border: 2px solid #aa7a40; border-radius: 9px; padding: 11px 12px; color: #172c38; background: rgb(255 252 235 / .86); font: 700 1rem var(--font-body); text-transform: none; letter-spacing: normal; }
 .gameField textarea { min-height: 170px; resize: vertical; font: .78rem/1.45 var(--font-code); }
 .agentActions { display: flex; flex-wrap: wrap; gap: 8px; }
+.deckButton { border: 1px solid #715126; border-radius: 8px; padding: 8px 11px; color: #fff1b8; background: linear-gradient(#4d3520, #25170e); box-shadow: inset 0 1px rgb(255 255 255 / .16), 0 3px 0 #120a06; font: 850 .75rem var(--font-body); cursor: pointer; }
+.deckButton:hover { filter: brightness(1.18); transform: translateY(-1px); }
+.deckButton:active { box-shadow: inset 0 2px 5px rgb(0 0 0 / .5); transform: translateY(2px); }
 .miniButton { min-height: 39px; padding: 8px 12px; border-radius: 8px; font-size: .72rem; }
 .agentMeta { margin: 14px 0 0; color: #5f6f74; font-size: .78rem; }
+.deckOverlay { position: fixed; z-index: 80; inset: 0; display: grid; padding: 24px; place-items: center; background: rgb(4 11 15 / .82); backdrop-filter: blur(8px); }
+.deckDialog { width: min(1120px, 100%); max-height: min(820px, calc(100vh - 48px)); overflow: auto; border: 2px solid #d09a44; border-radius: 20px; padding: 22px; color: #eaf7f3; background: linear-gradient(145deg, rgb(15 40 47 / .99), rgb(5 20 28 / .99)); box-shadow: inset 0 0 0 3px rgb(255 255 255 / .05), 0 28px 90px rgb(0 0 0 / .65); }
+.deckHeader { display: flex; align-items: start; justify-content: space-between; gap: 18px; }
+.deckHeader h2 { margin: 4px 0 0; color: #fff0b0; font: 900 clamp(1.5rem, 3vw, 2.4rem) Georgia, serif; }
+.deckClose { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid #c99747; border-radius: 50%; color: #fff2bd; background: #4a2419; font: 900 1.55rem/1 Georgia, serif; cursor: pointer; }
+.deckBadges { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.deckBadges span { border: 1px solid rgb(235 191 92 / .55); border-radius: 999px; padding: 5px 9px; color: #ffe49a; background: rgb(146 91 27 / .22); font-size: .72rem; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; }
+.deckWorkspace { display: grid; grid-template-columns: minmax(190px, .28fr) minmax(0, 1fr); gap: 12px; min-height: 420px; margin-top: 18px; }
+.deckFiles { display: grid; align-content: start; gap: 8px; }
+.deckFiles button { display: grid; gap: 3px; width: 100%; border: 1px solid #42636b; border-radius: 9px; padding: 10px; color: #cce2e4; background: rgb(3 13 18 / .55); text-align: left; cursor: pointer; }
+.deckFiles button:hover, .deckFiles .deckFileActive { border-color: #e2b65a; color: #fff1b8; background: rgb(131 83 30 / .32); }
+.deckFiles small { color: #82a4aa; text-transform: uppercase; }
+.deckCode { min-width: 0; overflow: hidden; border: 1px solid #38555d; border-radius: 12px; background: #061319; }
+.deckCodeTitle { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid #28434b; padding: 10px 13px; color: #d8eff0; background: #0d252d; font-size: .75rem; }
+.deckCodeTitle span { max-width: 45%; overflow: hidden; color: #72949b; text-overflow: ellipsis; white-space: nowrap; }
+.deckCode pre { max-height: 520px; margin: 0; overflow: auto; padding: 16px; color: #cfeee6; font: .74rem/1.5 var(--font-code); white-space: pre; tab-size: 2; }
 .codeDrawer { margin-top: 12px; padding-top: 10px; border-top: 1px solid #bf9a63; }
 .inlineError { padding: 9px; border-radius: 8px; color: #6b1e1e; background: #ffd9d0; font-size: .82rem; }
 .parchmentPanel { border-radius: 18px; padding: 20px; color: #213743; }
@@ -166,6 +185,6 @@
 .championRound .bracketCaptain { grid-template-columns: 30px minmax(0, 1fr); }
 .championRound .bracketCaptain small { grid-column: 2; }
 @keyframes winnerAdvance { from { opacity: .25; transform: translateX(-28px) scale(.9); } 60% { transform: translateX(5px) scale(1.03); } to { opacity: 1; transform: none; } }
-@media (max-width: 980px) { .featureGrid { grid-template-columns: 1fr; } .setupGrid { grid-template-columns: 1fr; padding-bottom: 78px; } .versus { padding: 0; } .leagueLayout { grid-template-columns: 1fr; } .guideGrid { grid-template-columns: 1fr; } }
+@media (max-width: 980px) { .featureGrid { grid-template-columns: 1fr; } .setupGrid { grid-template-columns: 1fr; padding-bottom: 78px; } .versus { padding: 0; } .leagueLayout { grid-template-columns: 1fr; } .guideGrid { grid-template-columns: 1fr; } .deckOverlay { padding: 10px; } .deckDialog { max-height: calc(100vh - 20px); padding: 16px; } .deckWorkspace { grid-template-columns: 1fr; } .deckFiles { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
 @media (max-width: 680px) { .landingNav { padding: 16px; } .hero h1 { font-size: clamp(3.2rem, 18vw, 5.5rem); } .heroActions, .buttonRow { align-items: stretch; flex-direction: column; width: 100%; } .gameButton, .gameButtonGhost { width: 100%; } .screenTop { align-items: flex-start; } .screenTitle { text-align: left; } .screenTop > span { display: none; } .modeGrid, .knockoutSlots { grid-template-columns: 1fr; } .matchHud { grid-template-columns: 1fr auto 1fr; padding: 10px; } .teamHud small { display: none; } .hudScore { font-size: 2rem; } .matchClock { min-width: 88px; padding: 6px 8px; } .matchControls { right: 10px; bottom: 10px; gap: 5px; } .roundControl { width: 43px; height: 43px; } .matchStats { left: 10px; bottom: 10px; } .matchStats small { display: none; } .respawnHud { bottom: 65px; min-width: 206px; max-width: calc(100vw - 20px); padding-inline: 7px; } .respawnHud > small { display: none; } .respawnSide { font-size: .57rem; } .respawnSide b { font-size: .64rem; } .finalScore { gap: 8px; } .statGrid { grid-template-columns: 1fr 1fr; } }
 @media (prefers-reduced-motion: reduce) { .scrollCue, .loadingBar::after, .bracketWinner { animation: none; } .gameButton, .miniButton, .roundControl { transition: none; } }

@@ -5,7 +5,10 @@ import { base64ToBytes, importTfjsZip } from "../agents/import";
 import type { GameMode, Observation, TeamAction, TeamId } from "../contracts/types";
 import { neutralAction, resolveFireTargets, validateTeamAction } from "../contracts/validation";
 import { defaultConfig } from "../content/fixtures";
-import { createBuiltinPolicy, type BuiltinPolicyKind } from "../policies/baselines";
+import { builtinPolicyDefinitions, createBuiltinPolicy, isBuiltinPolicyKind, type BuiltinPolicyKind } from "../policies/baselines";
+import baselinesSource from "../policies/baselines.ts?raw";
+import navigationSource from "../policies/navigation.ts?raw";
+import { teddyAgentDefinitions, type CaptainSourceFile } from "../policies/teddy-agents";
 import { ReplayRecorder, type ReplayRecord } from "../replay/replay";
 import { buildObservation } from "../sim/observation";
 import { generateProceduralMap } from "../sim/procedural-map";
@@ -13,7 +16,20 @@ import { deriveSeed, XorShift32 } from "../sim/rng";
 import { createInitialWorld, stepWorld } from "../sim/world";
 import type { AgentVersion } from "../storage/db";
 
-export interface TournamentEntry { id: string; alias: string; student: string; hash: string; kind: BuiltinPolicyKind | "script" | "dense" | "tfjs"; payload?: string; supportedModes?: GameMode[]; }
+export interface TournamentEntry {
+  id: string;
+  alias: string;
+  student: string;
+  hash: string;
+  kind: BuiltinPolicyKind | "script" | "dense" | "tfjs";
+  payload?: string;
+  supportedModes?: GameMode[];
+  targetMode?: GameMode;
+  difficulty?: 1 | 2 | 3 | "boss";
+  description?: string;
+  architecture?: string;
+  sourceFiles?: CaptainSourceFile[];
+}
 export interface MatchJob { id: string; leftId: string; rightId: string; seed: number; policySeed?: number; shipsPerTeam?: number; blueId: string; roseId: string; state: "pending" | "running" | "completed" | "failed-infrastructure"; }
 export interface TeamMatchDiagnostics { decisions: number; fallbacks: number; meanLatencyMs: number; maxLatencyMs: number; flagPickups: number; }
 export interface MatchResult { id: string; blueId: string; roseId: string; seed: number; winnerId: string | null; draw: boolean; blueScore: number; roseScore: number; blueKills: number; roseKills: number; tick: number; forfeits: string[]; replay: ReplayRecord; metrics?: { blue: TeamMatchDiagnostics; rose: TeamMatchDiagnostics }; }
@@ -22,7 +38,7 @@ interface PolicyInstance { act(observation: Observation): Promise<TeamAction>; d
 
 const immediate = (act: (observation: Observation) => TeamAction): PolicyInstance => ({ act: observation => Promise.resolve(act(observation)), dispose() {} });
 async function policy(entry: TournamentEntry, teamId: TeamId, shipIds: string[], seed: number): Promise<PolicyInstance> {
-  if (["raider", "navigator", "guardian", "corsair", "admiral"].includes(entry.kind)) return immediate(createBuiltinPolicy(entry.kind as BuiltinPolicyKind, seed));
+  if (isBuiltinPolicyKind(entry.kind)) return immediate(createBuiltinPolicy(entry.kind, seed));
   if (entry.kind === "dense" && entry.payload) { const packaged = parseDenseAgentJson(entry.payload); const runner = new WorkerPolicyRunner(); await runner.initialize(denseWorkerControllerSource, { teamId, shipIds, episodeId: `tournament-${seed}-${entry.hash}`, agentSeed: seed, config: {} }, { seed }, { denseModels: [{ id: "policy", model: packaged.model, maxBatch: 8 }] }); return { act: observation => runner.act(observation, 100), dispose: () => runner.dispose() }; }
   if (entry.kind === "script" && entry.payload) {
     const runner = new WorkerPolicyRunner(); await runner.initialize(entry.payload, { teamId, shipIds, episodeId: `tournament-${seed}-${entry.hash}`, agentSeed: seed, config: {} }, { seed });
@@ -35,13 +51,41 @@ async function policy(entry: TournamentEntry, teamId: TeamId, shipIds: string[],
   throw new Error(`Unsupported tournament entry ${entry.id}.`);
 }
 
-export function builtinEntries(): TournamentEntry[] { return [
-  { id: "captain-scarlet-raider", alias: "Scarlet Raider", student: "Built-in", hash: "builtin-scarlet-raider-v2", kind: "raider" },
-  { id: "captain-reef-runner", alias: "Reef Runner", student: "Built-in", hash: "builtin-reef-runner-v2", kind: "navigator" },
-  { id: "captain-iron-guardian", alias: "Iron Guardian", student: "Built-in", hash: "builtin-iron-guardian-v2", kind: "guardian" },
-  { id: "captain-broadside-corsair", alias: "Broadside Corsair", student: "Built-in", hash: "builtin-broadside-corsair-v2", kind: "corsair" },
-  { id: "captain-grand-admiral", alias: "Grand Admiral", student: "Built-in", hash: "builtin-grand-admiral-v2", kind: "admiral" },
-]; }
+export function builtinEntries(mode?: GameMode): TournamentEntry[] {
+  const trusted = builtinPolicyDefinitions.map(definition => ({
+    id: definition.id,
+    alias: definition.alias,
+    student: "Built-in rival",
+    hash: definition.hash,
+    kind: definition.kind,
+    supportedModes: [definition.mode],
+    targetMode: definition.mode,
+    difficulty: definition.level,
+    description: definition.description,
+    architecture: definition.level === 1 ? "Reactive objective policy" : definition.level === 2 ? "Objective and recovery state machine" : "Role-based tactical state machine",
+    sourceFiles: [
+      { path: "captain-profile.json", language: "json" as const, content: JSON.stringify(definition, null, 2) },
+      { path: "src/policies/baselines.ts", language: "typescript" as const, content: baselinesSource },
+      { path: "src/policies/navigation.ts", language: "typescript" as const, content: navigationSource },
+    ],
+  } satisfies TournamentEntry));
+  const bosses = teddyAgentDefinitions.map(definition => ({
+    id: definition.id,
+    alias: definition.alias,
+    student: "Teddy final boss",
+    hash: definition.hash,
+    kind: "script" as const,
+    payload: definition.source,
+    supportedModes: [definition.mode],
+    targetMode: definition.mode,
+    difficulty: "boss" as const,
+    description: "An upload-equivalent final boss using only public observations, legal masks, seeded randomness, and persistent policy memory.",
+    architecture: "Sandboxed fleetrl-package-v1 JavaScript state machine",
+    sourceFiles: definition.files,
+  } satisfies TournamentEntry));
+  const entries = [...trusted, ...bosses];
+  return mode ? entries.filter(entry => entry.targetMode === mode) : entries;
+}
 export function entryFromVersion(version: AgentVersion): TournamentEntry { return { id: version.id, alias: version.name, student: version.student ?? "Unassigned local", hash: version.hash, kind: version.kind, payload: version.payload, supportedModes: version.supportedModes ?? ["duel", "fleet", "fog-duel", "fog-fleet"] }; }
 
 export async function preflightTournamentEntry(entry: TournamentEntry, mode: GameMode, shipsPerTeam = 3): Promise<void> {

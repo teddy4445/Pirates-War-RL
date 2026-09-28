@@ -2,7 +2,7 @@
 
 Pirates War RL is a browser-only, continuous 2D pirate capture-the-flag game for autonomous agents. Pick or upload the captain for each fleet, choose Duel, Fleet, Fog Duel, or Fog Fleet, then watch both policies navigate, fire, steal flags, and score in a full-screen broadcast. Fleet games support 2–6 ships per side or a random count. League mode offers mirrored all-vs-all standings and 4/8/16-captain knockout brackets; policy-free replays use the same deterministic simulation. An optional native Python kit provides matching headless rules for local model development and Dense JSON export.
 
-Each seed creates a symmetric but varied archipelago ranging from one large central island to several small islands, with irregular coastlines, neutral flag sites, and zero to six physical shipwreck shoals. Five polygon-aware built-in captains provide distinct raiding, navigation, defense, gunnery, and fleet-coordination strategies, including complete steal-and-return routes and subtle recorded per-match helm variation. Cannons select visible enemy ships independently of hull heading, lead their current velocity, and use a version-4 base damage of 18.75 (25% below the prior value), with stronger close-range hits while remaining physical, terrain-blocked projectiles. Hull-to-hull and hull-to-land impacts also cost health in proportion to each ship's inward speed. One delivered enemy flag wins; if time expires, captures and then ship sinks decide the result.
+Each seed creates a symmetric but varied archipelago ranging from one large central island to several small islands, with irregular coastlines, neutral flag sites, and zero to six physical shipwreck shoals. Sixteen mode-specific opponents form four difficulty ladders: Level 1, Level 2, Level 3, and an upload-equivalent Teddy final boss for Duel, Fleet, Fog Duel, and Fog Fleet. The regular rivals use progressively faster objective, recovery, combat, and fleet-role logic. Teddy's four inspectable `fleetrl-package-v1` JavaScript submissions run through the same QuickJS/WASM worker contract as student code. Cannons select visible enemy ships independently of hull heading, lead their current velocity, and use a version-4 base damage of 18.75 (25% below the prior value), with stronger close-range hits while remaining physical, terrain-blocked projectiles. Hull-to-hull and hull-to-land impacts also cost health in proportion to each ship's inward speed. One delivered enemy flag wins; if time expires, captures and then ship sinks decide the result.
 
 The release is fully client-side at runtime: no backend, login, API key, paid service, CDN, cloud inference, or Python installation is required by the website. Python is an optional downloadable training workflow, not a web server.
 
@@ -44,11 +44,12 @@ npm run test:e2e:bundle
 
 - `#/home`: cinematic game landing page and product overview.
 - `#/menu`: opening game menu with New Game, League, agent development, and Exit.
-- `#/game/new`: choose both code-driven captains, mode, 2–6/random fleet size, seed, 15–300 second battle time, viewpoint, and sound. The latest setup is remembered. Either side may use a built-in policy, uploaded JavaScript, Dense JSON, restricted TensorFlow.js ZIP, or pasted JavaScript.
+- `#/game/new`: choose both code-driven captains, mode, 2–6/random fleet size, seed, 15–300 second battle time, viewpoint, and sound. Each mode presents its own four-opponent ladder. “Under the deck” reveals the selected captain's metadata, source, manifest, and supporting files for either side. The latest setup is remembered. Either side may use a built-in policy, uploaded JavaScript, Dense JSON, restricted TensorFlow.js ZIP, or pasted JavaScript.
 - `#/game/live`: full-viewport autonomous broadcast with all HUD data inside the arena, health and cannon-ready bars, bottom-center per-ship respawn countdowns, explored-map fog, pause/continue, sound, and close controls. Replays add a cyclic X1/X2/X4/X8 speed control. There is no manual steering.
 - `#/game/results`: real match outcome, score, combat/event counts, policy diagnostics, retry, replay, and captain-change actions.
 - `#/league`: session roster import, mirrored all-vs-all or 4/8/16-captain knockout scheduling, animated bracket/standings, sequential execution, result export, and replay selection for every completed battle.
 - `#/develop`: the complete agent contract, observation/action semantics, execution/resource limits, supported formats, and optional Python workflow.
+- `#/develop/teddy`: the reproducible Teddy final-boss process, evaluation discipline, exact manifests, and the four executable `agent.js` submissions.
 
 The old Learn, browser Training, persistent Agent Library, Instructor, Classroom, and manual-control routes are removed. Unknown and retired routes return to the game landing page.
 
@@ -94,6 +95,7 @@ Import the exported `.agent.json` directly in New Game or League. Raw Python, pi
 | [Python guide](docs/PYTHON_TRAINING_GUIDE.md) | Native environment and command workflow. |
 | [Compatibility](docs/MODEL_EXPORT_AND_COMPATIBILITY.md) | Exact Dense transfer contract. |
 | [Cross-language parity](docs/CROSS_LANGUAGE_PARITY.md) | Shared data, tolerances, and conformance scope. |
+| [Teddy's Agent process](docs/TEDDY_AGENT_PROCESS.md) | Four final-boss packages, student-equivalent workflow, and evaluation gates. |
 | [Release verification](docs/RELEASE_VERIFICATION.md) | Executed commands, measurements, screenshots, and known limits. |
 | [GitHub Pages deployment](docs/GITHUB_PAGES_DEPLOYMENT.md) | Actions workflow, custom domain, DNS, and verification. |
 
