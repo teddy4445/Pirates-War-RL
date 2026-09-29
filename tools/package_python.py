@@ -21,7 +21,7 @@ def canonical_bytes(path: Path) -> bytes:
 
 def files() -> list[tuple[str, bytes]]:
     records: list[tuple[str, bytes]] = []
-    for path in sorted(PYTHON.rglob("*")):
+    for path in sorted(PYTHON.rglob("*"), key=lambda candidate: candidate.relative_to(PYTHON).as_posix()):
         relative = path.relative_to(PYTHON)
         if not path.is_file() or any(part in {".venv", "__pycache__", ".pytest_cache"} or part.startswith("smoke-") for part in relative.parts) or path.suffix == ".pyc":
             continue
@@ -40,7 +40,7 @@ def build() -> bytes:
     output = io.BytesIO()
     with zipfile.ZipFile(output, "w", zipfile.ZIP_STORED) as archive:
         for name, data in files():
-            info = zipfile.ZipInfo(name, date_time=(2026, 9, 26, 0, 0, 0)); info.compress_type = zipfile.ZIP_STORED; info.external_attr = 0o100644 << 16
+            info = zipfile.ZipInfo(name, date_time=(2026, 9, 26, 0, 0, 0)); info.create_system = 3; info.compress_type = zipfile.ZIP_STORED; info.external_attr = 0o100644 << 16
             archive.writestr(info, data)
     return output.getvalue()
 
