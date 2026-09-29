@@ -11,6 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 PYTHON = ROOT / "python"
 OUTPUT = ROOT / "public" / "downloads" / "FleetRL_Python_Training_Bundle.zip"
 DOCS = ("PYTHON_TRAINING_GUIDE.md", "MODEL_EXPORT_AND_COMPATIBILITY.md", "CROSS_LANGUAGE_PARITY.md")
+TEXT_SUFFIXES = {".json", ".md", ".py", ".toml"}
+
+
+def canonical_bytes(path: Path) -> bytes:
+    data = path.read_bytes()
+    return data.replace(b"\r\n", b"\n").replace(b"\r", b"\n") if path.suffix.lower() in TEXT_SUFFIXES else data
 
 
 def files() -> list[tuple[str, bytes]]:
@@ -19,10 +25,10 @@ def files() -> list[tuple[str, bytes]]:
         relative = path.relative_to(PYTHON)
         if not path.is_file() or any(part in {".venv", "__pycache__", ".pytest_cache"} or part.startswith("smoke-") for part in relative.parts) or path.suffix == ".pyc":
             continue
-        records.append((relative.as_posix(), path.read_bytes()))
+        records.append((relative.as_posix(), canonical_bytes(path)))
     for name in DOCS:
         path = ROOT / "docs" / name
-        if path.exists(): records.append((f"docs/{name}", path.read_bytes()))
+        if path.exists(): records.append((f"docs/{name}", canonical_bytes(path)))
     compatibility = {"bundleVersion": "fleetrl-python-bundle-v1", "packageVersion": "0.1.0", "python": ">=3.10", "engine": "fleetrl-engine-py-v6", "rules": "fleetrl-rules-v6", "api": "fleetrl-agent-v1", "featureEncoder": "ship-64-v1", "actionDecoder": "discrete-22-v1", "modelExport": "dense-json-v1", "websiteBackend": False}
     records.append(("COMPATIBILITY.json", json.dumps(compatibility, indent=2).encode()))
     manifest = {"schemaVersion": "fleetrl-python-bundle-manifest-v1", "generatedBy": "tools/package_python.py", "files": [{"path": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()} for name, data in records]}
@@ -32,9 +38,9 @@ def files() -> list[tuple[str, bytes]]:
 
 def build() -> bytes:
     output = io.BytesIO()
-    with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+    with zipfile.ZipFile(output, "w", zipfile.ZIP_STORED) as archive:
         for name, data in files():
-            info = zipfile.ZipInfo(name, date_time=(2026, 9, 26, 0, 0, 0)); info.compress_type = zipfile.ZIP_DEFLATED; info.external_attr = 0o100644 << 16
+            info = zipfile.ZipInfo(name, date_time=(2026, 9, 26, 0, 0, 0)); info.compress_type = zipfile.ZIP_STORED; info.external_attr = 0o100644 << 16
             archive.writestr(info, data)
     return output.getvalue()
 

@@ -6,13 +6,13 @@ Verified: 2026-09-29. Scope: local Windows Pirates War RL rules-v6 release candi
 
 | Artifact | Evidence |
 |---|---|
-| Static website | `dist/`, 99 files, 33,670,670 bytes after the verified rules-v6 and GitHub Pages build |
+| Static website | `dist/`, 99 files, 35,030,178 bytes after the verified rules-v6 and GitHub Pages build |
 | GitHub Pages configuration | Actions deployment workflow with clean-runner Python-kit generation, `CNAME` for `rl.teddylazebnik.com`, `.nojekyll`, direct-route recovery, and relative-path-safe output |
 | Generated hero | `public/assets/backgrounds/pirates-war-hero.png`, SHA-256 `02113100C053C73EF31A5471CCE10702AD430E1C6C6667F653366CE71CFF6D2C` |
 | Generated strategy scene | `public/assets/backgrounds/strategy-fleets-v1.png`, SHA-256 `00ec3f6e0b30e5a31e9565507a8b91566667cd51a950e595194c97ec45f69935` |
 | Generated fog scene | `public/assets/backgrounds/fog-chase-v1.png`, SHA-256 `8fb4e26bd6bc1df53c4588b054076aba2cae233277fa5c601871cdaa62ce6589` |
 | Python kit | `public/downloads/FleetRL_Python_Training_Bundle.zip` and matching `dist/downloads/` copy |
-| Python kit SHA-256 | `3dcf20587007f1a5e7125e41368095efe5c24f4b8f3f3777fc257ecddac73d25` |
+| Python kit SHA-256 | `f426e75c091cd045fa1eb1c6f469502566f4d704eec9bbe95aae3df87718cf28` |
 | Python kit manifest | 42 packaged files, each hash checked before installation |
 
 The package hash is valid for the release tested here. Recompute it after changing Python source, resources, tests, or included documents.
@@ -29,7 +29,7 @@ The package hash is valid for the release tested here. Recompute it after changi
 | `npm run parity` | Regenerated 12 trajectories (4 modes × 3 seeds × 240 ticks), 11 complete gameplay-state cases, 6 adapter cases, and 3 `fleetrl-archipelago-v3` maps; Python 21 passed; TypeScript 4 files / 36 tests passed. |
 | `npm run python:package:check` | Confirmed the maintained package and downloadable ZIP were byte-current. |
 | `npm run test:e2e -- tests/e2e/shell.spec.ts` | 6 Chromium production tests passed in 50.9 s, including the score-based result screen, mode-specific New Game roster and Under the deck source viewer, imported agents, mirrored League evaluation of all four bosses against their Level 3 rivals, the Teddy build page, responsive landing, published CNAME, and repository-subpath service-worker scope. |
-| `npm run python:package` / `npm run python:package:check` | Rebuilt the 188,542-byte website download and confirmed it was byte-current after the Python rules/action changes. |
+| `npm run python:package` / `npm run python:package:check` | Rebuilt the 1,548,050-byte website download and confirmed it was byte-current after the Python rules/action changes. Canonical LF text plus stored ZIP entries make this hash reproducible across Windows and the Linux Pages runner. |
 
 The full reproducible command is `npm run release:verify`. Individual commands remain available for diagnosing a failed stage.
 

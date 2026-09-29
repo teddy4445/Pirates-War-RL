@@ -38,7 +38,7 @@ The game-first product redesign is implemented. The repository contains the stat
 - `npm run python:test`: 37 passed.
 - `npm run parity`: Python parity subset 21 passed; TypeScript parity subset 4 files / 36 tests passed; 12 trajectories, 11 full-state gameplay cases, 6 adapter cases, and `fleetrl-archipelago-v3` procedural-map fixtures regenerated.
 - `npm run test:e2e -- tests/e2e/shell.spec.ts`: 6 production Chromium workflows passed in 50.9 seconds for landing/menu/game/new score results/replay/settings memory, the mode-specific roster and Under the deck viewer, imported agents, all-vs-all plus duplicate-captain knockout League/replay, mirrored Level 3-versus-boss evaluations in all four modes, the Teddy process page, Python download/responsive/subpath rendering, the published CNAME and repository-subpath service-worker scope, and retired-route handling.
-- `npm run python:package` and `npm run python:package:check`: the downloadable rules-v6 kit was rebuilt and byte-current. SHA-256: `3dcf20587007f1a5e7125e41368095efe5c24f4b8f3f3777fc257ecddac73d25`.
+- `npm run python:package` and `npm run python:package:check`: the downloadable rules-v6 kit was rebuilt and byte-current. Text entries are canonical LF and ZIP entries are stored, making the archive bytes independent of host line endings and DEFLATE versions. SHA-256: `f426e75c091cd045fa1eb1c6f469502566f4d704eec9bbe95aae3df87718cf28`.
 - See `docs/RELEASE_VERIFICATION.md` for measurements, screenshots, environment, and command details.
 
 ## Known limitations
