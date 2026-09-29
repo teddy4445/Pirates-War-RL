@@ -6,6 +6,7 @@ import { assignedEntry } from "../game/import-agent";
 import { clampMatchDurationSeconds, DEFAULT_MATCH_DURATION_SECONDS, freshPolicySeed, gameSession, resolveFleetSize, type FleetSizeChoice } from "../game/session";
 import { gameArtStyle } from "../game/theme";
 import { builtinEntries, preflightTournamentEntry, type TournamentEntry } from "../tournament/runner";
+import { BrandCrest } from "./Brand";
 import styles from "./GameShell.module.css";
 
 const modes: { id: GameMode; name: string; detail: string }[] = [
@@ -61,7 +62,7 @@ export function GameSetupPage() {
   };
 
   return <section className={styles.screen} style={gameArtStyle}>
-    <div className={styles.screenTop}><a className={styles.backLink} href="#/menu" aria-label="Back to main menu">←</a><header className={styles.screenTitle}><p className={styles.kicker}>New game</p><h1>Choose your captains</h1><p>Every movement, shot, and flag action comes from agent code.</p></header><span aria-hidden="true" style={{ width: 48 }} /></div>
+    <div className={styles.screenTop}><a className={styles.backLink} href="#/menu" aria-label="Back to main menu">←</a><header className={styles.screenTitle}><p className={styles.kicker}>New game</p><h1>Choose your captains</h1><p>Every movement, shot, and flag action comes from agent code.</p></header><a className={styles.screenBrandLink} href="#/menu" aria-label="Pirates War RL main menu"><BrandCrest className={styles.screenBrand} decorative /></a></div>
     {error && <div className={styles.errorBox} role="alert">Preflight failed: {error}</div>}
     <div className={styles.setupGrid}>
       <AgentPicker team="blue" mode={mode} value={blue} onChange={setBlue} />

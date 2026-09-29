@@ -3,6 +3,7 @@ import { fleetAudio } from "../audio/mixer";
 import type { TeamId } from "../contracts/types";
 import { freshPolicySeed, gameSession, resolveFleetSize } from "../game/session";
 import { gameArtStyle } from "../game/theme";
+import { BrandCrest } from "./Brand";
 import styles from "./GameShell.module.css";
 
 export function PostGamePage() {
@@ -14,7 +15,7 @@ export function PostGamePage() {
     void fleetAudio.playCue(result.draw ? "match_draw" : "match_victory");
   }, [result]);
 
-  if (!request || !result) return <section className={styles.resultPage} style={gameArtStyle}><div className={styles.resultCard}><h1>No result yet</h1><a className={styles.gameButton} href="#/game/new">Start a battle</a></div></section>;
+  if (!request || !result) return <section className={styles.resultPage} style={gameArtStyle}><div className={styles.resultCard}><a className={styles.resultBrandLink} href="#/menu" aria-label="Pirates War RL main menu"><BrandCrest className={styles.resultBrand} decorative /></a><h1>No result yet</h1><a className={styles.gameButton} href="#/game/new">Start a battle</a></div></section>;
 
   const winner = result.draw ? "Draw at sea" : result.winnerId === request.blue.id ? `${request.blue.alias} wins` : result.winnerId === request.green.id ? `${request.green.alias} wins` : "Battle concluded";
   const events = result.replay.worldEvents;
@@ -35,6 +36,7 @@ export function PostGamePage() {
 
   return <section className={styles.resultPage} style={gameArtStyle}>
     <div className={styles.resultCard}>
+      <a className={styles.resultBrandLink} href="#/menu" aria-label="Pirates War RL main menu"><BrandCrest className={styles.resultBrand} decorative /></a>
       <p className={styles.kicker}>Battle complete</p>
       <h1>{winner}</h1>
       <p>{outcomeReason}</p>
@@ -43,7 +45,12 @@ export function PostGamePage() {
         <b>—</b>
         <div><strong>{result.roseScore}</strong><span>{request.green.alias} · points</span></div>
       </div>
-      <p className={styles.scoreLegend}>1 point per kill · 3 points per first enemy-flag pickup · 25 points per flag delivery</p>
+      <div className={`${styles.buttonRow} ${styles.resultActions}`}>
+        <button className={styles.gameButton} onClick={retry}>Try again</button>
+        <button className={styles.gameButtonGhost} onClick={replay}>Watch replay</button>
+        {request.returnTo === "#/league" ? <a className={styles.gameButtonGhost} href="#/league">Return to league</a> : <a className={styles.gameButtonGhost} href="#/game/new">Change captains</a>}
+        <a className={styles.gameButtonGhost} href="#/menu">Main menu</a>
+      </div>
       <div className={styles.scoreBreakdown}>
         <div><small>Blue score log</small><b>{breakdown.blue.kills} × 1</b><span>Kills</span><b>{breakdown.blue.pickups} × 3</b><span>Pickups</span><b>{breakdown.blue.deliveries} × 25</b><span>Deliveries</span></div>
         <div><small>Green score log</small><b>{breakdown.rose.kills} × 1</b><span>Kills</span><b>{breakdown.rose.pickups} × 3</b><span>Pickups</span><b>{breakdown.rose.deliveries} × 25</b><span>Deliveries</span></div>
@@ -53,12 +60,6 @@ export function PostGamePage() {
         <div className={styles.stat}><small>Cannon shots</small><b>{cannons}</b></div>
         <div className={styles.stat}><small>Combat kills</small><b>{result.blueKills + result.roseKills}</b></div>
         <div className={styles.stat}><small>Flag deliveries</small><b>{deliveries}</b></div>
-      </div>
-      <div className={styles.buttonRow}>
-        <button className={styles.gameButton} onClick={retry}>Try again</button>
-        <button className={styles.gameButtonGhost} onClick={replay}>Watch replay</button>
-        {request.returnTo === "#/league" ? <a className={styles.gameButtonGhost} href="#/league">Return to league</a> : <a className={styles.gameButtonGhost} href="#/game/new">Change captains</a>}
-        <a className={styles.gameButtonGhost} href="#/menu">Main menu</a>
       </div>
     </div>
   </section>;

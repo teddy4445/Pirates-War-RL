@@ -17,7 +17,7 @@ test.describe.serial("Pirates War RL release flow", () => {
     await expect(page).toHaveTitle("Pirates War RL");
     await expect(page.getByRole("heading", { level: 1, name: /Pirates War/ })).toBeVisible();
     await page.getByRole("link", { name: "Enter the arena" }).click();
-    await expect(page.getByRole("heading", { level: 1, name: "Main Menu" })).toBeVisible();
+    await expect(page.getByRole("img", { name: "Pirates War RL" })).toBeVisible();
     await page.getByRole("link", { name: "New game" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Choose your captains" })).toBeVisible();
 
@@ -148,7 +148,7 @@ test.describe.serial("Pirates War RL release flow", () => {
     await page.screenshot({ path: path.join(screenshots, "pirates-war-mobile-landing.png"), fullPage: true });
 
     await page.goto(`${subpathOrigin}/course/fleetrl/#/menu`);
-    await expect(page.getByRole("heading", { level: 1, name: "Main Menu" })).toBeVisible();
+    await expect(page.getByRole("img", { name: "Pirates War RL" })).toBeVisible();
     await expect(page.getByRole("link", { name: "League" })).toBeVisible();
     const cname = await page.request.get(`${subpathOrigin}/course/fleetrl/CNAME`);
     expect((await cname.text()).trim()).toBe("rl.teddylazebnik.com");

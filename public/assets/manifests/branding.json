@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "fleetrl-brand-assets-v1",
+  "assets": [
+    {
+      "id": "pirates-war-crest-v1",
+      "category": "branding",
+      "path": "assets/branding/pirates-war-crest-v1.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8ae2600a1a24a9b3cfa6435e79bcf276507fb929bcac23684221d4127a00e322",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated transparent raster",
+      "promptSummary": "Compact ship-bow and cream-sail emblem inside a brass wheel, with blue and emerald capture-flag accents; no text.",
+      "review": "inspected at generated resolution and at favicon scale; transparent, centered, and readable as a compact crest"
+    },
+    {
+      "id": "pirates-war-logo-v1",
+      "category": "branding",
+      "path": "assets/branding/pirates-war-logo-v1.png",
+      "width": 2043,
+      "height": 770,
+      "sha256": "b34071c1d08f604704d8d889ef5dc352d3c358add5257e16fb6f305d6df4c75b",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated transparent raster derived from pirates-war-crest-v1",
+      "promptSummary": "Horizontal lockup pairing the crest with the exact PIRATES WAR RL title in antique-gold pirate display lettering and blue-to-emerald RL accents.",
+      "review": "inspected at generated resolution; exact title, transparent background, and responsive header/menu silhouette"
+    }
+  ]
+}

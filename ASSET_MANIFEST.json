@@ -335,6 +335,28 @@
       "review": "inspected at generated resolution; text-free moonlit fog pursuit scene"
     },
     {
+      "id": "pirates-war-crest-v1",
+      "category": "branding",
+      "path": "assets/branding/pirates-war-crest-v1.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8ae2600a1a24a9b3cfa6435e79bcf276507fb929bcac23684221d4127a00e322",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated transparent raster",
+      "review": "compact crest used across screens and as the favicon"
+    },
+    {
+      "id": "pirates-war-logo-v1",
+      "category": "branding",
+      "path": "assets/branding/pirates-war-logo-v1.png",
+      "width": 2043,
+      "height": 770,
+      "sha256": "b34071c1d08f604704d8d889ef5dc352d3c358add5257e16fb6f305d6df4c75b",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated transparent raster",
+      "review": "horizontal title lockup used in the landing header and main menu"
+    },
+    {
       "id": "fleetrl-audio-2.0.0",
       "category": "audio",
       "path": "public/assets/audio/",

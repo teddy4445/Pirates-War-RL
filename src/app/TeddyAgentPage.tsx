@@ -3,6 +3,7 @@ import type { GameMode } from "../contracts/types";
 import { gameArtStyle } from "../game/theme";
 import { teddyAgentDefinitions } from "../policies/teddy-agents";
 import styles from "./GameShell.module.css";
+import { BrandCrest } from "./Brand";
 
 const modeNames: Record<GameMode, string> = { duel: "Duel", fleet: "Fleet", "fog-duel": "Fog Duel", "fog-fleet": "Fog Fleet" };
 
@@ -24,7 +25,7 @@ export function TeddyAgentPage() {
   const file = definition.files[fileIndex] ?? definition.files[0]!;
   const chooseMode = (next: GameMode) => { setMode(next); setFileIndex(0); };
   return <section className={styles.screen} style={gameArtStyle}>
-    <div className={styles.screenTop}><a className={styles.backLink} href="#/develop" aria-label="Back to develop your agent">←</a><header className={styles.screenTitle}><p className={styles.kicker}>Final-boss logbook</p><h1>Teddy's Agent</h1><p>How the four boss submissions were built through the same public route available to every student.</p></header><span aria-hidden="true" style={{ width: 48 }} /></div>
+    <div className={styles.screenTop}><a className={styles.backLink} href="#/develop" aria-label="Back to develop your agent">←</a><header className={styles.screenTitle}><p className={styles.kicker}>Final-boss logbook</p><h1>Teddy's Agent</h1><p>How the four boss submissions were built through the same public route available to every student.</p></header><a className={styles.screenBrandLink} href="#/menu" aria-label="Pirates War RL main menu"><BrandCrest className={styles.screenBrand} decorative /></a></div>
     <div className={styles.guide}>
       <section className={styles.parchmentPanel}><h2>The challenge</h2><p>There are sixteen official opponents: Level 1, Level 2, Level 3, and one Teddy final boss for each of the four game modes. A student champion should beat all sixteen under the declared mode, rules, seeds, side assignments, and decision budget—not merely win one favorable demonstration.</p><div className={styles.deckBadges}><span>16 opponents</span><span>4 modes</span><span>100 ms decisions</span><span>No hidden state</span></div></section>
       <div className={styles.guideGrid}><section className={styles.parchmentPanel}><h2>1 · Start with the public contract</h2><p>Teddy's bosses receive the same filtered <code>fleetrl-agent-v1</code> observations as uploads. Fog bosses remember only positions they genuinely observed. They use known island polygons, legal-action masks, seeded <code>api.random()</code>, and one action per friendly ship.</p></section><section className={styles.parchmentPanel}><h2>2 · Develop in the matching game</h2><p>The native Python kit reproduces fixed-step physics, delayed actions, observations, scoring, and seeded maps. It supports rule policies, Q-learning, and DQN. Training is optional; a strong state machine and a neural policy enter through the same immutable submission contract.</p></section></div>

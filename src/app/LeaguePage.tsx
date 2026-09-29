@@ -6,6 +6,7 @@ import { clampMatchDurationSeconds, DEFAULT_MATCH_DURATION_SECONDS, freshPolicyS
 import { gameArtStyle } from "../game/theme";
 import { builtinEntries, knockoutWinner, makeKnockoutRoundJobs, makeRoundRobinJobs, preflightTournamentEntry, runTournamentMatch, shuffledKnockoutEntries, standings, type MatchJob, type MatchResult, type TournamentEntry } from "../tournament/runner";
 import styles from "./GameShell.module.css";
+import { BrandCrest } from "./Brand";
 
 const download = (name: string, value: unknown) => { const url = URL.createObjectURL(new Blob([JSON.stringify(value, null, 2)], { type: "application/json" })); const link = document.createElement("a"); link.href = url; link.download = name; link.click(); setTimeout(() => URL.revokeObjectURL(url), 0); };
 const modeOptions: { id: GameMode; label: string }[] = [{ id: "duel", label: "Duel" }, { id: "fleet", label: "Fleet" }, { id: "fog-duel", label: "Fog Duel" }, { id: "fog-fleet", label: "Fog Fleet" }];
@@ -143,7 +144,7 @@ export function LeaguePage() {
   const completed = results.length; const total = format === "knockout" ? bracketSize - 1 : jobs.length || entries.length * (entries.length - 1) * seedCount;
 
   return <section className={styles.screen} style={gameArtStyle}>
-    <div className={styles.screenTop}><a className={styles.backLink} href="#/menu" aria-label="Back to main menu">←</a><header className={styles.screenTitle}><p className={styles.kicker}>League</p><h1>Rule the seven seas</h1><p>{format === "knockout" ? "Random pairings advance through a live knockout tree." : "Every pairing plays both colors on every seed."}</p></header><span aria-hidden="true" style={{ width: 48 }} /></div>
+    <div className={styles.screenTop}><a className={styles.backLink} href="#/menu" aria-label="Back to main menu">←</a><header className={styles.screenTitle}><p className={styles.kicker}>League</p><h1>Rule the seven seas</h1><p>{format === "knockout" ? "Random pairings advance through a live knockout tree." : "Every pairing plays both colors on every seed."}</p></header><a className={styles.screenBrandLink} href="#/menu" aria-label="Pirates War RL main menu"><BrandCrest className={styles.screenBrand} decorative /></a></div>
     {error && <div className={styles.errorBox} role="alert">{error}</div>}
     {stage === "setup" ? <div className={styles.leagueLayout}>
       <aside className={styles.parchmentPanel}><h2>League rules</h2>

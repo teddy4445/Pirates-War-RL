@@ -1,11 +1,12 @@
 import type { CSSProperties } from "react";
 import { gameArtStyle } from "../game/theme";
+import { BrandLogo } from "./Brand";
 import styles from "./GameShell.module.css";
 
 export function LandingPage() {
   return <div className={`${styles.gamePage} ${styles.heroBackdrop}`} style={gameArtStyle}>
     <nav className={styles.landingNav} aria-label="Landing navigation">
-      <a className={styles.wordmark} href="#/home"><span className={styles.wordmarkMark}>PW</span> Pirates War RL</a>
+      <a className={styles.wordmark} href="#/home" aria-label="Pirates War RL home"><BrandLogo className={styles.headerLogo} /></a>
       <div className={styles.landingLinks}><a className={styles.navLink} href="#game-overview">The battle</a><a className={styles.navLink} href="#/develop">Build an agent</a></div>
     </nav>
     <section className={styles.hero}>
@@ -15,7 +16,6 @@ export function LandingPage() {
         <h1>Pirates War <span>RL</span></h1>
         <p className={styles.heroLead}>Code your captain. Read the sea. Steal the enemy flag and bring it home while rival agents hunt you across a living, procedural archipelago.</p>
         <div className={styles.heroActions}><a className={styles.gameButton} href="#/menu">Enter the arena</a><a className={styles.gameButtonGhost} href="#game-overview">Discover the game</a></div>
-        <div className={styles.heroBadges}><span>4 battle modes</span><span>16 built-in rivals</span><span>100% browser-played</span></div>
       </div>
       <a className={styles.scrollCue} href="#game-overview">↓ Explore the seas</a>
     </section>

@@ -8,6 +8,7 @@ import { buildObservation } from "../sim/observation";
 import { runTournamentMatch, type MatchResult } from "../tournament/runner";
 import type { TeamId } from "../contracts/types";
 import styles from "./GameShell.module.css";
+import { BrandCrest } from "./Brand";
 
 interface RespawnTimer { shipId: string; seconds: number; }
 
@@ -29,9 +30,9 @@ export function GameMatchPage() {
   const togglePlaying = () => { const next = !playing; setPlaying(next); void fleetAudio.playCue(next ? "ui_resume" : "ui_pause"); };
   const cycleSpeed = () => setPlaybackSpeed(value => value === 1 ? 2 : value === 2 ? 4 : value === 4 ? 8 : 1);
   const close = () => { setPlaying(false); fleetAudio.stopAmbience(); location.hash = "/game/results"; };
-  if (!request) return <section className={styles.loadingScreen} style={gameArtStyle}><div className={styles.loadingCard}><h1>No battle configured</h1><p>Choose two captains before entering the arena.</p><a className={styles.gameButton} href="#/game/new">Open game setup</a></div></section>;
-  if (error) return <section className={styles.loadingScreen} style={gameArtStyle}><div className={styles.loadingCard}><h1>Battle interrupted</h1><p>{error}</p><a className={styles.gameButton} href="#/game/new">Return to setup</a></div></section>;
-  if (!result || !sought) return <section className={styles.loadingScreen} style={gameArtStyle}><div className={styles.loadingCard}><p className={styles.kicker}>Preparing the arena</p><h1>Captains at the ready</h1><p>Both agents are running their full deterministic battle before the broadcast begins.</p><div className={styles.loadingBar} /></div></section>;
+  if (!request) return <section className={styles.loadingScreen} style={gameArtStyle}><div className={styles.loadingCard}><BrandCrest className={styles.loadingBrand} decorative /><h1>No battle configured</h1><p>Choose two captains before entering the arena.</p><a className={styles.gameButton} href="#/game/new">Open game setup</a></div></section>;
+  if (error) return <section className={styles.loadingScreen} style={gameArtStyle}><div className={styles.loadingCard}><BrandCrest className={styles.loadingBrand} decorative /><h1>Battle interrupted</h1><p>{error}</p><a className={styles.gameButton} href="#/game/new">Return to setup</a></div></section>;
+  if (!result || !sought) return <section className={styles.loadingScreen} style={gameArtStyle}><div className={styles.loadingCard}><BrandCrest className={styles.loadingBrand} decorative /><p className={styles.kicker}>Preparing the arena</p><h1>Captains at the ready</h1><p>Both agents are running their full deterministic battle before the broadcast begins.</p><div className={styles.loadingBar} /></div></section>;
   const remaining = Math.max(0, (sought.config.match.durationTicks - sought.tick) / sought.config.timing.physicsHz);
   const perspectiveTeam = request.viewpoint === "spectator" ? null : request.viewpoint;
   const orderedTeams: [TeamId, TeamId] = perspectiveTeam === "rose" ? ["rose", "blue"] : ["blue", "rose"];
@@ -49,7 +50,7 @@ export function GameMatchPage() {
     <div className={styles.matchShade} />
     <header className={styles.matchHud}>
       <div className={styles.teamHud}><span className={styles.hudScore}>{sought.scores.blue}</span><div><small>BLUE FLEET</small><strong>{request.blue.alias}</strong></div></div>
-      <div className={styles.matchClock}><b>{Math.floor(remaining / 60)}:{Math.floor(remaining % 60).toString().padStart(2, "0")}</b><span>{request.mode.replace("fog-", "FOG ").toUpperCase()} · {sought.config.shipsPerTeam} {sought.config.shipsPerTeam === 1 ? "SHIP" : "SHIPS"} · SEED {request.seed}</span></div>
+      <div className={styles.matchClock}><BrandCrest className={styles.matchBrand} decorative /><b>{Math.floor(remaining / 60)}:{Math.floor(remaining % 60).toString().padStart(2, "0")}</b><span>{request.mode.replace("fog-", "FOG ").toUpperCase()} · {sought.config.shipsPerTeam} {sought.config.shipsPerTeam === 1 ? "SHIP" : "SHIPS"} · SEED {request.seed}</span></div>
       <div className={styles.teamHud}><div><small>GREEN FLEET</small><strong>{request.green.alias}</strong></div><span className={styles.hudScore}>{sought.scores.rose}</span></div>
     </header>
     <div className={styles.matchStats} aria-label={`Ships sunk: Blue ${sought.kills.blue}, Green ${sought.kills.rose}`}>
