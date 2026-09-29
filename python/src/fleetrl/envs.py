@@ -33,18 +33,20 @@ def scripted_team_action(observation: dict[str, Any]) -> dict[str, list[dict[str
         legal = observation["legal"][ship["id"]]
         if legal["pickupFlagIds"]:
             result.append(decode_discrete_v1(observation, ship["id"], 18)); continue
-        target = home["deliveryZone"]["center"] if ship["carriedFlagId"] else (enemy_flag["position"] if enemy_flag["known"] and enemy_flag["position"] else enemy_base["approach"])
-        desired = math.atan2(target["y"] - ship["position"]["y"], target["x"] - ship["position"]["x"])
-        bearing = wrap_heading(desired - ship["heading"])
-        turn = max(-1.0, min(1.0, bearing / 0.7))
         nearest_enemy = min(
             (enemy for enemy in observation["enemies"] if enemy["alive"]),
             key=lambda enemy: ((enemy["position"]["x"] - ship["position"]["x"]) ** 2 + (enemy["position"]["y"] - ship["position"]["y"]) ** 2, enemy["id"]),
             default=None,
         )
+        if not ship["carriedFlagId"] and legal.get("canScuttle") and ship["health"] <= 24 and distance(ship["position"], home["deliveryZone"]["center"]) > 460 and nearest_enemy is None:
+            scuttle = neutral_action(ship["id"]); scuttle["scuttle"] = True; result.append(scuttle); continue
+        target = home["deliveryZone"]["center"] if ship["carriedFlagId"] else (enemy_flag["position"] if enemy_flag["known"] and enemy_flag["position"] else enemy_base["approach"])
+        desired = math.atan2(target["y"] - ship["position"]["y"], target["x"] - ship["position"]["x"])
+        bearing = wrap_heading(desired - ship["heading"])
+        turn = max(-1.0, min(1.0, bearing / 0.7))
         selected_enemy = nearest_enemy if nearest_enemy and nearest_enemy["id"] in legal.get("fireTargetShipIds", []) else next((enemy for enemy in sorted(observation["enemies"], key=lambda item: (distance(ship["position"], item["position"]), item["id"])) if enemy["id"] in legal.get("fireTargetShipIds", [])), None)
         fire = bool(legal["canFire"] and selected_enemy)
-        result.append({"shipId": ship["id"], "throttle": 1.0 if abs(bearing) < 2.4 else 0.25, "turn": turn, "fire": fire, "fireTargetShipId": selected_enemy["id"] if fire else None, "interact": {"type": "none"}})
+        result.append({"shipId": ship["id"], "throttle": 1.0 if abs(bearing) < 2.4 else 0.25, "turn": turn, "fire": fire, "fireTargetShipId": selected_enemy["id"] if fire else None, "scuttle": False, "interact": {"type": "none"}})
     return {"actions": result}
 
 

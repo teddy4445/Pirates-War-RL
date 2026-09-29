@@ -131,7 +131,6 @@ export function makeKnockoutRoundJobs(tournamentId: string, participantIds: stri
 
 export function knockoutWinner(result: MatchResult): string {
   if (result.winnerId) return result.winnerId;
-  if (result.blueKills !== result.roseKills) return result.blueKills > result.roseKills ? result.blueId : result.roseId;
   return deriveSeed(result.seed, `draw-break:${result.id}`) % 2 === 0 ? result.blueId : result.roseId;
 }
 
@@ -170,14 +169,14 @@ export async function runTournamentMatch(job: MatchJob, entries: TournamentEntry
   return { id: job.id, blueId: blueEntry.id, roseId: roseEntry.id, seed: job.seed, winnerId, draw: !winnerId && forfeits.length < 2, blueScore: state.scores.blue, roseScore: state.scores.rose, blueKills: state.kills.blue, roseKills: state.kills.rose, tick: state.tick, forfeits, replay, metrics: { blue: diagnostics("blue"), rose: diagnostics("rose") } };
 }
 
-export interface Standing { id: string; played: number; wins: number; draws: number; losses: number; points: number; headToHeadPoints: number; captures: number; conceded: number; differential: number; rank: number; }
+export interface Standing { id: string; played: number; wins: number; draws: number; losses: number; points: number; headToHeadPoints: number; scored: number; conceded: number; differential: number; rank: number; }
 export function standings(entries: TournamentEntry[], results: MatchResult[]): Standing[] {
-  const rows = new Map(entries.map(entry => [entry.id, { id: entry.id, played: 0, wins: 0, draws: 0, losses: 0, points: 0, headToHeadPoints: 0, captures: 0, conceded: 0, differential: 0, rank: 0 }]));
+  const rows = new Map(entries.map(entry => [entry.id, { id: entry.id, played: 0, wins: 0, draws: 0, losses: 0, points: 0, headToHeadPoints: 0, scored: 0, conceded: 0, differential: 0, rank: 0 }]));
   for (const result of results) {
-    const blue = rows.get(result.blueId)!, rose = rows.get(result.roseId)!; blue.played += 1; rose.played += 1; blue.captures += result.blueScore; blue.conceded += result.roseScore; rose.captures += result.roseScore; rose.conceded += result.blueScore;
+    const blue = rows.get(result.blueId)!, rose = rows.get(result.roseId)!; blue.played += 1; rose.played += 1; blue.scored += result.blueScore; blue.conceded += result.roseScore; rose.scored += result.roseScore; rose.conceded += result.blueScore;
     if (result.winnerId === blue.id) { blue.wins += 1; blue.points += 3; rose.losses += 1; } else if (result.winnerId === rose.id) { rose.wins += 1; rose.points += 3; blue.losses += 1; } else if (result.draw) { blue.draws += 1; rose.draws += 1; blue.points += 1; rose.points += 1; } else { blue.losses += 1; rose.losses += 1; }
   }
-  for (const row of rows.values()) row.differential = row.captures - row.conceded;
+  for (const row of rows.values()) row.differential = row.scored - row.conceded;
   for (const points of new Set([...rows.values()].map(row => row.points))) {
     const tiedIds = new Set([...rows.values()].filter(row => row.points === points).map(row => row.id));
     if (tiedIds.size < 2) continue;
@@ -188,6 +187,6 @@ export function standings(entries: TournamentEntry[], results: MatchResult[]): S
       else if (result.draw) { blue.headToHeadPoints += 1; rose.headToHeadPoints += 1; }
     }
   }
-  const sorted = [...rows.values()].sort((a, b) => b.points - a.points || b.headToHeadPoints - a.headToHeadPoints || b.differential - a.differential || b.captures - a.captures || a.id.localeCompare(b.id));
-  sorted.forEach((row, index) => { const prior = sorted[index - 1]; row.rank = prior && prior.points === row.points && prior.headToHeadPoints === row.headToHeadPoints && prior.differential === row.differential && prior.captures === row.captures ? prior.rank : index + 1; }); return sorted;
+  const sorted = [...rows.values()].sort((a, b) => b.points - a.points || b.headToHeadPoints - a.headToHeadPoints || b.differential - a.differential || b.scored - a.scored || a.id.localeCompare(b.id));
+  sorted.forEach((row, index) => { const prior = sorted[index - 1]; row.rank = prior && prior.points === row.points && prior.headToHeadPoints === row.headToHeadPoints && prior.differential === row.differential && prior.scored === row.scored ? prior.rank : index + 1; }); return sorted;
 }

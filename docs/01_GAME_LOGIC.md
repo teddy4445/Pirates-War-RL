@@ -34,7 +34,7 @@ The game flow uses a seeded symmetric archipelago: one home island near each end
 
 Required authoritative fields: stable match-local `id`, `teamId`, spawn position/heading, position `(x,y)`, velocity `(vx,vy)`, heading, radius, health, alive/respawning status, remaining cannon cooldown ticks, respawn tick, spawn-protection expiry tick, carried flag ID or null, and currently held control. Keep the same ship ID after respawn. Reset physical state, not the student's entire team-policy memory, on a ship respawn.
 
-Proposed values: radius 12 WU; health 100; acceleration 55 WU/s^2; drag coefficient 0.7 /s; maximum speed 80 WU/s; maximum turn rate 2.4 rad/s. Controls are throttle in [-1,1] and turn in [-1,1]. Negative throttle accelerates backward; it is not instant reverse motion. Neutral throttle coasts and slows through drag. There is no teleport or direct velocity-setting action.
+Proposed values: radius 12 WU; health 100; acceleration 55 WU/s^2; drag coefficient 0.7 /s; maximum speed 88 WU/s; maximum turn rate 2.4 rad/s. Controls are throttle in [-1,1] and turn in [-1,1]. Negative throttle accelerates backward; it is not instant reverse motion. Neutral throttle coasts and slows through drag. There is no teleport or direct velocity-setting action. A ship carrying the enemy flag uses `0.95 * maxSpeed`, or 83.6 WU/s by default.
 
 At every physics tick with dt = 1/60 s:
 
@@ -107,7 +107,7 @@ Dropping a carried enemy flag, including on carrier death, relocates it to the c
 
 ### Deliver/capture: automatic
 
-When a living, unprotected carrier enters its own base's water delivery zone, and its own flag is `at-home`, score one capture. The carried enemy flag returns to its owner's home post immediately. Clear the carrier slot. Do not reset other ships, health, or positions. Emit exactly one capture event. If the home flag is absent, the carrier must wait or help recover it; there is no score simply for placing a flag near home.
+When a living, unprotected carrier enters its own base's water delivery zone, and its own flag is `at-home`, score a delivery worth 25 points. The carried enemy flag returns to its owner's home post immediately. Clear the carrier slot. Do not reset other ships, health, or positions. Emit exactly one capture event. If the home flag is absent, the carrier must wait or help recover it; there is no score simply for placing a flag near home. The first enemy pickup during a flag excursion scores 3 points; dropping, placing, giving, and repicking that same loose flag cannot farm more pickup points. The pickup becomes score-eligible again only after that flag returns home or is delivered.
 
 ### Automatic return
 
@@ -123,16 +123,18 @@ Health <= 0 produces death once. Immediately remove the ship from movement, coll
 
 Respawn after `respawnDelayTicks = 900` (15 s by default). Restore full health, zero velocity, original heading, no flag, zero cannon cooldown, and the original spawn slot. If occupied, search a fixed set of validated offsets around that slot; if none is free, retry next tick rather than overlap or teleport to an unrelated area. Spawn protection lasts 60 ticks: allow movement, suppress incoming damage, firing, and flag interactions/capture. A visible shield communicates this state. Its duration is configurable and must be included in observations where visible.
 
+An agent may set the optional one-shot `scuttle: true` action for a living ship. Scuttling follows the normal death/drop cleanup but uses `scuttleRespawnTicks = 450` (7.5 s by default), exactly half the normal delay. It never awards an opponent kill or point. Scuttle is consumed at activation and is never held across ticks.
+
 The agent runtime persists through its own ships' deaths. It is reset only at match start or after a runtime failure under the documented timeout rules. Dead ships receive neutral actions and cannot carry over stale commands into their respawn.
 
-Default match limit: 180 simulation seconds, configurable from 15 through 300 seconds in New Game and League. The first team to deliver one enemy flag wins. Evaluate score conditions after all captures in a tick. Simultaneous threshold crossings with equal scores are a draw. At the time limit, higher capture score wins; if captures are tied, the team with more enemy ships sunk wins; equal captures and sinks draw. Damage remains a diagnostic and is never a hidden tiebreaker. Infrastructure cancellation is not a draw. Agent-forfeit rules are in [06](06_TIMING_DETERMINISM_AND_REPLAYS.md).
+Default match limit: 180 simulation seconds, configurable from 15 through 300 seconds in New Game and League. Sinking an enemy ship scores 1 point, the first enemy-flag pickup in an excursion scores 3 points, and delivering that flag to one's base scores 25 points. The match continues after deliveries. At the time limit, the side with the higher total score wins and equal totals draw; kills are already part of score and are not a second tiebreaker. Damage remains diagnostic. Infrastructure cancellation is not a draw. Agent-forfeit rules are in [06](06_TIMING_DETERMINISM_AND_REPLAYS.md).
 
 ## 6. Tick order and invariants
 
 At a tick boundary:
 
-1. Activate a committed action batch if this is a decision boundary; collect one-shot interaction intents.
-2. Process due respawns/protection expiries and cannon cooldown readiness using integer ticks.
+1. Activate a committed action batch if this is a decision boundary; collect one-shot scuttle and interaction intents.
+2. Process due respawns/protection expiries and cannon cooldown readiness using integer ticks, then resolve requested scuttles before movement.
 3. Integrate all living ships and resolve contacts; spawn permitted shots from the firing phase.
 4. Sweep all projectiles; accumulate simultaneous damage; resolve deaths and death drops.
 5. Resolve valid interactions of surviving ships atomically, then automatic returns and deliveries. One flag has at most one explicit interaction transition in this phase; delivery may follow a valid transition.
@@ -140,4 +142,4 @@ At a tick boundary:
 
 The exact order must be implemented once and covered by tests. Do not scatter it across UI callbacks.
 
-Required invariants: health is bounded; no living ship overlaps solid land beyond tolerance; each flag has exactly one location/carrier; carrier references are bidirectionally consistent; dead ships cannot carry/sense/shoot; scores only change on capture; all timers advance with ticks; out-of-range or impossible interactions are no-ops with diagnostics; changing graphics or audio cannot change the outcome.
+Required invariants: health is bounded; no living ship overlaps solid land beyond tolerance; each flag has exactly one location/carrier; carrier references are bidirectionally consistent; dead ships cannot carry/sense/shoot; scores change only for credited enemy sinks, first enemy pickups, and deliveries; all timers advance with ticks; out-of-range or impossible interactions are no-ops with diagnostics; changing graphics or audio cannot change the outcome.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "fleetrl-config-v1",
-  "rulesVersion": "fleetrl-rules-v5",
+  "rulesVersion": "fleetrl-rules-v6",
   "mode": "fleet",
   "mapId": "twin-harbors-v1",
   "shipsPerTeam": 3,
@@ -19,10 +19,12 @@
     "radius": 12,
     "maxHealth": 100,
     "acceleration": 55,
-    "maxSpeed": 80,
+    "maxSpeed": 88,
+    "flagCarrierSpeedMultiplier": 0.95,
     "dragPerSecond": 0.7,
     "maxTurnRate": 2.4,
     "respawnDelayTicks": 900,
+    "scuttleRespawnTicks": 450,
     "spawnProtectionTicks": 60
   },
   "combat": {
@@ -48,7 +50,12 @@
   },
   "match": {
     "durationTicks": 10800,
-    "captureTarget": 1
+    "scoreNormalizationTarget": 25,
+    "points": {
+      "kill": 1,
+      "pickup": 3,
+      "delivery": 25
+    }
   },
   "vision": {
     "sensorRadius": 220,

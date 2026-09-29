@@ -63,6 +63,7 @@ describe("P03 combat, flags, respawn and outcomes", () => {
     expect(next.ships.filter(ship => ship.alive)).toHaveLength(0);
     expect(next.events.filter(record => record.type === "ShipSunk").map(record => record.shipId).sort()).toEqual([blue.id, rose.id].sort());
     expect(next.kills).toEqual({ blue: 1, rose: 1 });
+    expect(next.scores).toEqual({ blue: 1, rose: 1 });
   });
 
   it("aims at the selected enemy with velocity lead regardless of hull heading", () => {
@@ -115,6 +116,7 @@ describe("P03 combat, flags, respawn and outcomes", () => {
     expect(next.ships.filter(ship => ship.alive)).toHaveLength(0);
     expect(next.events.filter(record => record.type === "ShipSunk").map(record => record.shipId).sort()).toEqual([blue.id, rose.id].sort());
     expect(next.kills).toEqual({ blue: 1, rose: 1 });
+    expect(next.scores).toEqual({ blue: 1, rose: 1 });
     expect(worldInvariantErrors(next)).toEqual([]);
   });
 
@@ -139,12 +141,14 @@ describe("P03 combat, flags, respawn and outcomes", () => {
     blueOne!.position = { ...twinHarbors.bases.find(base => base.teamId === "rose")!.approach };
     state = stepWorld(state, { blue: [action(blueOne!.id, { interact: { type: "pickup", flagId: enemyFlag.id } })] });
     expect(state.flags.find(flag => flag.id === enemyFlag.id)!.carrierShipId).toBe(blueOne!.id);
+    expect(state.scores.blue).toBe(3);
     const north = twinHarbors.flagSites.find(site => site.id === "north-neutral-site")!;
     state.ships.find(ship => ship.id === blueOne!.id)!.position = { ...north.approach };
     state = stepWorld(state, { blue: [action(blueOne!.id, { interact: { type: "place", flagSiteId: north.id } })] });
     expect(state.flags.find(flag => flag.id === enemyFlag.id)).toEqual(expect.objectContaining({ state: "on-land", siteId: north.id }));
     state.ships.find(ship => ship.id === blueTwo!.id)!.position = { ...north.approach };
     state = stepWorld(state, { blue: [action(blueTwo!.id, { interact: { type: "pickup", flagId: enemyFlag.id } })] });
+    expect(state.scores.blue).toBe(3);
     const one = state.ships.find(ship => ship.id === blueOne!.id)!;
     const two = state.ships.find(ship => ship.id === blueTwo!.id)!;
     one.position = { x: 900, y: 450 }; two.position = { x: 930, y: 450 };
@@ -167,7 +171,7 @@ describe("P03 combat, flags, respawn and outcomes", () => {
     state.ships.find(ship => ship.id === recoveryShip!.id)!.position = { x: 600, y: 450 };
     state = stepWorld(state, { blue: [action(recoveryShip!.id, { interact: { type: "pickup", flagId: blueFlag.id } })] });
     expect(state.flags.find(flag => flag.id === blueFlag.id)!.state).toBe("at-home");
-    expect(state.scores.blue).toBe(1);
+    expect(state.scores.blue).toBe(25);
   });
 
   it("G10 respawns on simulation ticks at a safe offset with neutral controls", () => {
@@ -184,7 +188,7 @@ describe("P03 combat, flags, respawn and outcomes", () => {
   });
 
   it("G11 produces simultaneous capture draws and time-limit draws", () => {
-    const config = duelConfig({ flags: { ...defaultConfig.flags, requireOwnFlagHome: false }, match: { durationTicks: 10, captureTarget: 1 } });
+    const config = duelConfig({ flags: { ...defaultConfig.flags, requireOwnFlagHome: false }, match: { ...defaultConfig.match, durationTicks: 1 } });
     let state = createInitialWorld(config, twinHarbors, 10);
     const blue = state.ships.find(ship => ship.teamId === "blue")!;
     const rose = state.ships.find(ship => ship.teamId === "rose")!;
@@ -195,10 +199,10 @@ describe("P03 combat, flags, respawn and outcomes", () => {
     blue.position = { ...twinHarbors.bases.find(base => base.teamId === "blue")!.deliveryZone.center };
     rose.position = { ...twinHarbors.bases.find(base => base.teamId === "rose")!.deliveryZone.center };
     state = stepWorld(state);
-    expect(state.scores).toEqual({ blue: 1, rose: 1 });
-    expect(state.outcome).toEqual(expect.objectContaining({ kind: "draw", winner: null, reason: "capture-target" }));
+    expect(state.scores).toEqual({ blue: 25, rose: 25 });
+    expect(state.outcome).toEqual(expect.objectContaining({ kind: "draw", winner: null, reason: "time-limit" }));
 
-    let timed = createInitialWorld({ ...config, match: { durationTicks: 1, captureTarget: 3 } }, twinHarbors, 11);
+    let timed = createInitialWorld({ ...config, match: { ...defaultConfig.match, durationTicks: 1 } }, twinHarbors, 11);
     timed = stepWorld(timed);
     expect(timed.outcome).toEqual(expect.objectContaining({ kind: "draw", reason: "time-limit" }));
   });
@@ -215,10 +219,39 @@ describe("P03 combat, flags, respawn and outcomes", () => {
     expect(state.events.some(record => record.type === "FlagRelocatedToIsland" && record.flagId === roseFlag.id)).toBe(true);
   });
 
-  it("uses ship sinks as the public timeout tiebreaker", () => {
-    let state = createInitialWorld({ ...duelConfig(), match: { durationTicks: 1, captureTarget: 1 } }, twinHarbors, 13);
-    state.kills.blue = 2; state.kills.rose = 1;
+  it("uses total points as the public match winner", () => {
+    let state = createInitialWorld({ ...duelConfig(), match: { ...defaultConfig.match, durationTicks: 1 } }, twinHarbors, 13);
+    state.scores.blue = 4; state.scores.rose = 3;
     state = stepWorld(state);
-    expect(state.outcome).toEqual(expect.objectContaining({ kind: "win", winner: "blue", reason: "kill-tiebreak" }));
+    expect(state.outcome).toEqual(expect.objectContaining({ kind: "win", winner: "blue", reason: "time-limit" }));
+  });
+
+  it("scuttles without crediting the opponent and respawns in half the normal time", () => {
+    const config = duelConfig({ ship: { ...defaultConfig.ship, respawnDelayTicks: 10, scuttleRespawnTicks: 5 } });
+    let state = createInitialWorld(config, twinHarbors, 14);
+    const blue = state.ships.find(ship => ship.teamId === "blue")!;
+    state = stepWorld(state, { blue: [action(blue.id, { scuttle: true })] });
+    expect(state.ships.find(ship => ship.id === blue.id)).toEqual(expect.objectContaining({ alive: false, respawnAtTick: 5 }));
+    expect(state.kills).toEqual({ blue: 0, rose: 0 });
+    expect(state.scores).toEqual({ blue: 0, rose: 0 });
+    expect(state.events.some(record => record.type === "ShipScuttled" && record.shipId === blue.id)).toBe(true);
+    state = runSteps(state, () => ({}), 5);
+    expect(state.ships.find(ship => ship.id === blue.id)!.alive).toBe(true);
+  });
+
+  it("uses the faster v6 hull limit and slows enemy-flag carriers by five percent", () => {
+    expect(defaultConfig.ship.maxSpeed).toBe(88);
+    const config = duelConfig({ ship: { ...defaultConfig.ship, acceleration: 0, dragPerSecond: 0 } });
+    let state = createInitialWorld(config, twinHarbors, 15);
+    const blue = state.ships.find(ship => ship.teamId === "blue")!;
+    const roseFlag = state.flags.find(flag => flag.ownerTeamId === "rose")!;
+    blue.velocity = { x: 100, y: 0 };
+    state = stepWorld(state);
+    expect(Math.hypot(state.ships.find(ship => ship.id === blue.id)!.velocity.x, state.ships.find(ship => ship.id === blue.id)!.velocity.y)).toBeCloseTo(88, 9);
+    const carrier = state.ships.find(ship => ship.id === blue.id)!;
+    carrier.velocity = { x: 100, y: 0 }; carrier.carriedFlagId = roseFlag.id;
+    roseFlag.state = "carried"; roseFlag.position = null; roseFlag.carrierShipId = carrier.id;
+    state = stepWorld(state);
+    expect(Math.hypot(state.ships.find(ship => ship.id === blue.id)!.velocity.x, state.ships.find(ship => ship.id === blue.id)!.velocity.y)).toBeCloseTo(83.6, 9);
   });
 });

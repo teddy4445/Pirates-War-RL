@@ -64,8 +64,8 @@ def test_packaged_versions_and_default_config_match_gameplay_fixture() -> None:
     versions = json.loads(files("fleetrl").joinpath("data", "versions.json").read_text(encoding="utf-8"))
     assert load_config() == FIXTURE["defaultConfig"]
     assert FIXTURE["rulesVersion"] == RULES_VERSION == versions["rulesVersion"]
-    assert versions["pythonEngine"] == ENGINE_VERSION == "fleetrl-engine-py-v5"
-    assert versions["browserEngine"] == "fleetrl-engine-ts-v5"
+    assert versions["pythonEngine"] == ENGINE_VERSION == "fleetrl-engine-py-v6"
+    assert versions["browserEngine"] == "fleetrl-engine-ts-v6"
 
 
 @pytest.mark.parametrize("case", FIXTURE["cases"], ids=lambda case: case["id"])

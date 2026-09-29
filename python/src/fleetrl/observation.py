@@ -86,12 +86,14 @@ def _filtered_events(state: dict[str, Any], team_id: str, sensors: list[dict[str
                 record[key] = item[key]
         if "detail" in item and (own_experience or item["type"] in public_types):
             record["detail"] = item["detail"]
+        if "points" in item:
+            record["points"] = item["points"]
         records.append(record)
     return records
 
 
 def _known_legal(state: dict[str, Any], ship: dict[str, Any], flags: list[dict[str, Any]], own: list[dict[str, Any]], enemies: list[dict[str, Any]]) -> dict[str, Any]:
-    empty = {"canFire": False, "fireTargetShipIds": [], "pickupFlagIds": [], "giveTargetShipIds": [], "placementSiteIds": [], "canDrop": False}
+    empty = {"canFire": False, "fireTargetShipIds": [], "pickupFlagIds": [], "giveTargetShipIds": [], "placementSiteIds": [], "canDrop": False, "canScuttle": False}
     if not ship["alive"]:
         return empty
     protected = ship["protectionUntilTick"] > state["tick"]
@@ -136,6 +138,7 @@ def _known_legal(state: dict[str, Any], ship: dict[str, Any], flags: list[dict[s
         "giveTargetShipIds": [] if protected else sorted(give),
         "placementSiteIds": [] if protected else sorted(placements),
         "canDrop": not protected and ship["carriedFlagId"] is not None,
+        "canScuttle": True,
     }
 
 
@@ -172,15 +175,15 @@ def build_observation(
     held = {"actions": [copy.deepcopy(ship["heldAction"]) for ship in own_state]}
     rules = {
         "physicsHz": config["timing"]["physicsHz"], "decisionIntervalTicks": config["timing"]["decisionIntervalTicks"],
-        "shipRadius": config["ship"]["radius"], "maxSpeed": config["ship"]["maxSpeed"], "maxHealth": config["ship"]["maxHealth"],
-        "cooldownTicks": config["combat"]["cooldownTicks"], "respawnDelayTicks": config["ship"]["respawnDelayTicks"],
+        "shipRadius": config["ship"]["radius"], "maxSpeed": config["ship"]["maxSpeed"], "flagCarrierSpeedMultiplier": config["ship"]["flagCarrierSpeedMultiplier"], "maxHealth": config["ship"]["maxHealth"],
+        "cooldownTicks": config["combat"]["cooldownTicks"], "respawnDelayTicks": config["ship"]["respawnDelayTicks"], "scuttleRespawnTicks": config["ship"]["scuttleRespawnTicks"],
         "spawnProtectionTicks": config["ship"]["spawnProtectionTicks"], "projectileRange": config["combat"]["projectileRange"],
         "projectileSpeed": config["combat"]["projectileSpeed"], "projectileDamage": config["combat"]["damage"],
         "minDamageMultiplier": config["combat"]["minDamageMultiplier"], "maxDamageMultiplier": config["combat"]["maxDamageMultiplier"],
         "closeRangeFraction": config["combat"]["closeRangeFraction"], "impactDamagePerSpeed": config["combat"]["impactDamagePerSpeed"],
         "pickupRadius": config["flags"]["pickupRadius"], "placeRadius": config["flags"]["placeRadius"], "giveRadius": config["flags"]["giveRadius"],
         "sensorRadius": config["vision"]["sensorRadius"], "matchDurationTicks": config["match"]["durationTicks"],
-        "captureTarget": config["match"]["captureTarget"], "obstacleRayRange": config["features"]["obstacleRayRange"],
+        "scoreNormalizationTarget": config["match"]["scoreNormalizationTarget"], "scorePoints": dict(config["match"]["points"]), "obstacleRayRange": config["features"]["obstacleRayRange"],
     }
     events = list(state["events"] if source_events is None else source_events)
     return {

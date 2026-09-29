@@ -42,7 +42,9 @@ def test_discrete_decoder_and_mask_match_public_contract() -> None:
     mask = discrete_action_mask_v1(observation, "blue-1")
     assert mask.shape == (22,)
     assert mask[:18].all()
-    assert not mask[18:].any()
+    assert not mask[18:21].any()
+    assert mask[21]
+    assert decode_discrete_v1(observation, "blue-1", 21)["scuttle"] is True
     with pytest.raises(ValueError):
         decode_discrete_v1(observation, "blue-1", 22)
     with pytest.raises(ValueError):

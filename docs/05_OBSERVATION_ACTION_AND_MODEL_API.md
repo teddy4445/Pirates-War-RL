@@ -29,6 +29,7 @@ type ShipAction = {
   turn: number;     // finite, [-1,1], clockwise positive
   fire: boolean;
   fireTargetShipId?: string | null; // selected legal visible enemy; nearest legal target if omitted
+  scuttle?: boolean; // one-shot self-sink; half normal respawn, no opponent kill/point
   interact: Interaction;
 };
 type TeamAction = { actions: ShipAction[] };
@@ -78,7 +79,7 @@ type Observation = {
   remainingTimeS: number;
   world: { width: number; height: number };
   score: { blue: number; rose: number };
-  kills: { blue: number; rose: number }; // public ship-sink tiebreak count
+  kills: { blue: number; rose: number }; // public credited enemy-sink count; one score point each
   ships: ShipView[];          // ALL own ships, including respawning ships
   enemies: ShipView[];        // filtered; full mode includes respawn state
   flags: FlagView[];          // exactly two; unknown fields are null
@@ -96,7 +97,7 @@ type Observation = {
 
 `PublicRulesView` includes configured world/ship/combat/flag/vision/match constants needed to interpret units, cooldowns, masks, and feature normalization, including `impactDamagePerSpeed`. It excludes private RNG state, hidden entity data, runtime secrets, and opponent code. `heldActions` contains only the observing team's committed controls/interaction intents; it makes the one-window pipeline inspectable. The helper methods use the exact same filtered snapshot supplied for that decision, reject non-owned ship IDs, and cannot query authoritative hidden state.
 
-Implement the referenced view types with only the specified public geometry and fields; no arbitrary engine object spread. `BaseView` exposes team ID, land post, delivery-zone center/radius, and water approach. `FlagSiteView` exposes ID, land point, water approach, radius, and reserved-home status. `KnownLegalActions` contains `canFire`, `fireTargetShipIds`, known legal pickup flag IDs, give-target ship IDs, placement-site IDs, and `canDrop`. A fire target is listed only when it is alive, visible to the team, within projectile range of that ship, and has an unobstructed direct line through known terrain. Lists must be computed from the observation's knowledge plus own state, not unseen dynamic state. Validation at execution can still fail as the world changes during the one-window latency.
+Implement the referenced view types with only the specified public geometry and fields; no arbitrary engine object spread. `BaseView` exposes team ID, land post, delivery-zone center/radius, and water approach. `FlagSiteView` exposes ID, land point, water approach, radius, and reserved-home status. `KnownLegalActions` contains `canFire`, `fireTargetShipIds`, known legal pickup flag IDs, give-target ship IDs, placement-site IDs, `canDrop`, and `canScuttle`. A fire target is listed only when it is alive, visible to the team, within projectile range of that ship, and has an unobstructed direct line through known terrain. Lists must be computed from the observation's knowledge plus own state, not unseen dynamic state. Validation at execution can still fail as the world changes during the one-window latency.
 
 ### Full observation
 
@@ -122,11 +123,11 @@ Each decision supplies up to one action for each own ship. Missing ships receive
 
 An action is checked twice: schema/ownership at intake and physical legality at activation. A valid pickup attempt may become a no-op if another ship moved the flag in the intervening 100 ms. Such a no-op is not a parser error or automatic forfeit.
 
-Throttle/turn/fire/target are held for the next six physics ticks. An `interact` command is consumed once at activation, not retried every tick. Cooldowns govern held fire. A legal target is selected independently of ship heading and launched with deterministic constant-velocity lead; the projectile does not home after launch. When `fire` is true and `fireTargetShipId` is omitted, the platform selects the nearest legal visible enemy. Dead/protected ships have the restrictions in [01](01_GAME_LOGIC.md). The safe action is `{throttle:0, turn:0, fire:false, fireTargetShipId:null, interact:{type:"none"}}` with the correct ship ID.
+Throttle/turn/fire/target are held for the next six physics ticks. An `interact` command and optional `scuttle` are consumed once at activation, not retried every tick. A living ship may scuttle even while protected or carrying a flag; its flag is dropped normally, no opponent receives kill credit, and its respawn delay is halved. Cooldowns govern held fire. A legal target is selected independently of ship heading and launched with deterministic constant-velocity lead; the projectile does not home after launch. When `fire` is true and `fireTargetShipId` is omitted, the platform selects the nearest legal visible enemy. Dead/protected ships have the restrictions in [01](01_GAME_LOGIC.md). The safe action is `{throttle:0, turn:0, fire:false, fireTargetShipId:null, scuttle:false, interact:{type:"none"}}` with the correct ship ID.
 
 ## 4. Built-in feature and discrete-action adapters
 
-Implement `encodeShipV1(observation, shipId)` -> exactly 64 finite float32 values. This is a convenience adapter for small models, not a replacement for the rich observation object. Always encode from the filtered object. Use width W, height H, diagonal D, maxSpeed V, maxHealth HP, maxCooldown C, configured respawn/protection durations, and capture target G. Clamp ratios to documented ranges and use a denominator of at least 1 for disabled timers. Normalized positions are [0,1]; relative coordinates/velocities are [-1,1].
+Implement `encodeShipV1(observation, shipId)` -> exactly 64 finite float32 values. This is a convenience adapter for small models, not a replacement for the rich observation object. Always encode from the filtered object. Use width W, height H, diagonal D, maxSpeed V, maxHealth HP, maxCooldown C, configured respawn/protection durations, and score normalization target G = 25. Clamp ratios to documented ranges and use a denominator of at least 1 for disabled timers. Normalized positions are [0,1]; relative coordinates/velocities are [-1,1].
 
 | Indices | Values in exact order |
 |---|---|
@@ -146,7 +147,7 @@ Implement `discrete-22-v1` for Q-learning/DQN:
 - ID 18: neutral motion plus pickup of nearest known legal flag.
 - ID 19: neutral motion plus give to nearest known legal teammate.
 - ID 20: neutral motion plus place at nearest known legal neutral shoreline site.
-- ID 21: neutral motion plus drop if carrying a flag.
+- ID 21: contextual neutral special—drop if carrying a flag; otherwise scuttle when alive.
 
 Choose nearest using actual distance then ID, not original array order. Missing special-action candidates produce neutral actions. ID 4 is neutral/coast; ID 7 is forward/straight without firing. Restrict this adapter intentionally; raw agents retain continuous controls and explicit target IDs. Mask firing when protected/dead/on cooldown or when no visible legal target exists. During Q target computation, apply the same legality conventions consistently.
 

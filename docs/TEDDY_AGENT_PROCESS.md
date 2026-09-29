@@ -20,11 +20,11 @@ The three numbered rivals are trusted built-ins with increasing movement, recove
 1. Pick exactly one target mode. A package declares only that supported mode.
 2. Develop against the public `fleetrl-agent-v1` contract. Use known island polygons, filtered enemies and flags, legal-action masks, and seeded `api.random()`. Never read authoritative hidden state.
 3. Use the native Python kit for matching rollouts or optional Q-learning/DQN. A student may instead build a state machine directly in JavaScript.
-4. Evaluate on held-out seeds, both colors, and relevant fleet sizes. Record captures, sink-tiebreak wins, draws, fallbacks, and latency separately. Freeze learning before evaluation.
+4. Evaluate on held-out seeds, both colors, and relevant fleet sizes. Record total points, kills, pickups, deliveries, draws, fallbacks, and latency separately. Freeze learning before evaluation.
 5. Package and preflight the exact artifact that will compete. Replays identify the immutable agent hash and never rerun a policy.
 6. Inspect or copy the shipped boss files through **Under the deck** on New Game or through the Teddy's Agent page.
 
-The current Teddy versions are auditable JavaScript state machines, not a claim of neural training. They use a defensive opening in Duel, a dedicated Fleet sentry, legitimate last-seen memory in fog, visible-projectile evasion, legal target selection, flag recovery, carrier escort, and polygon-aware waypoint selection. This is intentionally a workflow students can reproduce without privileged tools.
+The current Teddy versions are auditable JavaScript state machines, not a claim of neural training. They use a defensive opening in Duel, a dedicated Fleet sentry, legitimate last-seen memory in fog, visible-projectile evasion, legal target selection, flag recovery, carrier escort, polygon-aware waypoint selection, and legal strategic scuttling for badly damaged non-carriers far from home. This is intentionally a workflow students can reproduce without privileged tools.
 
 ## Maintained evaluation gates
 

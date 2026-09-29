@@ -63,6 +63,7 @@ function filteredEvents(state: WorldState, teamId: TeamId, sensors: ReturnType<t
     if (item.shipId && (ownIds.has(item.shipId) || !fogMode(state) || (item.position ? pointVisible(state, sensors, item.position) : false))) sanitized.shipId = item.shipId;
     if (item.otherShipId && (ownIds.has(item.otherShipId) || !fogMode(state) || (item.position ? pointVisible(state, sensors, item.position) : false))) sanitized.otherShipId = item.otherShipId;
     if (item.detail && (ownExperience || publicTypes.has(item.type))) sanitized.detail = item.detail;
+    if (item.points !== undefined) sanitized.points = item.points;
     records.push(sanitized);
   }
   return records;
@@ -75,7 +76,7 @@ function knownLegal(
   ownShips: ShipView[],
   visibleEnemies: ShipView[],
 ): KnownLegalActions {
-  if (!ship.alive) return { canFire: false, fireTargetShipIds: [], pickupFlagIds: [], giveTargetShipIds: [], placementSiteIds: [], canDrop: false };
+  if (!ship.alive) return { canFire: false, fireTargetShipIds: [], pickupFlagIds: [], giveTargetShipIds: [], placementSiteIds: [], canDrop: false, canScuttle: false };
   const protectedNow = ship.protectionUntilTick > state.tick;
   const fireTargetShipIds = protectedNow || ship.cooldownTicks > 0 ? [] : visibleEnemies.filter(enemy => enemy.alive && distance(ship.position, enemy.position) <= state.config.combat.projectileRange + 1e-9 && !segmentOccluded(ship.position, enemy.position, state.map.islands)).map(enemy => enemy.id).sort();
   const pickupFlagIds = visibleFlags.filter(flag => {
@@ -87,7 +88,7 @@ function knownLegal(
   const giveTargetShipIds = ship.carriedFlagId ? ownShips.filter(candidate => candidate.id !== ship.id && candidate.alive && !candidate.carriedFlagId && candidate.protectionTicksRemaining === 0 && distance(ship.position, candidate.position) <= state.config.flags.giveRadius && !segmentOccluded(ship.position, candidate.position, state.map.islands)).map(candidate => candidate.id).sort() : [];
   const knownOccupied = new Set(visibleFlags.filter(flag => flag.known && flag.state === "on-land").map(flag => state.flags.find(candidate => candidate.id === flag.id)?.siteId).filter((value): value is string => Boolean(value)));
   const placementSiteIds = ship.carriedFlagId ? state.map.flagSites.filter(site => !site.reservedHome && !knownOccupied.has(site.id) && distance(ship.position, site.approach) <= state.config.flags.placeRadius + 1e-9).map(site => site.id).sort() : [];
-  return { canFire: fireTargetShipIds.length > 0, fireTargetShipIds, pickupFlagIds: protectedNow ? [] : pickupFlagIds, giveTargetShipIds: protectedNow ? [] : giveTargetShipIds, placementSiteIds: protectedNow ? [] : placementSiteIds, canDrop: !protectedNow && ship.carriedFlagId !== null };
+  return { canFire: fireTargetShipIds.length > 0, fireTargetShipIds, pickupFlagIds: protectedNow ? [] : pickupFlagIds, giveTargetShipIds: protectedNow ? [] : giveTargetShipIds, placementSiteIds: protectedNow ? [] : placementSiteIds, canDrop: !protectedNow && ship.carriedFlagId !== null, canScuttle: true };
 }
 
 export function buildObservation(
@@ -133,15 +134,15 @@ export function buildObservation(
     heldActions,
     publicRules: {
       physicsHz: state.config.timing.physicsHz, decisionIntervalTicks: state.config.timing.decisionIntervalTicks,
-      shipRadius: state.config.ship.radius, maxSpeed: state.config.ship.maxSpeed, maxHealth: state.config.ship.maxHealth,
-      cooldownTicks: state.config.combat.cooldownTicks, respawnDelayTicks: state.config.ship.respawnDelayTicks,
+      shipRadius: state.config.ship.radius, maxSpeed: state.config.ship.maxSpeed, flagCarrierSpeedMultiplier: state.config.ship.flagCarrierSpeedMultiplier, maxHealth: state.config.ship.maxHealth,
+      cooldownTicks: state.config.combat.cooldownTicks, respawnDelayTicks: state.config.ship.respawnDelayTicks, scuttleRespawnTicks: state.config.ship.scuttleRespawnTicks,
       spawnProtectionTicks: state.config.ship.spawnProtectionTicks, projectileRange: state.config.combat.projectileRange,
       projectileSpeed: state.config.combat.projectileSpeed, projectileDamage: state.config.combat.damage,
       minDamageMultiplier: state.config.combat.minDamageMultiplier, maxDamageMultiplier: state.config.combat.maxDamageMultiplier,
       closeRangeFraction: state.config.combat.closeRangeFraction, impactDamagePerSpeed: state.config.combat.impactDamagePerSpeed,
       pickupRadius: state.config.flags.pickupRadius, placeRadius: state.config.flags.placeRadius, giveRadius: state.config.flags.giveRadius,
       sensorRadius: state.config.vision.sensorRadius, matchDurationTicks: state.config.match.durationTicks,
-      captureTarget: state.config.match.captureTarget, obstacleRayRange: state.config.features.obstacleRayRange,
+      scoreNormalizationTarget: state.config.match.scoreNormalizationTarget, scorePoints: { ...state.config.match.points }, obstacleRayRange: state.config.features.obstacleRayRange,
     },
     legal,
     events: filteredEvents(state, teamId, sensors, sourceEvents),

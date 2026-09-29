@@ -26,7 +26,7 @@ def _update_island_discoveries(state: dict[str, Any]) -> None:
 
 
 def neutral_action(ship_id: str) -> dict[str, Any]:
-    return {"shipId": ship_id, "throttle": 0.0, "turn": 0.0, "fire": False, "fireTargetShipId": None, "interact": {"type": "none"}}
+    return {"shipId": ship_id, "throttle": 0.0, "turn": 0.0, "fire": False, "fireTargetShipId": None, "scuttle": False, "interact": {"type": "none"}}
 
 
 def create_world(config: dict[str, Any], map_data: dict[str, Any], seed: int) -> dict[str, Any]:
@@ -42,8 +42,8 @@ def create_world(config: dict[str, Any], map_data: dict[str, Any], seed: int) ->
     flags = []
     for owner in TEAM_IDS:
         base = next(base for base in map_data["bases"] if base["teamId"] == owner)
-        flags.append({"id": f"{owner}-flag", "ownerTeamId": owner, "state": "at-home", "position": dict(base["homePost"]), "carrierShipId": None, "siteId": base["homeFlagSiteId"], "changedAtTick": 0})
-    state = {"engineVersion": "fleetrl-engine-py-v5", "tick": 0, "seed": seed & 0xFFFFFFFF, "tieBreakRngState": derive_seed(seed, "tie-break"), "nextEntitySequence": 1, "config": copy.deepcopy(config), "map": copy.deepcopy(map_data), "ships": ships, "flags": flags, "projectiles": [], "scores": {"blue": 0, "rose": 0}, "kills": {"blue": 0, "rose": 0}, "discoveredIslandIds": {"blue": [], "rose": []}, "events": [], "outcome": None}
+        flags.append({"id": f"{owner}-flag", "ownerTeamId": owner, "state": "at-home", "position": dict(base["homePost"]), "carrierShipId": None, "siteId": base["homeFlagSiteId"], "changedAtTick": 0, "pickupScored": False})
+    state = {"engineVersion": "fleetrl-engine-py-v6", "tick": 0, "seed": seed & 0xFFFFFFFF, "tieBreakRngState": derive_seed(seed, "tie-break"), "nextEntitySequence": 1, "config": copy.deepcopy(config), "map": copy.deepcopy(map_data), "ships": ships, "flags": flags, "projectiles": [], "scores": {"blue": 0, "rose": 0}, "kills": {"blue": 0, "rose": 0}, "discoveredIslandIds": {"blue": [], "rose": []}, "events": [], "outcome": None}
     _update_island_discoveries(state)
     return state
 
@@ -211,10 +211,14 @@ def _resolve_projectiles(state: dict[str, Any], previous: dict[str, dict[str, fl
     for ship in sorted((item for item in state["ships"] if item["alive"] and item["health"] <= 0), key=lambda item: item["id"]):
         _drop_flag(state, ship, "carrier-death")
         killer = killer_teams.get(ship["id"])
-        if killer: state["kills"][killer] += 1
+        if killer:
+            state["kills"][killer] += 1
+            state["scores"][killer] += config["match"]["points"]["kill"]
         ship.update({"alive": False, "velocity": {"x": 0.0, "y": 0.0}, "respawnAtTick": state["tick"] + config["ship"]["respawnDelayTicks"], "protectionUntilTick": 0, "cooldownTicks": 0, "heldAction": neutral_action(ship["id"])})
         fields = {"shipId": ship["id"], "teamId": ship["teamId"], "position": dict(ship["position"])}
-        if killer: fields["detail"] = f"killer:{killer}"
+        if killer:
+            fields["detail"] = f"killer:{killer}"
+            fields["points"] = config["match"]["points"]["kill"]
         _emit(state, "ShipSunk", **fields)
 
 
@@ -243,9 +247,10 @@ def _resolve_interactions(state: dict[str, Any], intents: list[dict[str, Any]]) 
         winner = tied[rng.next_uint32() % len(tied)][0] if len(tied) > 1 else tied[0][0]
         flag = next(item for item in state["flags"] if item["id"] == flag_id)
         if flag["ownerTeamId"] == winner["teamId"]:
-            base = next(item for item in state["map"]["bases"] if item["teamId"] == flag["ownerTeamId"]); flag.update({"state": "at-home", "position": dict(base["homePost"]), "carrierShipId": None, "siteId": base["homeFlagSiteId"], "changedAtTick": state["tick"]}); _emit(state, "FlagRecovered", flagId=flag_id, shipId=winner["id"], teamId=winner["teamId"], position=dict(base["homePost"]))
+            base = next(item for item in state["map"]["bases"] if item["teamId"] == flag["ownerTeamId"]); flag.update({"state": "at-home", "position": dict(base["homePost"]), "carrierShipId": None, "siteId": base["homeFlagSiteId"], "changedAtTick": state["tick"], "pickupScored": False}); _emit(state, "FlagRecovered", flagId=flag_id, shipId=winner["id"], teamId=winner["teamId"], position=dict(base["homePost"]))
         else:
-            flag.update({"state": "carried", "position": None, "carrierShipId": winner["id"], "siteId": None, "changedAtTick": state["tick"]}); winner["carriedFlagId"] = flag_id; _emit(state, "FlagPickedUp", flagId=flag_id, shipId=winner["id"], teamId=winner["teamId"], position=dict(winner["position"]))
+            pickup_points = 0 if flag.get("pickupScored", False) else state["config"]["match"]["points"]["pickup"]
+            flag.update({"state": "carried", "position": None, "carrierShipId": winner["id"], "siteId": None, "changedAtTick": state["tick"], "pickupScored": True}); winner["carriedFlagId"] = flag_id; state["scores"][winner["teamId"]] += pickup_points; _emit(state, "FlagPickedUp", flagId=flag_id, shipId=winner["id"], teamId=winner["teamId"], position=dict(winner["position"]), points=pickup_points)
     state["tieBreakRngState"] = rng.state
     occupied = {flag["siteId"] for flag in state["flags"] if flag["siteId"]}
     for intent in other:
@@ -267,21 +272,18 @@ def _returns_captures_outcome(state: dict[str, Any]) -> None:
     config = state["config"]
     for flag in state["flags"]:
         if flag["state"] in ("in-water", "on-land") and state["tick"] - flag["changedAtTick"] >= config["flags"]["looseReturnTicks"]:
-            base = next(item for item in state["map"]["bases"] if item["teamId"] == flag["ownerTeamId"]); flag.update({"state": "at-home", "position": dict(base["homePost"]), "carrierShipId": None, "siteId": base["homeFlagSiteId"], "changedAtTick": state["tick"]}); _emit(state, "FlagAutoReturned", flagId=flag["id"], teamId=flag["ownerTeamId"], position=dict(base["homePost"]))
+            base = next(item for item in state["map"]["bases"] if item["teamId"] == flag["ownerTeamId"]); flag.update({"state": "at-home", "position": dict(base["homePost"]), "carrierShipId": None, "siteId": base["homeFlagSiteId"], "changedAtTick": state["tick"], "pickupScored": False}); _emit(state, "FlagAutoReturned", flagId=flag["id"], teamId=flag["ownerTeamId"], position=dict(base["homePost"]))
     captures = []
     for ship in (item for item in state["ships"] if item["alive"] and not _protected(item, state["tick"]) and item["carriedFlagId"]):
         flag = next(item for item in state["flags"] if item["id"] == ship["carriedFlagId"]); own = next(item for item in state["flags"] if item["ownerTeamId"] == ship["teamId"]); base = next(item for item in state["map"]["bases"] if item["teamId"] == ship["teamId"])
         if (not config["flags"]["requireOwnFlagHome"] or own["state"] == "at-home") and distance(ship["position"], base["deliveryZone"]["center"]) <= base["deliveryZone"]["radius"]: captures.append((ship, flag))
     for ship, flag in sorted(captures, key=lambda item: item[0]["id"]):
-        enemy_base = next(item for item in state["map"]["bases"] if item["teamId"] == flag["ownerTeamId"]); state["scores"][ship["teamId"]] += 1; ship["carriedFlagId"] = None; flag.update({"state": "at-home", "position": dict(enemy_base["homePost"]), "carrierShipId": None, "siteId": enemy_base["homeFlagSiteId"], "changedAtTick": state["tick"]}); _emit(state, "FlagCaptured", flagId=flag["id"], shipId=ship["id"], teamId=ship["teamId"], position=dict(ship["position"]))
+        delivery_points = config["match"]["points"]["delivery"]
+        enemy_base = next(item for item in state["map"]["bases"] if item["teamId"] == flag["ownerTeamId"]); state["scores"][ship["teamId"]] += delivery_points; ship["carriedFlagId"] = None; flag.update({"state": "at-home", "position": dict(enemy_base["homePost"]), "carrierShipId": None, "siteId": enemy_base["homeFlagSiteId"], "changedAtTick": state["tick"], "pickupScored": False}); _emit(state, "FlagCaptured", flagId=flag["id"], shipId=ship["id"], teamId=ship["teamId"], position=dict(ship["position"]), points=delivery_points)
     blue, rose = state["scores"]["blue"], state["scores"]["rose"]
-    reason = "capture-target" if blue >= config["match"]["captureTarget"] or rose >= config["match"]["captureTarget"] else "time-limit" if state["tick"] + 1 >= config["match"]["durationTicks"] else None
-    if reason:
-        capture_winner = None if blue == rose else "blue" if blue > rose else "rose"
-        kill_winner = None if state["kills"]["blue"] == state["kills"]["rose"] else "blue" if state["kills"]["blue"] > state["kills"]["rose"] else "rose"
-        winner = capture_winner if capture_winner else kill_winner
-        outcome_reason = "kill-tiebreak" if reason == "time-limit" and not capture_winner and kill_winner else reason
-        state["outcome"] = {"kind": "win" if winner else "draw", "winner": winner, "reason": outcome_reason, "endedAtTick": state["tick"]}; fields = {"detail": f"{state['outcome']['kind']}:{outcome_reason}"};
+    if state["tick"] + 1 >= config["match"]["durationTicks"]:
+        winner = None if blue == rose else "blue" if blue > rose else "rose"
+        state["outcome"] = {"kind": "win" if winner else "draw", "winner": winner, "reason": "time-limit", "endedAtTick": state["tick"]}; fields = {"detail": f"{state['outcome']['kind']}:time-limit"};
         if winner: fields["teamId"] = winner
         _emit(state, "MatchEnded", **fields)
 
@@ -295,10 +297,17 @@ def step_world(previous: dict[str, Any], controls: dict[str, list[dict[str, Any]
     for ship in state["ships"]:
         if not ship["alive"]: continue
         activated = action_by_ship.get(ship["id"]); action = copy.deepcopy(activated) if activated else {**copy.deepcopy(ship["heldAction"]), "interact": {"type": "none"}}
+        if activated and activated.get("scuttle", False):
+            _drop_flag(state, ship, "carrier-death")
+            ship.update({"alive": False, "health": 0, "velocity": {"x": 0.0, "y": 0.0}, "respawnAtTick": state["tick"] + state["config"]["ship"]["scuttleRespawnTicks"], "protectionUntilTick": 0, "cooldownTicks": 0, "heldAction": neutral_action(ship["id"])})
+            _emit(state, "ShipScuttled", shipId=ship["id"], teamId=ship["teamId"], position=dict(ship["position"]), detail="half-respawn")
+            _emit(state, "ShipSunk", shipId=ship["id"], teamId=ship["teamId"], position=dict(ship["position"]), detail="scuttle")
+            continue
         if activated and activated["interact"]["type"] != "none": intents.append({"shipId": ship["id"], "interaction": copy.deepcopy(activated["interact"])})
-        ship["heldAction"] = {**copy.deepcopy(action), "interact": {"type": "none"}}
+        ship["heldAction"] = {**copy.deepcopy(action), "scuttle": False, "interact": {"type": "none"}}
         ship["heading"] = wrap_heading(ship["heading"] + action["turn"] * state["config"]["ship"]["maxTurnRate"] * dt)
-        forward = {"x": math.cos(ship["heading"]), "y": math.sin(ship["heading"])}; velocity = add(ship["velocity"], scale(forward, action["throttle"] * state["config"]["ship"]["acceleration"] * dt)); velocity = scale(velocity, math.exp(-state["config"]["ship"]["dragPerSecond"] * dt)); ship["velocity"] = clamp_magnitude(velocity, state["config"]["ship"]["maxSpeed"])
+        speed_limit = state["config"]["ship"]["maxSpeed"] * (state["config"]["ship"]["flagCarrierSpeedMultiplier"] if ship["carriedFlagId"] else 1.0)
+        forward = {"x": math.cos(ship["heading"]), "y": math.sin(ship["heading"])}; velocity = add(ship["velocity"], scale(forward, action["throttle"] * state["config"]["ship"]["acceleration"] * dt)); velocity = scale(velocity, math.exp(-state["config"]["ship"]["dragPerSecond"] * dt)); ship["velocity"] = clamp_magnitude(velocity, speed_limit)
         collision = sweep_circle_against_map(ship["position"], add(ship["position"], scale(ship["velocity"], dt)), ship["radius"], state["map"]); ship["position"] = collision["position"]
         if collision["hit"] and collision["normal"]:
             inward = dot(ship["velocity"], collision["normal"])

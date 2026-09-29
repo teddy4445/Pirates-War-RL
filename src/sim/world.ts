@@ -55,7 +55,7 @@ export function createInitialWorld(config: FleetRLConfig, map: MapDefinition, se
   const flags = teamOrder.map(ownerTeamId => {
     const base = map.bases.find(candidate => candidate.teamId === ownerTeamId);
     if (!base) throw new Error(`Map is missing ${ownerTeamId}.`);
-    return { id: `${ownerTeamId}-flag`, ownerTeamId, state: "at-home" as const, position: { ...base.homePost }, carrierShipId: null, siteId: base.homeFlagSiteId, changedAtTick: 0 };
+    return { id: `${ownerTeamId}-flag`, ownerTeamId, state: "at-home" as const, position: { ...base.homePost }, carrierShipId: null, siteId: base.homeFlagSiteId, changedAtTick: 0, pickupScored: false };
   });
   const state: WorldState = {
     engineVersion: ENGINE_VERSION,
@@ -311,14 +311,17 @@ function resolveProjectiles(state: WorldState, previousPositions: Map<string, { 
   for (const ship of deaths) {
     dropCarriedFlag(state, ship, "carrier-death");
     const killerTeam = killerTeams.get(ship.id);
-    if (killerTeam) state.kills[killerTeam] += 1;
+    if (killerTeam) {
+      state.kills[killerTeam] += 1;
+      state.scores[killerTeam] += state.config.match.points.kill;
+    }
     ship.alive = false;
     ship.velocity = { x: 0, y: 0 };
     ship.respawnAtTick = state.tick + state.config.ship.respawnDelayTicks;
     ship.protectionUntilTick = 0;
     ship.cooldownTicks = 0;
     ship.heldAction = neutralAction(ship.id);
-    event(state, "ShipSunk", { shipId: ship.id, teamId: ship.teamId, position: { ...ship.position }, ...(killerTeam ? { detail: `killer:${killerTeam}` } : {}) });
+    event(state, "ShipSunk", { shipId: ship.id, teamId: ship.teamId, position: { ...ship.position }, ...(killerTeam ? { detail: `killer:${killerTeam}`, points: state.config.match.points.kill } : {}) });
   }
 }
 
@@ -362,11 +365,13 @@ function resolveInteractions(state: WorldState, intents: InteractionIntent[]): v
     if (flag.ownerTeamId === winner.ship.teamId) {
       const home = state.map.bases.find(base => base.teamId === flag.ownerTeamId);
       if (!home) continue;
-      flag.state = "at-home"; flag.position = { ...home.homePost }; flag.carrierShipId = null; flag.siteId = home.homeFlagSiteId; flag.changedAtTick = state.tick;
+      flag.state = "at-home"; flag.position = { ...home.homePost }; flag.carrierShipId = null; flag.siteId = home.homeFlagSiteId; flag.changedAtTick = state.tick; flag.pickupScored = false;
       event(state, "FlagRecovered", { flagId: flag.id, shipId: winner.ship.id, teamId: winner.ship.teamId, position: { ...home.homePost } });
     } else {
-      flag.state = "carried"; flag.position = null; flag.carrierShipId = winner.ship.id; flag.siteId = null; flag.changedAtTick = state.tick; winner.ship.carriedFlagId = flag.id;
-      event(state, "FlagPickedUp", { flagId: flag.id, shipId: winner.ship.id, teamId: winner.ship.teamId, position: { ...winner.ship.position } });
+      const pickupPoints = flag.pickupScored ? 0 : state.config.match.points.pickup;
+      flag.state = "carried"; flag.position = null; flag.carrierShipId = winner.ship.id; flag.siteId = null; flag.changedAtTick = state.tick; flag.pickupScored = true; winner.ship.carriedFlagId = flag.id;
+      state.scores[winner.ship.teamId] += pickupPoints;
+      event(state, "FlagPickedUp", { flagId: flag.id, shipId: winner.ship.id, teamId: winner.ship.teamId, position: { ...winner.ship.position }, points: pickupPoints });
     }
   }
   state.tieBreakRngState = rng.snapshot();
@@ -399,7 +404,7 @@ function resolveReturnsAndCaptures(state: WorldState): void {
     if ((flag.state === "in-water" || flag.state === "on-land") && state.tick - flag.changedAtTick >= state.config.flags.looseReturnTicks) {
       const base = state.map.bases.find(candidate => candidate.teamId === flag.ownerTeamId);
       if (!base) continue;
-      flag.state = "at-home"; flag.position = { ...base.homePost }; flag.carrierShipId = null; flag.siteId = base.homeFlagSiteId; flag.changedAtTick = state.tick;
+      flag.state = "at-home"; flag.position = { ...base.homePost }; flag.carrierShipId = null; flag.siteId = base.homeFlagSiteId; flag.changedAtTick = state.tick; flag.pickupScored = false;
       event(state, "FlagAutoReturned", { flagId: flag.id, teamId: flag.ownerTeamId, position: { ...base.homePost } });
     }
   }
@@ -415,24 +420,17 @@ function resolveReturnsAndCaptures(state: WorldState): void {
   for (const { ship, flag } of captures.sort((a, b) => a.ship.id.localeCompare(b.ship.id))) {
     const enemyBase = state.map.bases.find(base => base.teamId === flag.ownerTeamId);
     if (!enemyBase || ship.carriedFlagId !== flag.id) continue;
-    state.scores[ship.teamId] += 1;
+    state.scores[ship.teamId] += state.config.match.points.delivery;
     ship.carriedFlagId = null;
-    flag.state = "at-home"; flag.position = { ...enemyBase.homePost }; flag.carrierShipId = null; flag.siteId = enemyBase.homeFlagSiteId; flag.changedAtTick = state.tick;
-    event(state, "FlagCaptured", { flagId: flag.id, shipId: ship.id, teamId: ship.teamId, position: { ...ship.position } });
+    flag.state = "at-home"; flag.position = { ...enemyBase.homePost }; flag.carrierShipId = null; flag.siteId = enemyBase.homeFlagSiteId; flag.changedAtTick = state.tick; flag.pickupScored = false;
+    event(state, "FlagCaptured", { flagId: flag.id, shipId: ship.id, teamId: ship.teamId, position: { ...ship.position }, points: state.config.match.points.delivery });
   }
 }
 
 function evaluateOutcome(state: WorldState): void {
-  const blueReached = state.scores.blue >= state.config.match.captureTarget;
-  const roseReached = state.scores.rose >= state.config.match.captureTarget;
-  if (blueReached || roseReached) {
+  if (state.tick + 1 >= state.config.match.durationTicks) {
     const winner = state.scores.blue === state.scores.rose ? null : state.scores.blue > state.scores.rose ? "blue" : "rose";
-    state.outcome = { kind: winner ? "win" : "draw", winner, reason: "capture-target", endedAtTick: state.tick };
-  } else if (state.tick + 1 >= state.config.match.durationTicks) {
-    const captureWinner = state.scores.blue === state.scores.rose ? null : state.scores.blue > state.scores.rose ? "blue" : "rose";
-    const killWinner = state.kills.blue === state.kills.rose ? null : state.kills.blue > state.kills.rose ? "blue" : "rose";
-    const winner = captureWinner ?? killWinner;
-    state.outcome = { kind: winner ? "win" : "draw", winner, reason: !captureWinner && killWinner ? "kill-tiebreak" : "time-limit", endedAtTick: state.tick };
+    state.outcome = { kind: winner ? "win" : "draw", winner, reason: "time-limit", endedAtTick: state.tick };
   }
   if (state.outcome) event(state, "MatchEnded", { ...(state.outcome.winner ? { teamId: state.outcome.winner } : {}), detail: `${state.outcome.kind}:${state.outcome.reason}` });
 }
@@ -455,13 +453,27 @@ export function stepWorld(previous: WorldState, controls?: Partial<StepControls>
     if (!ship.alive) continue;
     const activated = actionByShip.get(ship.id);
     const action = activated ?? { ...ship.heldAction, interact: { type: "none" as const } };
+    if (activated?.scuttle) {
+      dropCarriedFlag(state, ship, "carrier-death");
+      ship.alive = false;
+      ship.health = 0;
+      ship.velocity = { x: 0, y: 0 };
+      ship.respawnAtTick = state.tick + state.config.ship.scuttleRespawnTicks;
+      ship.protectionUntilTick = 0;
+      ship.cooldownTicks = 0;
+      ship.heldAction = neutralAction(ship.id);
+      event(state, "ShipScuttled", { shipId: ship.id, teamId: ship.teamId, position: { ...ship.position }, detail: "half-respawn" });
+      event(state, "ShipSunk", { shipId: ship.id, teamId: ship.teamId, position: { ...ship.position }, detail: "scuttle" });
+      continue;
+    }
     if (activated && activated.interact.type !== "none") interactionIntents.push({ shipId: ship.id, interaction: { ...activated.interact } });
-    ship.heldAction = { ...cloneAction(action), interact: { type: "none" } };
+    ship.heldAction = { ...cloneAction(action), scuttle: false, interact: { type: "none" } };
     ship.heading = wrapHeading(ship.heading + action.turn * state.config.ship.maxTurnRate * dt);
     const forward = { x: Math.cos(ship.heading), y: Math.sin(ship.heading) };
     const accelerated = add(ship.velocity, scale(forward, action.throttle * state.config.ship.acceleration * dt));
     const dragged = scale(accelerated, Math.exp(-state.config.ship.dragPerSecond * dt));
-    ship.velocity = clampMagnitude(dragged, state.config.ship.maxSpeed);
+    const speedLimit = state.config.ship.maxSpeed * (ship.carriedFlagId ? state.config.ship.flagCarrierSpeedMultiplier : 1);
+    ship.velocity = clampMagnitude(dragged, speedLimit);
     const desired = add(ship.position, scale(ship.velocity, dt));
     const collision = sweepCircleAgainstMap(ship.position, desired, ship.radius, state.map);
     ship.position = collision.position;

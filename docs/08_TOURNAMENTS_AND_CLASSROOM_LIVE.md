@@ -26,7 +26,7 @@ Create the entire job list before execution. States: pending, initializing, runn
 
 ## 2. Ranking and definitions
 
-Primary league points: win 3, draw 1, loss 0; double forfeit 0 each. Rank by total points, then direct head-to-head points among tied agents, then capture differential, then captures scored. If still tied, share the competitive rank; alphabetic order may stabilize display but must not pretend to break the tie.
+Primary league points: win 3, draw 1, loss 0; double forfeit 0 each. Rank by total league points, then direct head-to-head points among tied agents, then aggregate game-score differential, then game points scored. If still tied, share the competitive rank; alphabetic order may stabilize display but must not pretend to break the tie.
 
 When completed match counts differ during a run, label standings provisional and show games played plus points/game. Do not crown a leader based on partial uneven schedules. Final standings require the declared schedule or explicitly report incompleteness.
 
@@ -42,7 +42,7 @@ Forfeits count in the W/L columns and have separate reason counts. Double-forfei
 
 Pairwise matrix defaults to score rate with W/D/L counts and denominator on hover/focus. For ordinary outcomes, opposite off-diagonal score rates sum to 1; with double forfeits they need not. Strict win rates also do not sum to 1 when draws exist. Never label score rate as win rate. Use a striped/outlined state for incomplete cells; diagonal is not applicable.
 
-Record flags scored/conceded, damage dealt/received, shots/hits, ships sunk/lost, possession time, distance traveled, median capture time conditional on successful captures, mean/p50/p95 decision latency, timeout/invalid rates, and runtime reset counts. A no-capture match has no capture time, not zero. Aggregate latency percentiles from raw samples or a documented mergeable estimator, not averages of per-match percentiles. Store the relevant sample counts.
+Record game points scored/conceded, flag pickups/deliveries, damage dealt/received, shots/hits, ships sunk/lost, possession time, distance traveled, median delivery time conditional on successful deliveries, mean/p50/p95 decision latency, timeout/invalid rates, and runtime reset counts. A no-delivery match has no delivery time, not zero. Aggregate latency percentiles from raw samples or a documented mergeable estimator, not averages of per-match percentiles. Store the relevant sample counts.
 
 Confidence intervals are optional but must state method and sample unit. Mirrored games sharing a seed are correlated; a seed-pair clustered bootstrap is more defensible than pretending all shots/decisions are independent wins. Elo is deferred because it can conceal non-transitive matchups and depends on update ordering; the pairwise matrix is the first-class teaching view.
 

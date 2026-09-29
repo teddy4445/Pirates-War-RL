@@ -1,7 +1,7 @@
 {
   "schemaVersion": "fleetrl-assets-v1",
   "status": "production-derivatives-built",
-  "generatedAt": "2026-09-25",
+  "generatedAt": "2026-09-28",
   "sources": [
     {
       "id": "source-ships",
@@ -313,6 +313,28 @@
       "review": "inspected at generated resolution; text-free responsive background"
     },
     {
+      "id": "strategy-fleets-v1",
+      "category": "background",
+      "path": "assets/backgrounds/strategy-fleets-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "00ec3f6e0b30e5a31e9565507a8b91566667cd51a950e595194c97ec45f69935",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated raster; prompt recorded in release notes",
+      "review": "inspected at generated resolution; text-free blue/green strategy fleet scene"
+    },
+    {
+      "id": "fog-chase-v1",
+      "category": "background",
+      "path": "assets/backgrounds/fog-chase-v1.png",
+      "width": 1672,
+      "height": 941,
+      "sha256": "8fb4e26bd6bc1df53c4588b054076aba2cae233277fa5c601871cdaa62ce6589",
+      "source": "OpenAI built-in image generation",
+      "provenance": "original project-specific generated raster; prompt recorded in release notes",
+      "review": "inspected at generated resolution; text-free moonlit fog pursuit scene"
+    },
+    {
       "id": "fleetrl-audio-2.0.0",
       "category": "audio",
       "path": "public/assets/audio/",
@@ -323,5 +345,5 @@
       "review": "file and managed-browser QA supplied; human speaker/headphone audition still required"
     }
   ],
-  "derivedAt": "2026-09-26"
+  "derivedAt": "2026-09-28"
 }

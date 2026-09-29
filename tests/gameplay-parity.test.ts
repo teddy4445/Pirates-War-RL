@@ -75,7 +75,7 @@ describe("Python/browser authoritative gameplay parity", () => {
     expect(example).toEqual(fixture.defaultConfig);
     expect(publicExample).toEqual(fixture.defaultConfig);
     expect(fixture.rulesVersion).toBe(RULES_VERSION);
-    expect(versions).toEqual(expect.objectContaining({ rulesVersion: RULES_VERSION, browserEngine: ENGINE_VERSION, pythonEngine: "fleetrl-engine-py-v5" }));
+    expect(versions).toEqual(expect.objectContaining({ rulesVersion: RULES_VERSION, browserEngine: ENGINE_VERSION, pythonEngine: "fleetrl-engine-py-v6" }));
   });
 
   for (const testCase of fixture.cases) it(testCase.id, () => {

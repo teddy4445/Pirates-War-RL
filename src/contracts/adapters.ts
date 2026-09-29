@@ -36,7 +36,7 @@ export function encodeShipV1(observation: Observation, shipId: string): number[]
     ship.carriedFlagId ? 1 : 0, ship.alive ? 1 : 0, clamp(ship.respawnTicksRemaining / Math.max(1, rules.respawnDelayTicks), 0, 1), clamp(ship.protectionTicksRemaining / Math.max(1, rules.spawnProtectionTicks), 0, 1),
     homeRel[0] ?? 0, homeRel[1] ?? 0, enemyRel[0] ?? 0, enemyRel[1] ?? 0,
     clamp(distance(ship.position, home.deliveryZone.center) / diagonal, 0, 1), clamp(distance(ship.position, enemyBase.approach) / diagonal, 0, 1),
-    clamp(observation.remainingTimeS / (rules.matchDurationTicks / rules.physicsHz), 0, 1), clamp((observation.score[observation.teamId] - observation.score[observation.teamId === "blue" ? "rose" : "blue"]) / Math.max(1, rules.captureTarget)),
+    clamp(observation.remainingTimeS / (rules.matchDurationTicks / rules.physicsHz), 0, 1), clamp((observation.score[observation.teamId] - observation.score[observation.teamId === "blue" ? "rose" : "blue"]) / Math.max(1, rules.scoreNormalizationTarget)),
   ];
   const enemyRelFlag = enemyPoint ? relative(ship.position, enemyPoint, width, height) : [0, 0];
   feature.push(enemyFlag?.known ? 1 : 0, enemyRelFlag[0] ?? 0, enemyRelFlag[1] ?? 0, enemyFlag?.state === "carried" && Boolean(enemyFlag.carrierShipId && observation.ships.some(candidate => candidate.id === enemyFlag.carrierShipId)) ? 1 : 0, enemyFlag?.state === "at-home" ? 1 : 0);
@@ -59,7 +59,7 @@ export function encodeShipV1(observation: Observation, shipId: string): number[]
     feature.push(clamp(result.time, 0, 1));
   }
   const legal = observation.legal[ship.id];
-  feature.push(observation.teamId === "blue" ? 1 : 0, observation.mode === "duel" || observation.mode === "fleet" ? 1 : 0, clamp(observation.ships.length / 8, 0, 1), clamp(observation.score[observation.teamId] / Math.max(1, rules.captureTarget), 0, 1), clamp(observation.score[observation.teamId === "blue" ? "rose" : "blue"] / Math.max(1, rules.captureTarget), 0, 1), ownFlag?.known && ownFlag.state === "at-home" ? 1 : 0, legal?.pickupFlagIds.length ? 1 : 0, legal?.giveTargetShipIds.length ? 1 : 0);
+  feature.push(observation.teamId === "blue" ? 1 : 0, observation.mode === "duel" || observation.mode === "fleet" ? 1 : 0, clamp(observation.ships.length / 8, 0, 1), clamp(observation.score[observation.teamId] / Math.max(1, rules.scoreNormalizationTarget), 0, 1), clamp(observation.score[observation.teamId === "blue" ? "rose" : "blue"] / Math.max(1, rules.scoreNormalizationTarget), 0, 1), ownFlag?.known && ownFlag.state === "at-home" ? 1 : 0, legal?.pickupFlagIds.length ? 1 : 0, legal?.giveTargetShipIds.length ? 1 : 0);
   if (feature.length !== 64) throw new Error(`ship-64-v1 produced ${feature.length} values.`);
   return feature.map(f32);
 }
@@ -74,7 +74,7 @@ export function decodeDiscreteV1(observation: Observation, shipId: string, actio
     const motion = actionId % 9;
     const targets = observation.enemies.filter(enemy => legal?.fireTargetShipIds.includes(enemy.id));
     const target = nearest(ship.position, targets);
-    return { shipId, throttle: Math.floor(motion / 3) - 1, turn: motion % 3 - 1, fire: Boolean(fireIndex && target), fireTargetShipId: fireIndex ? target?.id ?? null : null, interact: { type: "none" } };
+    return { shipId, throttle: Math.floor(motion / 3) - 1, turn: motion % 3 - 1, fire: Boolean(fireIndex && target), fireTargetShipId: fireIndex ? target?.id ?? null : null, scuttle: false, interact: { type: "none" } };
   }
   const result = neutralAction(shipId);
   if (!legal) return result;
@@ -90,7 +90,10 @@ export function decodeDiscreteV1(observation: Observation, shipId: string, actio
     const choices = observation.flagSites.filter(site => legal.placementSiteIds.includes(site.id)).map(site => ({ ...site, position: site.approach }));
     const target = nearest(ship.position, choices);
     if (target) result.interact = { type: "place", flagSiteId: target.id };
-  } else if (actionId === 21 && legal.canDrop) result.interact = { type: "drop" };
+  } else if (actionId === 21) {
+    if (legal.canDrop) result.interact = { type: "drop" };
+    else if (legal.canScuttle) result.scuttle = true;
+  }
   return result;
 }
 
@@ -105,6 +108,6 @@ export function discreteActionMaskV1(observation: Observation, shipId: string): 
   mask[18] = Boolean(legal?.pickupFlagIds.length);
   mask[19] = Boolean(legal?.giveTargetShipIds.length);
   mask[20] = Boolean(legal?.placementSiteIds.length);
-  mask[21] = Boolean(legal?.canDrop);
+  mask[21] = Boolean(legal?.canDrop || legal?.canScuttle);
   return mask;
 }

@@ -41,7 +41,7 @@ def main() -> None:
             cases.append({"id": f"{mode}-seed-{seed}", "mode": mode, "seed": seed, "schedule": schedule, "snapshots": snapshots})
     output = {
         "schemaVersion": "fleetrl-parity-trajectory-v1",
-        "rulesVersion": "fleetrl-rules-v5",
+        "rulesVersion": "fleetrl-rules-v6",
         "mapId": map_data["id"],
         "absoluteTolerance": 1e-9,
         "relativeTolerance": 1e-9,

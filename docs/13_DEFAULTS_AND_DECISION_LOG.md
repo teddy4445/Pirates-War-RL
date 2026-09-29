@@ -16,7 +16,7 @@ Status: implemented versioned defaults chosen to remove ambiguity. They are conf
 | Sensor radius | 220 WU | Fog uses team union and island occlusion |
 | Static map known | true | Agents receive exact island polygons; optional fog discovery can disable this |
 | Ship radius / health | 12 WU / 100 | Same class in initial release |
-| Acceleration / max speed | 55 WU/s^2 / 80 WU/s | Throttle [-1,1] |
+| Acceleration / max speed | 55 WU/s^2 / 88 WU/s | Throttle [-1,1]; carriers use 95% (83.6 WU/s) |
 | Drag / max turn rate | 0.7 /s / 2.4 rad/s | Simple inertial movement |
 | Cannon base damage / cooldown | 18.75 / 48 ticks | Actual damage falls from 30 point-blank to 12 at maximum range |
 | Projectile speed / radius / range | 320 WU/s / 3 WU / 250 WU | Physical projectile, not instant hitscan |
@@ -24,8 +24,8 @@ Status: implemented versioned defaults chosen to remove ambiguity. They are conf
 | Collision damage | 0.2 health per inward WU/s | Per-hull midpoint component for ships; inward-normal component for terrain |
 | Pickup/place / give range | 30 / 36 WU | Valid shoreline approach required |
 | Loose flag auto-return | 1800 ticks | 30 simulated seconds |
-| Respawn / spawn protection | 900 / 60 ticks | 15 s / 1 s |
-| Match duration / target | 10800 ticks / 1 capture | Default 180 s; setup range 15–300 s; tied captures use ship sinks, then draw |
+| Respawn / scuttle respawn / protection | 900 / 450 / 60 ticks | 15 s / 7.5 s / 1 s; scuttle grants no opponent point |
+| Match duration / scoring | 10800 ticks; 1 / 3 / 25 points | Default 180 s; enemy kill / first flag pickup / flag delivery; higher total wins |
 | Base delivery radius | 36 WU | Center in navigable water |
 | Feature encoder / discrete actions | ship-64-v1 / discrete-22-v1 | Rich API still supports continuous controls |
 | Obstacle-ray range | 180 WU | Static terrain only |
@@ -90,6 +90,8 @@ D25. `fleetrl-rules-v3` enables deterministic impact damage for friendly/enemy s
 D26. `fleetrl-rules-v4` reduces cannon base damage by exactly 25%, from 25 to 18.75, while retaining the distance curve and close-range threshold. Browser and Python engines are version 4. The native Python adapters now use the same seeded `fleetrl-archipelago-v3` map generator as live browser matches by default; explicit custom maps remain supported. Cross-language conformance covers full gameplay state, ordered events, filtered observations, maps, adapters, and trajectories. Earlier replays are rejected rather than silently recomputed with weaker cannon fire.
 
 D27. `fleetrl-rules-v5` triples the default ship respawn delay from 300 to 900 physics ticks (5 to 15 simulation seconds). New Game and League expose a remembered integer match-duration setting clamped to 15–300 seconds and materialize it as `durationTicks`. The live/replay HUD shows per-ship return countdowns at bottom center; a fog viewpoint exposes all friendly timers but only enemy timers derived from a sink credited to that viewpoint's team. Additional turtles, jellyfish, manta shadows, kelp fragments, and foam eddies are deterministic presentation-only Canvas layers with no collision, observation, policy, or gameplay RNG role. Browser/Python engines are version 5, and older replays are rejected instead of being recomputed under the longer respawn rule.
+
+D28. `fleetrl-rules-v6` raises maximum ship speed by 10% from 80 to 88 WU/s and caps enemy-flag carriers at 95% of that limit. A living ship may issue one-shot `scuttle:true`; it drops any carried flag, awards no opponent kill/point, and returns after 450 ticks, exactly half the normal delay. Scoring becomes additive: credited enemy sink 1 point, the first enemy-flag pickup per excursion 3 points, and base delivery 25 points. Re-picking the same loose flag cannot farm pickup points; returning home, auto-returning, or delivering resets its pickup eligibility. Matches continue after deliveries and the higher score at time expiry wins. `discrete-22-v1` retains width 22: action 21 drops when carrying and otherwise scuttles. Browser/Python engines are version 6; older replays remain version-rejected. The landing page also gains two project-specific generated cinematic backgrounds and reduced-motion-aware ocean/glint animation, with hashes and provenance recorded in the asset manifests.
 
 ## Change control
 

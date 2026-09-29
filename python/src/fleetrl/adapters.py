@@ -49,7 +49,7 @@ def encode_ship_v1(observation: dict[str, Any], ship_id: str) -> np.ndarray:
         _clamp(distance(ship["position"], home["deliveryZone"]["center"]) / diagonal, 0, 1),
         _clamp(distance(ship["position"], enemy_base["approach"]) / diagonal, 0, 1),
         _clamp(observation["remainingTimeS"] / (rules["matchDurationTicks"] / rules["physicsHz"]), 0, 1),
-        _clamp((observation["score"][observation["teamId"]] - observation["score"][other_team]) / max(1, rules["captureTarget"])),
+        _clamp((observation["score"][observation["teamId"]] - observation["score"][other_team]) / max(1, rules["scoreNormalizationTarget"])),
     ]
     enemy_flag_rel = _relative(ship["position"], enemy_point, width, height) if enemy_point else (0.0, 0.0)
     enemy_on_own = bool(enemy_flag and enemy_flag["state"] == "carried" and enemy_flag["carrierShipId"] and any(item["id"] == enemy_flag["carrierShipId"] for item in observation["ships"]))
@@ -76,8 +76,8 @@ def encode_ship_v1(observation: dict[str, Any], ship_id: str) -> np.ndarray:
     legal = observation["legal"].get(ship_id, {})
     values.extend([
         1.0 if observation["teamId"] == "blue" else 0.0, 1.0 if observation["mode"] in ("duel", "fleet") else 0.0,
-        _clamp(len(observation["ships"]) / 8, 0, 1), _clamp(observation["score"][observation["teamId"]] / max(1, rules["captureTarget"]), 0, 1),
-        _clamp(observation["score"][other_team] / max(1, rules["captureTarget"]), 0, 1),
+        _clamp(len(observation["ships"]) / 8, 0, 1), _clamp(observation["score"][observation["teamId"]] / max(1, rules["scoreNormalizationTarget"]), 0, 1),
+        _clamp(observation["score"][other_team] / max(1, rules["scoreNormalizationTarget"]), 0, 1),
         1.0 if own_flag and own_flag["known"] and own_flag["state"] == "at-home" else 0.0,
         1.0 if legal.get("pickupFlagIds") else 0.0, 1.0 if legal.get("giveTargetShipIds") else 0.0,
     ])
@@ -101,7 +101,7 @@ def decode_discrete_v1(observation: dict[str, Any], ship_id: str, action_id: int
         fire = bool(action_id // 9)
         legal = observation["legal"].get(ship_id, {})
         target = _nearest(ship["position"], [item for item in observation["enemies"] if item["id"] in legal.get("fireTargetShipIds", [])])
-        return {"shipId": ship_id, "throttle": motion // 3 - 1, "turn": motion % 3 - 1, "fire": bool(fire and target), "fireTargetShipId": target["id"] if fire and target else None, "interact": {"type": "none"}}
+        return {"shipId": ship_id, "throttle": motion // 3 - 1, "turn": motion % 3 - 1, "fire": bool(fire and target), "fireTargetShipId": target["id"] if fire and target else None, "scuttle": False, "interact": {"type": "none"}}
     action = neutral_action(ship_id); legal = observation["legal"].get(ship_id)
     if not legal:
         return action
@@ -116,8 +116,11 @@ def decode_discrete_v1(observation: dict[str, Any], ship_id: str, action_id: int
         candidates = [{**item, "position": item["approach"]} for item in observation["flagSites"] if item["id"] in legal["placementSiteIds"]]
         target = _nearest(ship["position"], candidates)
         if target: action["interact"] = {"type": "place", "flagSiteId": target["id"]}
-    elif action_id == 21 and legal["canDrop"]:
-        action["interact"] = {"type": "drop"}
+    elif action_id == 21:
+        if legal["canDrop"]:
+            action["interact"] = {"type": "drop"}
+        elif legal.get("canScuttle"):
+            action["scuttle"] = True
     return action
 
 
@@ -133,5 +136,5 @@ def discrete_action_mask_v1(observation: dict[str, Any], ship_id: str) -> np.nda
     legal = observation["legal"].get(ship_id, {})
     if legal.get("canFire"): mask[9:18] = 1
     mask[18] = bool(legal.get("pickupFlagIds")); mask[19] = bool(legal.get("giveTargetShipIds"))
-    mask[20] = bool(legal.get("placementSiteIds")); mask[21] = bool(legal.get("canDrop"))
+    mask[20] = bool(legal.get("placementSiteIds")); mask[21] = bool(legal.get("canDrop") or legal.get("canScuttle"))
     return mask

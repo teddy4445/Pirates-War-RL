@@ -16,6 +16,8 @@ def test_rng_vectors() -> None:
 
 def test_deterministic_motion_and_speed_limit() -> None:
     config, map_data = load_config(), load_map()
+    assert config["ship"]["maxSpeed"] == 88
+    assert config["ship"]["flagCarrierSpeedMultiplier"] == 0.95
     first = create_world(config, map_data, 17)
     second = create_world(config, map_data, 17)
     ship_id = next(ship["id"] for ship in first["ships"] if ship["teamId"] == "blue")
@@ -25,6 +27,28 @@ def test_deterministic_motion_and_speed_limit() -> None:
     assert canonical_kinematics(first) == canonical_kinematics(second)
     ship = next(item for item in first["ships"] if item["id"] == ship_id)
     assert math.hypot(ship["velocity"]["x"], ship["velocity"]["y"]) <= config["ship"]["maxSpeed"] + 1e-9
+
+
+def test_flag_carrier_speed_and_half_time_scuttle_respawn() -> None:
+    config, map_data = load_config(), load_map(); config["mode"] = "duel"
+    config["ship"]["acceleration"] = 0; config["ship"]["dragPerSecond"] = 0
+    state = create_world(config, map_data, 18)
+    blue = next(ship for ship in state["ships"] if ship["teamId"] == "blue")
+    rose_flag = next(flag for flag in state["flags"] if flag["ownerTeamId"] == "rose")
+    blue.update(velocity={"x": 100, "y": 0}, carriedFlagId=rose_flag["id"])
+    rose_flag.update(state="carried", position=None, carrierShipId=blue["id"], pickupScored=True)
+    state = step_world(state)
+    blue = next(ship for ship in state["ships"] if ship["teamId"] == "blue")
+    assert math.isclose(math.hypot(blue["velocity"]["x"], blue["velocity"]["y"]), 83.6)
+    blue["carriedFlagId"] = None
+    rose_flag.update(state="at-home", carrierShipId=None, pickupScored=False)
+    state = step_world(state, {"blue": [{**neutral_action(blue["id"]), "scuttle": True}]})
+    blue = next(ship for ship in state["ships"] if ship["teamId"] == "blue")
+    assert blue["alive"] is False
+    assert blue["respawnAtTick"] == 1 + config["ship"]["scuttleRespawnTicks"]
+    assert state["kills"] == {"blue": 0, "rose": 0}
+    assert state["scores"] == {"blue": 0, "rose": 0}
+    assert any(event["type"] == "ShipScuttled" for event in state["events"])
 
 
 def test_simultaneous_lethal_hits() -> None:

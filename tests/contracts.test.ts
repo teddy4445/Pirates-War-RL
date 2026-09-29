@@ -10,6 +10,10 @@ describe("fleetrl contracts", () => {
     expect(result).toEqual(expect.objectContaining({ ok: true }));
     const config = fixture("default-config.json") as any;
     expect(config.ship.respawnDelayTicks / config.timing.physicsHz).toBe(15);
+    expect(config.ship.scuttleRespawnTicks / config.timing.physicsHz).toBe(7.5);
+    expect(config.ship.maxSpeed).toBe(88);
+    expect(config.ship.flagCarrierSpeedMultiplier).toBe(.95);
+    expect(config.match.points).toEqual({ kill: 1, pickup: 3, delivery: 25 });
   });
 
   it("rejects a drifted timing contract", () => {

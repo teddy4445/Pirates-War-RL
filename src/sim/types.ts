@@ -27,6 +27,7 @@ export interface FlagState {
   carrierShipId: string | null;
   siteId: string | null;
   changedAtTick: number;
+  pickupScored: boolean;
 }
 
 export interface ProjectileState {
@@ -61,17 +62,18 @@ export type WorldEvent = {
   otherImpactSpeed?: number;
   shotDistance?: number;
   closeRange?: boolean;
+  points?: number;
 };
 
 export interface MatchOutcome {
   kind: "win" | "draw" | "forfeit" | "double-forfeit";
   winner: TeamId | null;
-  reason: "capture-target" | "time-limit" | "kill-tiebreak" | "forfeit";
+  reason: "time-limit" | "forfeit";
   endedAtTick: number;
 }
 
 export interface WorldState {
-  engineVersion: "fleetrl-engine-ts-v5";
+  engineVersion: "fleetrl-engine-ts-v6";
   tick: number;
   seed: number;
   tieBreakRngState: number;

@@ -22,18 +22,18 @@ export interface BuiltinPolicyDefinition {
 }
 
 export const builtinPolicyDefinitions: BuiltinPolicyDefinition[] = [
-  { id: "captain-duel-harbor-cadet", alias: "Harbor Cadet · Level 1", hash: "builtin-duel-harbor-cadet-v1", kind: "duel-cadet", mode: "duel", level: 1, description: "A reliable objective runner with conservative speed and point-blank fire." },
-  { id: "captain-duel-tide-hunter", alias: "Tide Hunter · Level 2", hash: "builtin-duel-tide-hunter-v1", kind: "duel-hunter", mode: "duel", level: 2, description: "Adds own-flag recovery, faster helm control, and selective cannon pressure." },
-  { id: "captain-duel-blackwake-ace", alias: "Blackwake Ace · Level 3", hash: "builtin-duel-blackwake-ace-v1", kind: "duel-ace", mode: "duel", level: 3, description: "Runs the full obstacle planner, aggressive intercepts, and health-aware flag tactics." },
-  { id: "captain-fleet-deckhand-squadron", alias: "Deckhand Squadron · Level 1", hash: "builtin-fleet-deckhand-squadron-v1", kind: "fleet-deckhands", mode: "fleet", level: 1, description: "A simple coordinated rush with safe obstacle routing." },
-  { id: "captain-fleet-coral-vanguard", alias: "Coral Vanguard · Level 2", hash: "builtin-fleet-coral-vanguard-v1", kind: "fleet-vanguard", mode: "fleet", level: 2, description: "Splits raiding and home recovery while using focused fire." },
-  { id: "captain-fleet-storm-armada", alias: "Storm Armada · Level 3", hash: "builtin-fleet-storm-armada-v1", kind: "fleet-armada", mode: "fleet", level: 3, description: "Coordinates raider, escort, and interceptor roles with carrier hand-offs." },
-  { id: "captain-fog-duel-lantern-scout", alias: "Lantern Scout · Level 1", hash: "builtin-fog-duel-lantern-scout-v1", kind: "fog-duel-scout", mode: "fog-duel", level: 1, description: "Searches the enemy approach and reacts only to genuinely visible threats." },
-  { id: "captain-fog-duel-mist-stalker", alias: "Mist Stalker · Level 2", hash: "builtin-fog-duel-mist-stalker-v1", kind: "fog-duel-stalker", mode: "fog-duel", level: 2, description: "Adds flag recovery and stronger local combat without hidden-state access." },
-  { id: "captain-fog-duel-phantom-corsair", alias: "Phantom Corsair · Level 3", hash: "builtin-fog-duel-phantom-corsair-v1", kind: "fog-duel-phantom", mode: "fog-duel", level: 3, description: "Uses known terrain, visible-event reactions, and fast capture routes." },
-  { id: "captain-fog-fleet-watchlight-crew", alias: "Watchlight Crew · Level 1", hash: "builtin-fog-fleet-watchlight-crew-v1", kind: "fog-fleet-watch", mode: "fog-fleet", level: 1, description: "A steady shared-vision fleet with uncomplicated objective play." },
-  { id: "captain-fog-fleet-veil-squadron", alias: "Veil Squadron · Level 2", hash: "builtin-fog-fleet-veil-squadron-v1", kind: "fog-fleet-veil", mode: "fog-fleet", level: 2, description: "Spreads sensors across lanes and assigns a dedicated recovery ship." },
-  { id: "captain-fog-fleet-spectral-armada", alias: "Spectral Armada · Level 3", hash: "builtin-fog-fleet-spectral-armada-v1", kind: "fog-fleet-spectral", mode: "fog-fleet", level: 3, description: "Combines shared sight, escorts, interception, and aggressive legal targeting." },
+  { id: "captain-duel-harbor-cadet", alias: "Harbor Cadet · Level 1", hash: "builtin-duel-harbor-cadet-v2", kind: "duel-cadet", mode: "duel", level: 1, description: "A reliable objective runner with conservative speed and point-blank fire." },
+  { id: "captain-duel-tide-hunter", alias: "Tide Hunter · Level 2", hash: "builtin-duel-tide-hunter-v2", kind: "duel-hunter", mode: "duel", level: 2, description: "Adds own-flag recovery, faster helm control, and selective cannon pressure." },
+  { id: "captain-duel-blackwake-ace", alias: "Blackwake Ace · Level 3", hash: "builtin-duel-blackwake-ace-v2", kind: "duel-ace", mode: "duel", level: 3, description: "Runs the full obstacle planner, aggressive intercepts, and health-aware flag tactics." },
+  { id: "captain-fleet-deckhand-squadron", alias: "Deckhand Squadron · Level 1", hash: "builtin-fleet-deckhand-squadron-v2", kind: "fleet-deckhands", mode: "fleet", level: 1, description: "A simple coordinated rush with safe obstacle routing." },
+  { id: "captain-fleet-coral-vanguard", alias: "Coral Vanguard · Level 2", hash: "builtin-fleet-coral-vanguard-v2", kind: "fleet-vanguard", mode: "fleet", level: 2, description: "Splits raiding and home recovery while using focused fire." },
+  { id: "captain-fleet-storm-armada", alias: "Storm Armada · Level 3", hash: "builtin-fleet-storm-armada-v2", kind: "fleet-armada", mode: "fleet", level: 3, description: "Coordinates raider, escort, and interceptor roles with carrier hand-offs." },
+  { id: "captain-fog-duel-lantern-scout", alias: "Lantern Scout · Level 1", hash: "builtin-fog-duel-lantern-scout-v2", kind: "fog-duel-scout", mode: "fog-duel", level: 1, description: "Searches the enemy approach and reacts only to genuinely visible threats." },
+  { id: "captain-fog-duel-mist-stalker", alias: "Mist Stalker · Level 2", hash: "builtin-fog-duel-mist-stalker-v2", kind: "fog-duel-stalker", mode: "fog-duel", level: 2, description: "Adds flag recovery and stronger local combat without hidden-state access." },
+  { id: "captain-fog-duel-phantom-corsair", alias: "Phantom Corsair · Level 3", hash: "builtin-fog-duel-phantom-corsair-v2", kind: "fog-duel-phantom", mode: "fog-duel", level: 3, description: "Uses known terrain, visible-event reactions, and fast capture routes." },
+  { id: "captain-fog-fleet-watchlight-crew", alias: "Watchlight Crew · Level 1", hash: "builtin-fog-fleet-watchlight-crew-v2", kind: "fog-fleet-watch", mode: "fog-fleet", level: 1, description: "A steady shared-vision fleet with uncomplicated objective play." },
+  { id: "captain-fog-fleet-veil-squadron", alias: "Veil Squadron · Level 2", hash: "builtin-fog-fleet-veil-squadron-v2", kind: "fog-fleet-veil", mode: "fog-fleet", level: 2, description: "Spreads sensors across lanes and assigns a dedicated recovery ship." },
+  { id: "captain-fog-fleet-spectral-armada", alias: "Spectral Armada · Level 3", hash: "builtin-fog-fleet-spectral-armada-v2", kind: "fog-fleet-spectral", mode: "fog-fleet", level: 3, description: "Combines shared sight, escorts, interception, and aggressive legal targeting." },
 ];
 
 const profiles = new Map(builtinPolicyDefinitions.map(definition => [definition.kind, definition]));
@@ -83,6 +83,12 @@ function actionToward(observation: Observation, ship: ShipView, target: Point, h
   const ownFlagAway = ownFlag?.known && ownFlag.state !== "at-home";
   if (ownFlagAway && observation.ships.length === 1 && ship.carriedFlagId && legal?.canDrop) return { ...neutralAction(ship.id), throttle: .3, interact: { type: "drop" } };
   if (helm.level >= 3 && ship.carriedFlagId && ship.health <= 44 && legal?.giveTargetShipIds.length) return { ...neutralAction(ship.id), interact: { type: "give", targetShipId: legal.giveTargetShipIds[0]! } };
+  const home = observation.bases.find(base => base.teamId === observation.teamId);
+  const scuttleThreat = nearestEnemy(observation, ship);
+  const scuttleHealth = helm.level === 1 ? 16 : helm.level === 2 ? 24 : 32;
+  if (!ship.carriedFlagId && legal?.canScuttle && ship.health <= scuttleHealth && home && distance(ship.position, home.deliveryZone.center) > 460 && !scuttleThreat) {
+    return { ...neutralAction(ship.id), scuttle: true };
+  }
 
   const waypoint = navigationWaypoint(observation, ship, target);
   const desiredBearing = wrapHeading(Math.atan2(waypoint.y - ship.position.y, waypoint.x - ship.position.x) - ship.heading);

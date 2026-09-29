@@ -1,11 +1,11 @@
 {
   "schemaVersion": "fleetrl-gameplay-parity-v1",
-  "rulesVersion": "fleetrl-rules-v5",
+  "rulesVersion": "fleetrl-rules-v6",
   "absoluteTolerance": 1e-09,
   "relativeTolerance": 1e-09,
   "defaultConfig": {
     "schemaVersion": "fleetrl-config-v1",
-    "rulesVersion": "fleetrl-rules-v5",
+    "rulesVersion": "fleetrl-rules-v6",
     "mode": "fleet",
     "mapId": "twin-harbors-v1",
     "shipsPerTeam": 3,
@@ -24,10 +24,12 @@
       "radius": 12,
       "maxHealth": 100,
       "acceleration": 55,
-      "maxSpeed": 80,
+      "maxSpeed": 88,
+      "flagCarrierSpeedMultiplier": 0.95,
       "dragPerSecond": 0.7,
       "maxTurnRate": 2.4,
       "respawnDelayTicks": 900,
+      "scuttleRespawnTicks": 450,
       "spawnProtectionTicks": 60
     },
     "combat": {
@@ -53,7 +55,12 @@
     },
     "match": {
       "durationTicks": 10800,
-      "captureTarget": 1
+      "scoreNormalizationTarget": 25,
+      "points": {
+        "kill": 1,
+        "pickup": 3,
+        "delivery": 25
+      }
     },
     "vision": {
       "sensorRadius": 220,
@@ -158,6 +165,7 @@
                 "turn": 0.0,
                 "fire": true,
                 "fireTargetShipId": "rose-1",
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -203,6 +211,7 @@
                 "turn": 0.0,
                 "fire": true,
                 "fireTargetShipId": "rose-1",
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -238,6 +247,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -255,7 +265,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -267,7 +278,8 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
@@ -654,6 +666,7 @@
                   "turn": 0.0,
                   "fire": true,
                   "fireTargetShipId": "rose-1",
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -664,10 +677,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -681,7 +696,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -691,7 +711,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -1048,6 +1069,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -1058,10 +1080,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -1075,7 +1099,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -1087,7 +1116,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -1171,6 +1201,7 @@
                 "turn": 0.0,
                 "fire": true,
                 "fireTargetShipId": "rose-1",
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -1216,6 +1247,7 @@
                 "turn": 0.0,
                 "fire": true,
                 "fireTargetShipId": "rose-1",
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -1251,6 +1283,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -1268,7 +1301,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -1280,7 +1314,8 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [
@@ -1717,6 +1752,7 @@
                   "turn": 0.0,
                   "fire": true,
                   "fireTargetShipId": "rose-1",
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -1727,10 +1763,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -1744,7 +1782,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -1754,7 +1797,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -2137,6 +2181,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -2147,10 +2192,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -2164,7 +2211,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -2176,7 +2228,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -2307,6 +2360,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -2342,6 +2396,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -2359,7 +2414,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -2371,7 +2427,8 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
@@ -2759,6 +2816,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -2769,10 +2827,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -2786,7 +2846,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -2798,7 +2863,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -3154,6 +3220,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -3164,10 +3231,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -3181,7 +3250,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -3193,7 +3267,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -3309,6 +3384,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -3344,6 +3420,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -3379,6 +3456,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -3414,6 +3492,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -3431,7 +3510,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -3443,7 +3523,8 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
@@ -3864,6 +3945,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -3874,6 +3956,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -3884,10 +3967,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -3901,7 +3986,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -3911,7 +4001,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               },
               "blue-2": {
                 "canFire": false,
@@ -3919,7 +4010,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -4310,6 +4402,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -4320,6 +4413,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -4330,10 +4424,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -4347,7 +4443,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -4357,7 +4458,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               },
               "rose-2": {
                 "canFire": false,
@@ -4365,7 +4467,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -4483,6 +4586,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -4518,6 +4622,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -4535,7 +4640,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -4547,7 +4653,8 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
@@ -4792,6 +4899,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -4802,10 +4910,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -4819,7 +4929,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -4829,7 +4944,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -5052,6 +5168,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -5062,10 +5179,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -5079,7 +5198,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -5089,7 +5213,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -5201,6 +5326,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -5236,6 +5362,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -5253,7 +5380,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -5265,13 +5393,14 @@
               },
               "carrierShipId": null,
               "siteId": "north-neutral-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
           "scores": {
             "blue": 0,
-            "rose": 0
+            "rose": 1
           },
           "kills": {
             "blue": 0,
@@ -5357,7 +5486,8 @@
               "x": 499.4999999,
               "y": 450.0
             },
-            "detail": "killer:rose"
+            "detail": "killer:rose",
+            "points": 1
           }
         ],
         "observations": {
@@ -5376,7 +5506,7 @@
             },
             "score": {
               "blue": 0,
-              "rose": 0
+              "rose": 1
             },
             "kills": {
               "blue": 0,
@@ -5668,6 +5798,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -5678,10 +5809,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -5695,7 +5828,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -5705,7 +5843,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": false
               }
             },
             "events": [
@@ -5765,7 +5904,8 @@
                   "y": 450.0
                 },
                 "shipId": "blue-1",
-                "detail": "killer:rose"
+                "detail": "killer:rose",
+                "points": 1
               }
             ]
           },
@@ -5784,7 +5924,7 @@
             },
             "score": {
               "blue": 0,
-              "rose": 0
+              "rose": 1
             },
             "kills": {
               "blue": 0,
@@ -6085,6 +6225,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -6095,10 +6236,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -6112,7 +6255,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -6122,7 +6270,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -6180,7 +6329,8 @@
                   "x": 499.4999999,
                   "y": 450.0
                 },
-                "shipId": "blue-1"
+                "shipId": "blue-1",
+                "points": 1
               }
             ]
           }
@@ -6195,6 +6345,9 @@
         "mode": "duel",
         "flags": {
           "requireOwnFlagHome": false
+        },
+        "match": {
+          "durationTicks": 1
         }
       },
       "setup": {
@@ -6266,6 +6419,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -6301,6 +6455,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -6318,7 +6473,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -6330,13 +6486,14 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
           "scores": {
-            "blue": 1,
-            "rose": 1
+            "blue": 25,
+            "rose": 25
           },
           "kills": {
             "blue": 0,
@@ -6359,7 +6516,7 @@
           "outcome": {
             "kind": "draw",
             "winner": null,
-            "reason": "capture-target",
+            "reason": "time-limit",
             "endedAtTick": 0
           }
         },
@@ -6374,7 +6531,8 @@
             "position": {
               "x": 200.0,
               "y": 450.0
-            }
+            },
+            "points": 25
           },
           {
             "id": "e-0-2",
@@ -6386,13 +6544,14 @@
             "position": {
               "x": 1400.0,
               "y": 450.0
-            }
+            },
+            "points": 25
           },
           {
             "id": "e-0-3",
             "tick": 0,
             "type": "MatchEnded",
-            "detail": "draw:capture-target"
+            "detail": "draw:time-limit"
           }
         ],
         "observations": {
@@ -6404,14 +6563,14 @@
             "observedAtTick": 1,
             "actionAppliesAtTick": 7,
             "simulationTimeS": 0.016666666666666666,
-            "remainingTimeS": 179.98333333333332,
+            "remainingTimeS": 0.0,
             "world": {
               "width": 1600,
               "height": 900
             },
             "score": {
-              "blue": 1,
-              "rose": 1
+              "blue": 25,
+              "rose": 25
             },
             "kills": {
               "blue": 0,
@@ -6712,6 +6871,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -6722,10 +6882,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -6738,8 +6900,13 @@
               "placeRadius": 30,
               "giveRadius": 36,
               "sensorRadius": 220,
-              "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "matchDurationTicks": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -6749,7 +6916,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -6763,7 +6931,8 @@
                   "x": 200.0,
                   "y": 450.0
                 },
-                "shipId": "blue-1"
+                "shipId": "blue-1",
+                "points": 25
               },
               {
                 "id": "e-0-2",
@@ -6775,13 +6944,14 @@
                   "x": 1400.0,
                   "y": 450.0
                 },
-                "shipId": "rose-1"
+                "shipId": "rose-1",
+                "points": 25
               },
               {
                 "id": "e-0-3",
                 "tick": 0,
                 "type": "MatchEnded",
-                "detail": "draw:capture-target"
+                "detail": "draw:time-limit"
               }
             ]
           },
@@ -6793,14 +6963,14 @@
             "observedAtTick": 1,
             "actionAppliesAtTick": 7,
             "simulationTimeS": 0.016666666666666666,
-            "remainingTimeS": 179.98333333333332,
+            "remainingTimeS": 0.0,
             "world": {
               "width": 1600,
               "height": 900
             },
             "score": {
-              "blue": 1,
-              "rose": 1
+              "blue": 25,
+              "rose": 25
             },
             "kills": {
               "blue": 0,
@@ -7101,6 +7271,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -7111,10 +7282,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -7127,8 +7300,13 @@
               "placeRadius": 30,
               "giveRadius": 36,
               "sensorRadius": 220,
-              "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "matchDurationTicks": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -7138,7 +7316,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -7152,7 +7331,8 @@
                   "x": 200.0,
                   "y": 450.0
                 },
-                "shipId": "blue-1"
+                "shipId": "blue-1",
+                "points": 25
               },
               {
                 "id": "e-0-2",
@@ -7164,13 +7344,14 @@
                   "x": 1400.0,
                   "y": 450.0
                 },
-                "shipId": "rose-1"
+                "shipId": "rose-1",
+                "points": 25
               },
               {
                 "id": "e-0-3",
                 "tick": 0,
                 "type": "MatchEnded",
-                "detail": "draw:capture-target"
+                "detail": "draw:time-limit"
               }
             ]
           }
@@ -7234,6 +7415,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -7269,6 +7451,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -7286,7 +7469,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -7298,7 +7482,8 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
@@ -7542,6 +7727,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -7552,10 +7738,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -7569,7 +7757,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -7579,7 +7772,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": []
@@ -7764,6 +7958,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -7774,10 +7969,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -7791,7 +7988,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -7801,7 +8003,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": []
@@ -7863,6 +8066,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -7898,6 +8102,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -7915,7 +8120,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -7927,7 +8133,8 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
@@ -8285,6 +8492,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -8295,10 +8503,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -8312,7 +8522,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -8322,7 +8537,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -8655,6 +8871,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -8665,10 +8882,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -8682,7 +8901,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 10800,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -8692,7 +8916,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -8713,7 +8938,7 @@
       }
     },
     {
-      "id": "timeout-kill-tiebreak",
+      "id": "timeout-score-winner",
       "seed": 210,
       "tickCount": 1,
       "configPatch": {
@@ -8724,9 +8949,13 @@
       },
       "setup": {
         "world": {
+          "scores": {
+            "blue": 4,
+            "rose": 3
+          },
           "kills": {
-            "blue": 2,
-            "rose": 1
+            "blue": 1,
+            "rose": 3
           }
         }
       },
@@ -8767,6 +8996,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -8802,6 +9032,7 @@
                 "turn": 0.0,
                 "fire": false,
                 "fireTargetShipId": null,
+                "scuttle": false,
                 "interact": {
                   "type": "none"
                 }
@@ -8819,7 +9050,8 @@
               },
               "carrierShipId": null,
               "siteId": "blue-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             },
             {
               "id": "rose-flag",
@@ -8831,17 +9063,18 @@
               },
               "carrierShipId": null,
               "siteId": "rose-home-site",
-              "changedAtTick": 0
+              "changedAtTick": 0,
+              "pickupScored": false
             }
           ],
           "projectiles": [],
           "scores": {
-            "blue": 0,
-            "rose": 0
+            "blue": 4,
+            "rose": 3
           },
           "kills": {
-            "blue": 2,
-            "rose": 1
+            "blue": 1,
+            "rose": 3
           },
           "discoveredIslandIds": {
             "blue": [
@@ -8860,7 +9093,7 @@
           "outcome": {
             "kind": "win",
             "winner": "blue",
-            "reason": "kill-tiebreak",
+            "reason": "time-limit",
             "endedAtTick": 0
           }
         },
@@ -8869,7 +9102,7 @@
             "id": "e-0-1",
             "tick": 0,
             "type": "MatchEnded",
-            "detail": "win:kill-tiebreak",
+            "detail": "win:time-limit",
             "teamId": "blue"
           }
         ],
@@ -8888,12 +9121,12 @@
               "height": 900
             },
             "score": {
-              "blue": 0,
-              "rose": 0
+              "blue": 4,
+              "rose": 3
             },
             "kills": {
-              "blue": 2,
-              "rose": 1
+              "blue": 1,
+              "rose": 3
             },
             "ships": [
               {
@@ -9190,6 +9423,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -9200,10 +9434,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -9217,7 +9453,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 1,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -9227,7 +9468,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -9236,7 +9478,7 @@
                 "tick": 0,
                 "type": "MatchEnded",
                 "teamId": "blue",
-                "detail": "win:kill-tiebreak"
+                "detail": "win:time-limit"
               }
             ]
           },
@@ -9254,12 +9496,12 @@
               "height": 900
             },
             "score": {
-              "blue": 0,
-              "rose": 0
+              "blue": 4,
+              "rose": 3
             },
             "kills": {
-              "blue": 2,
-              "rose": 1
+              "blue": 1,
+              "rose": 3
             },
             "ships": [
               {
@@ -9556,6 +9798,7 @@
                   "turn": 0.0,
                   "fire": false,
                   "fireTargetShipId": null,
+                  "scuttle": false,
                   "interact": {
                     "type": "none"
                   }
@@ -9566,10 +9809,12 @@
               "physicsHz": 60,
               "decisionIntervalTicks": 6,
               "shipRadius": 12,
-              "maxSpeed": 80,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
               "maxHealth": 100,
               "cooldownTicks": 48,
               "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
               "spawnProtectionTicks": 60,
               "projectileRange": 250,
               "projectileSpeed": 320,
@@ -9583,7 +9828,12 @@
               "giveRadius": 36,
               "sensorRadius": 220,
               "matchDurationTicks": 1,
-              "captureTarget": 1,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
               "obstacleRayRange": 180
             },
             "legal": {
@@ -9593,7 +9843,8 @@
                 "pickupFlagIds": [],
                 "giveTargetShipIds": [],
                 "placementSiteIds": [],
-                "canDrop": false
+                "canDrop": false,
+                "canScuttle": true
               }
             },
             "events": [
@@ -9602,7 +9853,970 @@
                 "tick": 0,
                 "type": "MatchEnded",
                 "teamId": "blue",
-                "detail": "win:kill-tiebreak"
+                "detail": "win:time-limit"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "scuttle-half-respawn",
+      "seed": 211,
+      "tickCount": 1,
+      "configPatch": {
+        "mode": "duel"
+      },
+      "schedule": [
+        {
+          "tick": 0,
+          "controls": {
+            "blue": [
+              {
+                "shipId": "blue-1",
+                "throttle": 0.0,
+                "turn": 0.0,
+                "fire": false,
+                "fireTargetShipId": null,
+                "scuttle": true,
+                "interact": {
+                  "type": "none"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "expected": {
+        "state": {
+          "tick": 1,
+          "seed": 211,
+          "tieBreakRngState": 388660527,
+          "nextEntitySequence": 3,
+          "ships": [
+            {
+              "id": "blue-1",
+              "teamId": "blue",
+              "spawnPosition": {
+                "x": 230,
+                "y": 360
+              },
+              "spawnHeading": 0,
+              "position": {
+                "x": 230,
+                "y": 360
+              },
+              "velocity": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "heading": 0,
+              "radius": 12,
+              "health": 0,
+              "alive": false,
+              "respawnAtTick": 450,
+              "protectionUntilTick": 0,
+              "cooldownTicks": 0,
+              "carriedFlagId": null,
+              "heldAction": {
+                "shipId": "blue-1",
+                "throttle": 0.0,
+                "turn": 0.0,
+                "fire": false,
+                "fireTargetShipId": null,
+                "scuttle": false,
+                "interact": {
+                  "type": "none"
+                }
+              }
+            },
+            {
+              "id": "rose-1",
+              "teamId": "rose",
+              "spawnPosition": {
+                "x": 1370,
+                "y": 360
+              },
+              "spawnHeading": -3.141592653589793,
+              "position": {
+                "x": 1370.0,
+                "y": 360.0
+              },
+              "velocity": {
+                "x": 0.0,
+                "y": 0.0
+              },
+              "heading": -3.141592653589793,
+              "radius": 12,
+              "health": 100,
+              "alive": true,
+              "respawnAtTick": null,
+              "protectionUntilTick": 0,
+              "cooldownTicks": 0,
+              "carriedFlagId": null,
+              "heldAction": {
+                "shipId": "rose-1",
+                "throttle": 0.0,
+                "turn": 0.0,
+                "fire": false,
+                "fireTargetShipId": null,
+                "scuttle": false,
+                "interact": {
+                  "type": "none"
+                }
+              }
+            }
+          ],
+          "flags": [
+            {
+              "id": "blue-flag",
+              "ownerTeamId": "blue",
+              "state": "at-home",
+              "position": {
+                "x": 146,
+                "y": 450
+              },
+              "carrierShipId": null,
+              "siteId": "blue-home-site",
+              "changedAtTick": 0,
+              "pickupScored": false
+            },
+            {
+              "id": "rose-flag",
+              "ownerTeamId": "rose",
+              "state": "at-home",
+              "position": {
+                "x": 1454,
+                "y": 450
+              },
+              "carrierShipId": null,
+              "siteId": "rose-home-site",
+              "changedAtTick": 0,
+              "pickupScored": false
+            }
+          ],
+          "projectiles": [],
+          "scores": {
+            "blue": 0,
+            "rose": 0
+          },
+          "kills": {
+            "blue": 0,
+            "rose": 0
+          },
+          "discoveredIslandIds": {
+            "blue": [
+              "blue-home-island",
+              "north-island",
+              "rose-home-island",
+              "south-island"
+            ],
+            "rose": [
+              "blue-home-island",
+              "north-island",
+              "rose-home-island",
+              "south-island"
+            ]
+          },
+          "outcome": null
+        },
+        "events": [
+          {
+            "id": "e-0-1",
+            "tick": 0,
+            "type": "ShipScuttled",
+            "shipId": "blue-1",
+            "teamId": "blue",
+            "position": {
+              "x": 230,
+              "y": 360
+            },
+            "detail": "half-respawn"
+          },
+          {
+            "id": "e-0-2",
+            "tick": 0,
+            "type": "ShipSunk",
+            "shipId": "blue-1",
+            "teamId": "blue",
+            "position": {
+              "x": 230,
+              "y": 360
+            },
+            "detail": "scuttle"
+          }
+        ],
+        "observations": {
+          "blue": {
+            "apiVersion": "fleetrl-agent-v1",
+            "mode": "duel",
+            "teamId": "blue",
+            "decisionId": 9,
+            "observedAtTick": 1,
+            "actionAppliesAtTick": 7,
+            "simulationTimeS": 0.016666666666666666,
+            "remainingTimeS": 179.98333333333332,
+            "world": {
+              "width": 1600,
+              "height": 900
+            },
+            "score": {
+              "blue": 0,
+              "rose": 0
+            },
+            "kills": {
+              "blue": 0,
+              "rose": 0
+            },
+            "ships": [
+              {
+                "id": "blue-1",
+                "teamId": "blue",
+                "position": {
+                  "x": 230,
+                  "y": 360
+                },
+                "velocity": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "heading": 0,
+                "health": 0,
+                "alive": false,
+                "cooldownTicks": 0,
+                "respawnTicksRemaining": 449,
+                "protectionTicksRemaining": 0,
+                "carriedFlagId": null
+              }
+            ],
+            "enemies": [
+              {
+                "id": "rose-1",
+                "teamId": "rose",
+                "position": {
+                  "x": 1370.0,
+                  "y": 360.0
+                },
+                "velocity": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "heading": -3.141592653589793,
+                "health": 100,
+                "alive": true,
+                "cooldownTicks": 0,
+                "respawnTicksRemaining": 0,
+                "protectionTicksRemaining": 0,
+                "carriedFlagId": null
+              }
+            ],
+            "flags": [
+              {
+                "id": "blue-flag",
+                "ownerTeamId": "blue",
+                "known": true,
+                "state": "at-home",
+                "position": {
+                  "x": 146,
+                  "y": 450
+                },
+                "carrierShipId": null
+              },
+              {
+                "id": "rose-flag",
+                "ownerTeamId": "rose",
+                "known": true,
+                "state": "at-home",
+                "position": {
+                  "x": 1454,
+                  "y": 450
+                },
+                "carrierShipId": null
+              }
+            ],
+            "projectiles": [],
+            "bases": [
+              {
+                "teamId": "blue",
+                "homePost": {
+                  "x": 146,
+                  "y": 450
+                },
+                "deliveryZone": {
+                  "center": {
+                    "x": 200,
+                    "y": 450
+                  },
+                  "radius": 36
+                },
+                "approach": {
+                  "x": 170,
+                  "y": 450
+                }
+              },
+              {
+                "teamId": "rose",
+                "homePost": {
+                  "x": 1454,
+                  "y": 450
+                },
+                "deliveryZone": {
+                  "center": {
+                    "x": 1400,
+                    "y": 450
+                  },
+                  "radius": 36
+                },
+                "approach": {
+                  "x": 1430,
+                  "y": 450
+                }
+              }
+            ],
+            "islands": [
+              {
+                "id": "blue-home-island",
+                "polygon": [
+                  [
+                    40,
+                    340
+                  ],
+                  [
+                    120,
+                    340
+                  ],
+                  [
+                    150,
+                    400
+                  ],
+                  [
+                    150,
+                    500
+                  ],
+                  [
+                    120,
+                    560
+                  ],
+                  [
+                    40,
+                    560
+                  ]
+                ]
+              },
+              {
+                "id": "north-island",
+                "polygon": [
+                  [
+                    670,
+                    220
+                  ],
+                  [
+                    730,
+                    160
+                  ],
+                  [
+                    870,
+                    160
+                  ],
+                  [
+                    930,
+                    220
+                  ],
+                  [
+                    870,
+                    320
+                  ],
+                  [
+                    730,
+                    320
+                  ]
+                ]
+              },
+              {
+                "id": "rose-home-island",
+                "polygon": [
+                  [
+                    1560,
+                    560
+                  ],
+                  [
+                    1480,
+                    560
+                  ],
+                  [
+                    1450,
+                    500
+                  ],
+                  [
+                    1450,
+                    400
+                  ],
+                  [
+                    1480,
+                    340
+                  ],
+                  [
+                    1560,
+                    340
+                  ]
+                ]
+              },
+              {
+                "id": "south-island",
+                "polygon": [
+                  [
+                    670,
+                    680
+                  ],
+                  [
+                    730,
+                    580
+                  ],
+                  [
+                    870,
+                    580
+                  ],
+                  [
+                    930,
+                    680
+                  ],
+                  [
+                    870,
+                    750
+                  ],
+                  [
+                    730,
+                    750
+                  ]
+                ]
+              }
+            ],
+            "flagSites": [
+              {
+                "id": "blue-home-site",
+                "position": {
+                  "x": 146,
+                  "y": 450
+                },
+                "approach": {
+                  "x": 170,
+                  "y": 450
+                },
+                "radius": 30,
+                "reservedHome": true
+              },
+              {
+                "id": "north-neutral-site",
+                "position": {
+                  "x": 800,
+                  "y": 316
+                },
+                "approach": {
+                  "x": 800,
+                  "y": 344
+                },
+                "radius": 30,
+                "reservedHome": false
+              },
+              {
+                "id": "rose-home-site",
+                "position": {
+                  "x": 1454,
+                  "y": 450
+                },
+                "approach": {
+                  "x": 1430,
+                  "y": 450
+                },
+                "radius": 30,
+                "reservedHome": true
+              },
+              {
+                "id": "south-neutral-site",
+                "position": {
+                  "x": 800,
+                  "y": 584
+                },
+                "approach": {
+                  "x": 800,
+                  "y": 560
+                },
+                "radius": 30,
+                "reservedHome": false
+              }
+            ],
+            "sensors": [],
+            "heldActions": {
+              "actions": [
+                {
+                  "shipId": "blue-1",
+                  "throttle": 0.0,
+                  "turn": 0.0,
+                  "fire": false,
+                  "fireTargetShipId": null,
+                  "scuttle": false,
+                  "interact": {
+                    "type": "none"
+                  }
+                }
+              ]
+            },
+            "publicRules": {
+              "physicsHz": 60,
+              "decisionIntervalTicks": 6,
+              "shipRadius": 12,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
+              "maxHealth": 100,
+              "cooldownTicks": 48,
+              "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
+              "spawnProtectionTicks": 60,
+              "projectileRange": 250,
+              "projectileSpeed": 320,
+              "projectileDamage": 18.75,
+              "minDamageMultiplier": 0.65,
+              "maxDamageMultiplier": 1.6,
+              "closeRangeFraction": 0.25,
+              "impactDamagePerSpeed": 0.2,
+              "pickupRadius": 30,
+              "placeRadius": 30,
+              "giveRadius": 36,
+              "sensorRadius": 220,
+              "matchDurationTicks": 10800,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
+              "obstacleRayRange": 180
+            },
+            "legal": {
+              "blue-1": {
+                "canFire": false,
+                "fireTargetShipIds": [],
+                "pickupFlagIds": [],
+                "giveTargetShipIds": [],
+                "placementSiteIds": [],
+                "canDrop": false,
+                "canScuttle": false
+              }
+            },
+            "events": [
+              {
+                "id": "e-0-1",
+                "tick": 0,
+                "type": "ShipScuttled",
+                "teamId": "blue",
+                "position": {
+                  "x": 230,
+                  "y": 360
+                },
+                "shipId": "blue-1",
+                "detail": "half-respawn"
+              },
+              {
+                "id": "e-0-2",
+                "tick": 0,
+                "type": "ShipSunk",
+                "teamId": "blue",
+                "position": {
+                  "x": 230,
+                  "y": 360
+                },
+                "shipId": "blue-1",
+                "detail": "scuttle"
+              }
+            ]
+          },
+          "rose": {
+            "apiVersion": "fleetrl-agent-v1",
+            "mode": "duel",
+            "teamId": "rose",
+            "decisionId": 9,
+            "observedAtTick": 1,
+            "actionAppliesAtTick": 7,
+            "simulationTimeS": 0.016666666666666666,
+            "remainingTimeS": 179.98333333333332,
+            "world": {
+              "width": 1600,
+              "height": 900
+            },
+            "score": {
+              "blue": 0,
+              "rose": 0
+            },
+            "kills": {
+              "blue": 0,
+              "rose": 0
+            },
+            "ships": [
+              {
+                "id": "rose-1",
+                "teamId": "rose",
+                "position": {
+                  "x": 1370.0,
+                  "y": 360.0
+                },
+                "velocity": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "heading": -3.141592653589793,
+                "health": 100,
+                "alive": true,
+                "cooldownTicks": 0,
+                "respawnTicksRemaining": 0,
+                "protectionTicksRemaining": 0,
+                "carriedFlagId": null
+              }
+            ],
+            "enemies": [
+              {
+                "id": "blue-1",
+                "teamId": "blue",
+                "position": {
+                  "x": 230,
+                  "y": 360
+                },
+                "velocity": {
+                  "x": 0.0,
+                  "y": 0.0
+                },
+                "heading": 0,
+                "health": 0,
+                "alive": false,
+                "cooldownTicks": 0,
+                "respawnTicksRemaining": 449,
+                "protectionTicksRemaining": 0,
+                "carriedFlagId": null
+              }
+            ],
+            "flags": [
+              {
+                "id": "blue-flag",
+                "ownerTeamId": "blue",
+                "known": true,
+                "state": "at-home",
+                "position": {
+                  "x": 146,
+                  "y": 450
+                },
+                "carrierShipId": null
+              },
+              {
+                "id": "rose-flag",
+                "ownerTeamId": "rose",
+                "known": true,
+                "state": "at-home",
+                "position": {
+                  "x": 1454,
+                  "y": 450
+                },
+                "carrierShipId": null
+              }
+            ],
+            "projectiles": [],
+            "bases": [
+              {
+                "teamId": "blue",
+                "homePost": {
+                  "x": 146,
+                  "y": 450
+                },
+                "deliveryZone": {
+                  "center": {
+                    "x": 200,
+                    "y": 450
+                  },
+                  "radius": 36
+                },
+                "approach": {
+                  "x": 170,
+                  "y": 450
+                }
+              },
+              {
+                "teamId": "rose",
+                "homePost": {
+                  "x": 1454,
+                  "y": 450
+                },
+                "deliveryZone": {
+                  "center": {
+                    "x": 1400,
+                    "y": 450
+                  },
+                  "radius": 36
+                },
+                "approach": {
+                  "x": 1430,
+                  "y": 450
+                }
+              }
+            ],
+            "islands": [
+              {
+                "id": "blue-home-island",
+                "polygon": [
+                  [
+                    40,
+                    340
+                  ],
+                  [
+                    120,
+                    340
+                  ],
+                  [
+                    150,
+                    400
+                  ],
+                  [
+                    150,
+                    500
+                  ],
+                  [
+                    120,
+                    560
+                  ],
+                  [
+                    40,
+                    560
+                  ]
+                ]
+              },
+              {
+                "id": "north-island",
+                "polygon": [
+                  [
+                    670,
+                    220
+                  ],
+                  [
+                    730,
+                    160
+                  ],
+                  [
+                    870,
+                    160
+                  ],
+                  [
+                    930,
+                    220
+                  ],
+                  [
+                    870,
+                    320
+                  ],
+                  [
+                    730,
+                    320
+                  ]
+                ]
+              },
+              {
+                "id": "rose-home-island",
+                "polygon": [
+                  [
+                    1560,
+                    560
+                  ],
+                  [
+                    1480,
+                    560
+                  ],
+                  [
+                    1450,
+                    500
+                  ],
+                  [
+                    1450,
+                    400
+                  ],
+                  [
+                    1480,
+                    340
+                  ],
+                  [
+                    1560,
+                    340
+                  ]
+                ]
+              },
+              {
+                "id": "south-island",
+                "polygon": [
+                  [
+                    670,
+                    680
+                  ],
+                  [
+                    730,
+                    580
+                  ],
+                  [
+                    870,
+                    580
+                  ],
+                  [
+                    930,
+                    680
+                  ],
+                  [
+                    870,
+                    750
+                  ],
+                  [
+                    730,
+                    750
+                  ]
+                ]
+              }
+            ],
+            "flagSites": [
+              {
+                "id": "blue-home-site",
+                "position": {
+                  "x": 146,
+                  "y": 450
+                },
+                "approach": {
+                  "x": 170,
+                  "y": 450
+                },
+                "radius": 30,
+                "reservedHome": true
+              },
+              {
+                "id": "north-neutral-site",
+                "position": {
+                  "x": 800,
+                  "y": 316
+                },
+                "approach": {
+                  "x": 800,
+                  "y": 344
+                },
+                "radius": 30,
+                "reservedHome": false
+              },
+              {
+                "id": "rose-home-site",
+                "position": {
+                  "x": 1454,
+                  "y": 450
+                },
+                "approach": {
+                  "x": 1430,
+                  "y": 450
+                },
+                "radius": 30,
+                "reservedHome": true
+              },
+              {
+                "id": "south-neutral-site",
+                "position": {
+                  "x": 800,
+                  "y": 584
+                },
+                "approach": {
+                  "x": 800,
+                  "y": 560
+                },
+                "radius": 30,
+                "reservedHome": false
+              }
+            ],
+            "sensors": [
+              {
+                "shipId": "rose-1",
+                "position": {
+                  "x": 1370.0,
+                  "y": 360.0
+                },
+                "radius": 220
+              }
+            ],
+            "heldActions": {
+              "actions": [
+                {
+                  "shipId": "rose-1",
+                  "throttle": 0.0,
+                  "turn": 0.0,
+                  "fire": false,
+                  "fireTargetShipId": null,
+                  "scuttle": false,
+                  "interact": {
+                    "type": "none"
+                  }
+                }
+              ]
+            },
+            "publicRules": {
+              "physicsHz": 60,
+              "decisionIntervalTicks": 6,
+              "shipRadius": 12,
+              "maxSpeed": 88,
+              "flagCarrierSpeedMultiplier": 0.95,
+              "maxHealth": 100,
+              "cooldownTicks": 48,
+              "respawnDelayTicks": 900,
+              "scuttleRespawnTicks": 450,
+              "spawnProtectionTicks": 60,
+              "projectileRange": 250,
+              "projectileSpeed": 320,
+              "projectileDamage": 18.75,
+              "minDamageMultiplier": 0.65,
+              "maxDamageMultiplier": 1.6,
+              "closeRangeFraction": 0.25,
+              "impactDamagePerSpeed": 0.2,
+              "pickupRadius": 30,
+              "placeRadius": 30,
+              "giveRadius": 36,
+              "sensorRadius": 220,
+              "matchDurationTicks": 10800,
+              "scoreNormalizationTarget": 25,
+              "scorePoints": {
+                "kill": 1,
+                "pickup": 3,
+                "delivery": 25
+              },
+              "obstacleRayRange": 180
+            },
+            "legal": {
+              "rose-1": {
+                "canFire": false,
+                "fireTargetShipIds": [],
+                "pickupFlagIds": [],
+                "giveTargetShipIds": [],
+                "placementSiteIds": [],
+                "canDrop": false,
+                "canScuttle": true
+              }
+            },
+            "events": [
+              {
+                "id": "e-0-1",
+                "tick": 0,
+                "type": "ShipScuttled",
+                "teamId": "blue",
+                "position": {
+                  "x": 230,
+                  "y": 360
+                },
+                "shipId": "blue-1"
+              },
+              {
+                "id": "e-0-2",
+                "tick": 0,
+                "type": "ShipSunk",
+                "teamId": "blue",
+                "position": {
+                  "x": 230,
+                  "y": 360
+                },
+                "shipId": "blue-1"
               }
             ]
           }

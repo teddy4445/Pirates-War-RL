@@ -23,7 +23,7 @@ def files() -> list[tuple[str, bytes]]:
     for name in DOCS:
         path = ROOT / "docs" / name
         if path.exists(): records.append((f"docs/{name}", path.read_bytes()))
-    compatibility = {"bundleVersion": "fleetrl-python-bundle-v1", "packageVersion": "0.1.0", "python": ">=3.10", "engine": "fleetrl-engine-py-v5", "rules": "fleetrl-rules-v5", "api": "fleetrl-agent-v1", "featureEncoder": "ship-64-v1", "actionDecoder": "discrete-22-v1", "modelExport": "dense-json-v1", "websiteBackend": False}
+    compatibility = {"bundleVersion": "fleetrl-python-bundle-v1", "packageVersion": "0.1.0", "python": ">=3.10", "engine": "fleetrl-engine-py-v6", "rules": "fleetrl-rules-v6", "api": "fleetrl-agent-v1", "featureEncoder": "ship-64-v1", "actionDecoder": "discrete-22-v1", "modelExport": "dense-json-v1", "websiteBackend": False}
     records.append(("COMPATIBILITY.json", json.dumps(compatibility, indent=2).encode()))
     manifest = {"schemaVersion": "fleetrl-python-bundle-manifest-v1", "generatedBy": "tools/package_python.py", "files": [{"path": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()} for name, data in records]}
     records.append(("BUNDLE_MANIFEST.json", json.dumps(manifest, indent=2).encode()))

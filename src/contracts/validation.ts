@@ -27,6 +27,12 @@ export function validateConfig(value: unknown): ValidationResult<FleetRLConfig> 
   if (typeof combat.closeRangeFraction !== "number" || !Number.isFinite(combat.closeRangeFraction) || combat.closeRangeFraction <= 0 || combat.closeRangeFraction >= 1) errors.push("combat closeRangeFraction must be within (0,1)");
   if (!finitePositive(combat.impactDamagePerSpeed)) errors.push("combat impactDamagePerSpeed must be finite and positive");
   if (combat.rammingDamage !== true) errors.push(`combat rammingDamage must be enabled for ${RULES_VERSION}`);
+  const ship = isRecord(value.ship) ? value.ship : {};
+  if (!finitePositive(ship.maxSpeed) || !finitePositive(ship.flagCarrierSpeedMultiplier) || Number(ship.flagCarrierSpeedMultiplier) > 1) errors.push("ship speeds must be finite, positive, and the carrier multiplier cannot exceed 1");
+  if (!finitePositive(ship.respawnDelayTicks) || !finitePositive(ship.scuttleRespawnTicks) || Number(ship.scuttleRespawnTicks) * 2 !== Number(ship.respawnDelayTicks)) errors.push("scuttleRespawnTicks must be exactly half respawnDelayTicks");
+  const match = isRecord(value.match) ? value.match : {};
+  const points = isRecord(match.points) ? match.points : {};
+  if (!finitePositive(match.scoreNormalizationTarget) || points.kill !== 1 || points.pickup !== 3 || points.delivery !== 25) errors.push(`${RULES_VERSION} scoring must be kill 1, pickup 3, delivery 25`);
   const features = isRecord(value.features) ? value.features : {};
   if (features.encoder !== "ship-64-v1" || features.width !== 64) errors.push("features must use ship-64-v1 width 64");
   const actions = isRecord(value.actions) ? value.actions : {};
@@ -40,6 +46,7 @@ function validateShipAction(action: unknown, ownShipIds: ReadonlySet<string>): s
   if (typeof action.shipId !== "string" || !ownShipIds.has(action.shipId)) errors.push("shipId must identify an owned ship");
   for (const key of ["throttle", "turn"] as const) if (typeof action[key] !== "number" || !Number.isFinite(action[key]) || action[key] < -1 || action[key] > 1) errors.push(`${key} must be finite and within [-1,1]`);
   if (typeof action.fire !== "boolean") errors.push("fire must be boolean");
+  if (action.scuttle !== undefined && typeof action.scuttle !== "boolean") errors.push("scuttle must be boolean when provided");
   if (action.fireTargetShipId !== undefined && action.fireTargetShipId !== null && (typeof action.fireTargetShipId !== "string" || !action.fireTargetShipId)) errors.push("fireTargetShipId must be a non-empty string or null");
   if (!isRecord(action.interact) || !["none", "pickup", "give", "place", "drop"].includes(String(action.interact.type))) errors.push("interact is invalid");
   return errors;
@@ -61,7 +68,7 @@ export function validateTeamAction(value: unknown, ownShipIds: ReadonlySet<strin
 }
 
 export function neutralAction(shipId: string): ShipAction {
-  return { shipId, throttle: 0, turn: 0, fire: false, fireTargetShipId: null, interact: { type: "none" } };
+  return { shipId, throttle: 0, turn: 0, fire: false, fireTargetShipId: null, scuttle: false, interact: { type: "none" } };
 }
 
 /** Resolves backward-compatible `fire:true` actions against only the agent's filtered observation. */

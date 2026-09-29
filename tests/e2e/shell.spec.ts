@@ -41,7 +41,9 @@ test.describe.serial("Pirates War RL release flow", () => {
     await page.getByRole("button", { name: "Close match and view results" }).click();
     await expect(page.getByText("Battle complete")).toBeVisible();
     await expect(page.getByRole("button", { name: "Try again" })).toBeVisible();
-    await expect(page.getByText("Blue decisions")).toBeVisible();
+    await expect(page.getByText("Blue score log")).toBeVisible();
+    await expect(page.getByText("Blue decisions")).toHaveCount(0);
+    await expect(page.getByText("Blue fallbacks")).toHaveCount(0);
 
     await page.getByRole("button", { name: "Watch replay" }).click();
     await expect(page.getByLabel(/Ships sunk:/)).toBeVisible({ timeout: 30_000 });
@@ -95,7 +97,7 @@ test.describe.serial("Pirates War RL release flow", () => {
     await page.getByRole("button", { name: "New league" }).click();
     await page.getByLabel("Competition format").selectOption("knockout");
     await expect(page.getByLabel("Bracket size")).toHaveValue("4");
-    for (let slot = 1; slot <= 4; slot += 1) await page.getByLabel(`Knockout captain ${slot}`).selectOption("builtin-duel-harbor-cadet-v1");
+    for (let slot = 1; slot <= 4; slot += 1) await page.getByLabel(`Knockout captain ${slot}`).selectOption("builtin-duel-harbor-cadet-v2");
     await expect(page.getByLabel("Knockout bracket from opening round to champion")).toBeVisible();
     await page.getByRole("button", { name: "Draw bracket" }).click();
     await expect(page.getByText("Champion crowned")).toBeVisible({ timeout: 90_000 });

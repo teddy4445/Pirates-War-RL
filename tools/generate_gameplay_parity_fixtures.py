@@ -144,7 +144,7 @@ def main() -> None:
             "id": "simultaneous-capture-draw",
             "seed": 207,
             "tickCount": 1,
-            "configPatch": {"mode": "duel", "flags": {"requireOwnFlagHome": False}},
+            "configPatch": {"mode": "duel", "flags": {"requireOwnFlagHome": False}, "match": {"durationTicks": 1}},
             "setup": {
                 "ships": {
                     "blue-1": {"position": {"x": 200, "y": 450}, "carriedFlagId": "rose-flag"},
@@ -171,16 +171,23 @@ def main() -> None:
             "setup": {"ships": {"blue-1": {"alive": False, "health": 0, "respawnAtTick": 0, "protectionUntilTick": 0}}},
         },
         {
-            "id": "timeout-kill-tiebreak",
+            "id": "timeout-score-winner",
             "seed": 210,
             "tickCount": 1,
             "configPatch": {"mode": "duel", "match": {"durationTicks": 1}},
-            "setup": {"world": {"kills": {"blue": 2, "rose": 1}}},
+            "setup": {"world": {"scores": {"blue": 4, "rose": 3}, "kills": {"blue": 1, "rose": 3}}},
+        },
+        {
+            "id": "scuttle-half-respawn",
+            "seed": 211,
+            "tickCount": 1,
+            "configPatch": {"mode": "duel"},
+            "schedule": [{"tick": 0, "controls": {"blue": [action("blue-1", scuttle=True)]}}],
         },
     ]
     output = {
         "schemaVersion": "fleetrl-gameplay-parity-v1",
-        "rulesVersion": "fleetrl-rules-v5",
+        "rulesVersion": "fleetrl-rules-v6",
         "absoluteTolerance": 1e-9,
         "relativeTolerance": 1e-9,
         "defaultConfig": load_config(),

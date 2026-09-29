@@ -40,7 +40,7 @@ function clamp(value) { return Math.max(-1, Math.min(1, value)); }
 function distance(a, b) { var dx = a.x - b.x; var dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy); }
 function wrap(angle) { while (angle >= Math.PI) angle -= Math.PI * 2; while (angle < -Math.PI) angle += Math.PI * 2; return angle; }
 function otherTeam(teamId) { return teamId === "blue" ? "rose" : "blue"; }
-function neutral(shipId) { return { shipId: shipId, throttle: 0, turn: 0, fire: false, fireTargetShipId: null, interact: { type: "none" } }; }
+function neutral(shipId) { return { shipId: shipId, throttle: 0, turn: 0, fire: false, fireTargetShipId: null, scuttle: false, interact: { type: "none" } }; }
 function baseFor(observation, teamId) { return observation.bases.find(function(base) { return base.teamId === teamId; }); }
 function flagFor(observation, teamId) { return observation.flags.find(function(flag) { return flag.ownerTeamId === teamId; }); }
 function nearest(origin, ships) {
@@ -199,8 +199,10 @@ function navigationWaypoint(observation, ship, target, laneY) {
   return best || { x: ship.position.x, y: laneY };
 }
 function routedTarget(observation, ship, target, index, api) {
-  var laneY = laneFor(observation, ship, index, api);
-  return navigationWaypoint(observation, ship, target, laneY);
+  laneFor(observation, ship, index, api);
+  var grid = navigationGrid(observation);
+  var route = plannedRoute(grid, ship.position, target);
+  return route.length ? route[0] : target;
 }
 function rememberedEnemy(observation, ship) {
   observation.enemies.forEach(function(enemy) { if (enemy.alive) memory.lastSeen[enemy.id] = { x: enemy.position.x, y: enemy.position.y, tick: observation.observedAtTick }; });
@@ -215,15 +217,8 @@ function objective(observation, ship, index, api) {
   var ownFlagAway = ownFlag && ownFlag.known && ownFlag.state !== "at-home";
   if (ship.carriedFlagId) return home.deliveryZone.center;
   var visibleOwnFlagCarrier = observation.enemies.find(function(enemy) { return enemy.alive && enemy.carriedFlagId === (ownFlag && ownFlag.id); });
-  if (observation.ships.length === 1 && observation.kills[observation.teamId] === 0) {
-    if (visibleOwnFlagCarrier) return visibleOwnFlagCarrier.position;
-    var openingIntruder = nearest(home.approach, observation.enemies.filter(function(enemy) { return enemy.alive && distance(enemy.position, home.approach) < 560; }));
-    if (openingIntruder) return openingIntruder.position;
-    var rememberedIntruder = rememberedEnemy(observation, ship);
-    if (rememberedIntruder) return rememberedIntruder;
-    var guardDirection = observation.teamId === "blue" ? 1 : -1;
-    return { x: home.approach.x + guardDirection * 190, y: home.approach.y + Math.sin(observation.decisionId / 28) * 105 };
-  }
+  if (observation.ships.length === 1 && visibleOwnFlagCarrier) return visibleOwnFlagCarrier.position;
+  if (observation.ships.length === 1 && ownFlagAway) return rememberedEnemy(observation, ship) || reachableFlagPoint(observation, observation.teamId) || home.approach;
   if (ownFlagAway && (observation.ships.length === 1 || index === observation.ships.length - 1)) return visibleOwnFlagCarrier ? visibleOwnFlagCarrier.position : rememberedEnemy(observation, ship) || reachableFlagPoint(observation, observation.teamId) || home.approach;
   if (observation.ships.length > 1 && index === observation.ships.length - 1) {
     var homeIntruder = visibleOwnFlagCarrier || nearest(home.approach, observation.enemies.filter(function(enemy) { return enemy.alive && distance(enemy.position, home.approach) < 520; }));
@@ -259,6 +254,11 @@ function steer(observation, ship, target, index, api) {
   }
   if (ship.carriedFlagId && ship.health < 42 && legal.giveTargetShipIds.length) {
     var give = neutral(ship.id); give.interact = { type: "give", targetShipId: legal.giveTargetShipIds[0] }; return give;
+  }
+  var home = baseFor(observation, observation.teamId);
+  var scuttleThreat = nearest(ship.position, observation.enemies.filter(function(enemy) { return enemy.alive; }));
+  if (!ship.carriedFlagId && legal.canScuttle && ship.health <= 34 && distance(ship.position, home.deliveryZone.center) > 440 && !scuttleThreat) {
+    var scuttle = neutral(ship.id); scuttle.scuttle = true; return scuttle;
   }
   var waypoint = routedTarget(observation, ship, target, index, api);
   var bearing = wrap(Math.atan2(waypoint.y - ship.position.y, waypoint.x - ship.position.x) - ship.heading);
@@ -311,13 +311,13 @@ function definition(mode: GameMode): TeddyAgentDefinition {
   return {
     id: `captain-${label.id}`,
     alias: label.alias,
-    hash: `builtin-${label.id}-v1`,
+    hash: `builtin-${label.id}-v2`,
     mode,
     source,
     files: [
       { path: "manifest.json", language: "json", content: JSON.stringify(manifest, null, 2) },
       { path: "agent.js", language: "javascript", content: source },
-      { path: "README.md", language: "markdown", content: `# ${label.alias}\n\nFinal-boss reference submission for ${mode}. It uses only fleetrl-agent-v1 observations, seeded api.random(), legal-action masks, and the same QuickJS/WASM sandbox used for student JavaScript.` },
+      { path: "README.md", language: "markdown", content: `# ${label.alias}\n\nFinal-boss reference submission for ${mode}. It uses only fleetrl-agent-v1 observations, seeded api.random(), legal-action masks, strategic scuttling, and the same QuickJS/WASM sandbox used for student JavaScript.` },
     ],
   };
 }

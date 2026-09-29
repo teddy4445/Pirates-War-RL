@@ -1,14 +1,65 @@
 import { useEffect } from "react";
 import { fleetAudio } from "../audio/mixer";
+import type { TeamId } from "../contracts/types";
 import { freshPolicySeed, gameSession, resolveFleetSize } from "../game/session";
 import { gameArtStyle } from "../game/theme";
 import styles from "./GameShell.module.css";
 
 export function PostGamePage() {
-  const request = gameSession.request; const result = gameSession.result;
-  useEffect(() => { if (!result) return; fleetAudio.stopAmbience(); void fleetAudio.playCue(result.draw ? "match_draw" : "match_victory"); }, [result]);
+  const request = gameSession.request;
+  const result = gameSession.result;
+  useEffect(() => {
+    if (!result) return;
+    fleetAudio.stopAmbience();
+    void fleetAudio.playCue(result.draw ? "match_draw" : "match_victory");
+  }, [result]);
+
   if (!request || !result) return <section className={styles.resultPage} style={gameArtStyle}><div className={styles.resultCard}><h1>No result yet</h1><a className={styles.gameButton} href="#/game/new">Start a battle</a></div></section>;
-  const winner = result.draw ? "Draw at sea" : result.winnerId === request.blue.id ? `${request.blue.alias} wins` : result.winnerId === request.green.id ? `${request.green.alias} wins` : "Battle concluded"; const events = result.replay.worldEvents; const cannons = events.filter(event => event.type === "CannonFired").length; const sunk = events.filter(event => event.type === "ShipSunk").length; const captures = events.filter(event => event.type === "FlagCaptured").length; const outcomeReason = result.replay.header.outcome?.reason === "capture-target" ? "Enemy flag captured and delivered" : result.replay.header.outcome?.reason === "kill-tiebreak" ? "Time expired · victory by ship sinks" : result.replay.header.outcome?.reason === "time-limit" ? "Time expired · captures and sinks tied" : result.forfeits.length ? "Agent forfeit" : "Recorded match ended";
-  const retry = () => { const policySeed = freshPolicySeed(); gameSession.begin({ ...request, policySeed, shipsPerTeam: request.mode.includes("fleet") ? resolveFleetSize(request.fleetSizeChoice, policySeed) : 1 }); location.hash = "/game/live"; }; const replay = () => { gameSession.replay(request, result); location.hash = "/game/live"; };
-  return <section className={styles.resultPage} style={gameArtStyle}><div className={styles.resultCard}><p className={styles.kicker}>Battle complete</p><h1>{winner}</h1><p>{outcomeReason}</p><div className={styles.finalScore}><div><strong>{result.blueScore}</strong><span>{request.blue.alias} · {result.blueKills} sinks</span></div><b>—</b><div><strong>{result.roseScore}</strong><span>{request.green.alias} · {result.roseKills} sinks</span></div></div><div className={styles.statGrid}><div className={styles.stat}><small>Battle time</small><b>{(result.tick / 60).toFixed(1)} s</b></div><div className={styles.stat}><small>Cannon shots</small><b>{cannons}</b></div><div className={styles.stat}><small>Ships sunk</small><b>{sunk}</b></div><div className={styles.stat}><small>Flag captures</small><b>{captures}</b></div><div className={styles.stat}><small>Blue decisions</small><b>{result.metrics?.blue.decisions ?? "—"}</b></div><div className={styles.stat}><small>Green decisions</small><b>{result.metrics?.rose.decisions ?? "—"}</b></div><div className={styles.stat}><small>Blue fallbacks</small><b>{result.metrics?.blue.fallbacks ?? "—"}</b></div><div className={styles.stat}><small>Green fallbacks</small><b>{result.metrics?.rose.fallbacks ?? "—"}</b></div></div><div className={styles.buttonRow}><button className={styles.gameButton} onClick={retry}>Try again</button><button className={styles.gameButtonGhost} onClick={replay}>Watch replay</button>{request.returnTo === "#/league" ? <a className={styles.gameButtonGhost} href="#/league">Return to league</a> : <a className={styles.gameButtonGhost} href="#/game/new">Change captains</a>}<a className={styles.gameButtonGhost} href="#/menu">Main menu</a></div></div></section>;
+
+  const winner = result.draw ? "Draw at sea" : result.winnerId === request.blue.id ? `${request.blue.alias} wins` : result.winnerId === request.green.id ? `${request.green.alias} wins` : "Battle concluded";
+  const events = result.replay.worldEvents;
+  const cannons = events.filter(event => event.type === "CannonFired").length;
+  const deliveries = events.filter(event => event.type === "FlagCaptured").length;
+  const count = (teamId: TeamId, type: string, points?: number) => events.filter(event => event.teamId === teamId && event.type === type && (points === undefined || event.points === points)).length;
+  const breakdown = {
+    blue: { kills: result.blueKills, pickups: count("blue", "FlagPickedUp", 3), deliveries: count("blue", "FlagCaptured") },
+    rose: { kills: result.roseKills, pickups: count("rose", "FlagPickedUp", 3), deliveries: count("rose", "FlagCaptured") },
+  };
+  const outcomeReason = result.forfeits.length ? "Battle decided by agent forfeit" : result.draw ? "Time expired · points tied" : "Time expired · victory by total score";
+  const retry = () => {
+    const policySeed = freshPolicySeed();
+    gameSession.begin({ ...request, policySeed, shipsPerTeam: request.mode.includes("fleet") ? resolveFleetSize(request.fleetSizeChoice, policySeed) : 1 });
+    location.hash = "/game/live";
+  };
+  const replay = () => { gameSession.replay(request, result); location.hash = "/game/live"; };
+
+  return <section className={styles.resultPage} style={gameArtStyle}>
+    <div className={styles.resultCard}>
+      <p className={styles.kicker}>Battle complete</p>
+      <h1>{winner}</h1>
+      <p>{outcomeReason}</p>
+      <div className={styles.finalScore}>
+        <div><strong>{result.blueScore}</strong><span>{request.blue.alias} · points</span></div>
+        <b>—</b>
+        <div><strong>{result.roseScore}</strong><span>{request.green.alias} · points</span></div>
+      </div>
+      <p className={styles.scoreLegend}>1 point per kill · 3 points per first enemy-flag pickup · 25 points per flag delivery</p>
+      <div className={styles.scoreBreakdown}>
+        <div><small>Blue score log</small><b>{breakdown.blue.kills} × 1</b><span>Kills</span><b>{breakdown.blue.pickups} × 3</b><span>Pickups</span><b>{breakdown.blue.deliveries} × 25</b><span>Deliveries</span></div>
+        <div><small>Green score log</small><b>{breakdown.rose.kills} × 1</b><span>Kills</span><b>{breakdown.rose.pickups} × 3</b><span>Pickups</span><b>{breakdown.rose.deliveries} × 25</b><span>Deliveries</span></div>
+      </div>
+      <div className={styles.statGrid}>
+        <div className={styles.stat}><small>Battle time</small><b>{(result.tick / 60).toFixed(1)} s</b></div>
+        <div className={styles.stat}><small>Cannon shots</small><b>{cannons}</b></div>
+        <div className={styles.stat}><small>Combat kills</small><b>{result.blueKills + result.roseKills}</b></div>
+        <div className={styles.stat}><small>Flag deliveries</small><b>{deliveries}</b></div>
+      </div>
+      <div className={styles.buttonRow}>
+        <button className={styles.gameButton} onClick={retry}>Try again</button>
+        <button className={styles.gameButtonGhost} onClick={replay}>Watch replay</button>
+        {request.returnTo === "#/league" ? <a className={styles.gameButtonGhost} href="#/league">Return to league</a> : <a className={styles.gameButtonGhost} href="#/game/new">Change captains</a>}
+        <a className={styles.gameButtonGhost} href="#/menu">Main menu</a>
+      </div>
+    </div>
+  </section>;
 }
